@@ -15,6 +15,87 @@ function isLikelyKoreanAddress(text) {
   return /[가-힣]/.test(text || "");
 }
 
+function CalendarIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+      <rect x="3" y="5" width="18" height="16" rx="2" fill="none" stroke="currentColor" strokeWidth="2" />
+      <path d="M3 10h18M8 3v4M16 3v4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2" />
+      <path d="M12 7v5l3.5 2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function UserIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+      <circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" strokeWidth="2" />
+      <path d="M4 21c1.5-3.6 4.4-5.4 8-5.4s6.5 1.8 8 5.4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function TeamIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+      <circle cx="9" cy="9" r="3.4" fill="none" stroke="currentColor" strokeWidth="2" />
+      <circle cx="17" cy="10.5" r="2.6" fill="none" stroke="currentColor" strokeWidth="2" />
+      <path d="M3 20c1.2-3 3.4-4.5 6-4.5s4.8 1.5 6 4.5M15.5 15.8c2.4.2 4.3 1.6 5.5 4.2" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function PinIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+      <path
+        d="M12 21s-6.5-5.7-6.5-10.4a6.5 6.5 0 1113 0C18.5 15.3 12 21 12 21z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="10.4" r="2.3" fill="none" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
+
+function MetaTile({ icon, label, value, sub }) {
+  return (
+    <div className="hg-att-view__tile">
+      <span className="hg-att-view__tile-icon" aria-hidden="true">
+        {icon}
+      </span>
+      <span className="hg-att-view__tile-text">
+        <span className="hg-att-view__tile-label">{label}</span>
+        <span className="hg-att-view__tile-value">
+          {value}
+          {sub && <small className="hg-att-view__tile-sub">{sub}</small>}
+        </span>
+      </span>
+    </div>
+  );
+}
+
+function SectionTitle({ index, children, extra }) {
+  return (
+    <h3 className="hg-att-view__card-title">
+      <span className="hg-att-view__card-num" aria-hidden="true">
+        {index}
+      </span>
+      {children}
+      {extra && <span className="hg-att-view__card-extra">{extra}</span>}
+    </h3>
+  );
+}
+
 export default function AttendanceBoardView({ post }) {
   const navigate = useNavigate();
   const viewDate = post.viewDate || post.date;
@@ -59,119 +140,129 @@ export default function AttendanceBoardView({ post }) {
       ? [{ id: null, photoName: post.photoName || "현장 사진" }]
       : [];
 
+  const contentLines = (post.workContent || "")
+    .split(/\n+/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  let sectionNo = 0;
+  const nextSection = () => {
+    sectionNo += 1;
+    return String(sectionNo).padStart(2, "0");
+  };
+
   return (
-    <section className="sec1 attendance-view">
-      <section className="viewSkin">
-        <article className="inner attendance-view-cards">
-          <section className="attendance-card attendance-card-header">
-            <p className="title attendance-post-title">{post.detailSubject || post.listSubject || post.subject}</p>
-            <div className="attendance-meta-grid">
-              <div className="attendance-meta-item">
-                <span className="attendance-meta-label">작업일</span>
-                <span className="attendance-meta-value attendance-meta-value--date">{post.workDate || "-"}</span>
-              </div>
-              <div className="attendance-meta-item">
-                <span className="attendance-meta-label">등록일</span>
-                <span className="attendance-meta-value attendance-meta-value--date">{viewDate}</span>
-              </div>
-              <div className="attendance-meta-item">
-                <span className="attendance-meta-label">등록시간</span>
-                <span className="attendance-meta-value attendance-meta-value--date">{registeredTime || "-"}</span>
-              </div>
-              <div className="attendance-meta-item">
-                <span className="attendance-meta-label">작성자</span>
-                <span className="attendance-meta-value">{post.reporterName || "-"}</span>
-              </div>
-              <div className="attendance-meta-item">
-                <span className="attendance-meta-label">인원</span>
-                <span className="attendance-meta-value">{post.personnelCount ?? "-"}명</span>
-              </div>
-              <div className="attendance-meta-item attendance-meta-item--location">
-                <span className="attendance-meta-label">위치</span>
-                <span className="attendance-meta-value">
-                  {!hasCoordinates ? (
-                    "-"
-                  ) : isAddressLoading ? (
-                    <span className="attendance-address-pending">주소 확인 중…</span>
-                  ) : (
-                    displayAddress || "등록된 주소 없음 (좌표만 저장됨)"
-                  )}
-                </span>
-              </div>
-            </div>
-          </section>
+    <section className="hg-proj hg-att-view">
+      <header className="hg-att-view__head">
+        <p className="hg-proj__eyebrow">Attendance Report</p>
+        <div className="hg-proj__accent" aria-hidden="true" />
+        <h2 className="hg-att-view__title">
+          {post.detailSubject || post.listSubject || post.subject}
+        </h2>
+      </header>
 
-          {hasCoordinates && (
-            <section className="attendance-card">
-              <h3 className="attendance-section-title">출결 위치</h3>
-              <div className="attendance-map-shell">
-                <NaverMapEmbed
-                  lat={post.latitude}
-                  lng={post.longitude}
-                  markerLabel="출결 위치"
-                  address={displayAddress}
-                  resolveAddress
-                  onAddressResolved={setResolvedAddress}
-                  openInfoOnLoad={false}
-                  height={360}
-                  className="attendance-map-embed"
-                />
-              </div>
-              <p className="attendance-coords">
-                위도 {formatCoordinate(post.latitude)}, 경도{" "}
-                {formatCoordinate(post.longitude)}
-                {naverMapUrl ? (
-                  <>
-                    {" "}
-                    ·{" "}
-                    <a
-                      href={naverMapUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="attendance-map-external-link"
-                    >
-                      네이버 지도에서 보기
-                    </a>
-                  </>
-                ) : null}
-              </p>
-            </section>
-          )}
+      <div className="hg-att-view__grid">
+        <MetaTile icon={<CalendarIcon />} label="작업일" value={post.workDate || "-"} />
+        <MetaTile
+          icon={<ClockIcon />}
+          label="등록일시"
+          value={viewDate || "-"}
+          sub={registeredTime || undefined}
+        />
+        <MetaTile icon={<UserIcon />} label="작성자" value={post.reporterName || "-"} />
+        <MetaTile
+          icon={<TeamIcon />}
+          label="투입 인원"
+          value={post.personnelCount != null ? `${post.personnelCount}명` : "-"}
+        />
+      </div>
 
-          <section className="attendance-card">
-            <h3 className="attendance-section-title">작업 내용</h3>
-            <div className="attendance-content">
-              {(post.workContent || "")
-                .split(/\n+/)
-                .map((line) => line.trim())
-                .filter(Boolean)
-                .map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-              {!post.workContent?.trim() && <p>작업 내용 없음</p>}
-            </div>
-          </section>
-
-          {photos.length > 0 && (
-            <section className="attendance-card">
-              <h3 className="attendance-section-title">
-                현장 사진
-                <span className="attendance-photo-count">{photos.length}장</span>
-              </h3>
-              <AttendancePhotoGallery postId={post.id} photos={photos} />
-            </section>
-          )}
-
-          <div className="bo_v_btn attendance-card-actions">
-            <Link to={boardRouteTarget("attendance")} className="btn_b01 btn">
-              목록
-            </Link>
-            <button type="button" className="btn_b01 btn btn_admin" onClick={handleDelete}>
-              삭제
-            </button>
+      {hasCoordinates && (
+        <section className="hg-att-view__card">
+          <SectionTitle index={nextSection()}>출결 위치</SectionTitle>
+          <p className="hg-att-view__address">
+            <span className="hg-att-view__address-icon" aria-hidden="true">
+              <PinIcon />
+            </span>
+            {isAddressLoading ? (
+              <span className="hg-att-view__address-pending">주소 확인 중…</span>
+            ) : (
+              displayAddress || "등록된 주소 없음 (좌표만 저장됨)"
+            )}
+          </p>
+          <div className="hg-att-view__map">
+            <NaverMapEmbed
+              lat={post.latitude}
+              lng={post.longitude}
+              markerLabel="출결 위치"
+              address={displayAddress}
+              resolveAddress
+              onAddressResolved={setResolvedAddress}
+              openInfoOnLoad={false}
+              height={400}
+              className="hg-att-view__map-embed"
+            />
           </div>
-        </article>
+          <div className="hg-att-view__map-foot">
+            <span className="hg-att-view__coords">
+              위도 {formatCoordinate(post.latitude)} · 경도 {formatCoordinate(post.longitude)}
+            </span>
+            {naverMapUrl && (
+              <a
+                href={naverMapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hg-att-view__map-link"
+              >
+                네이버 지도에서 보기
+                <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">
+                  <path
+                    d="M7 17L17 7M9 7h8v8"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            )}
+          </div>
+        </section>
+      )}
+
+      <section className="hg-att-view__card">
+        <SectionTitle index={nextSection()}>작업 내용</SectionTitle>
+        <div className="hg-att-view__content">
+          {contentLines.length > 0 ? (
+            contentLines.map((line) => <p key={line}>{line}</p>)
+          ) : (
+            <p className="hg-att-view__content-empty">작업 내용 없음</p>
+          )}
+        </div>
       </section>
+
+      {photos.length > 0 && (
+        <section className="hg-att-view__card">
+          <SectionTitle index={nextSection()} extra={`${photos.length}장`}>
+            현장 사진
+          </SectionTitle>
+          <AttendancePhotoGallery postId={post.id} photos={photos} />
+        </section>
+      )}
+
+      <div className="hg-att-view__actions">
+        <Link to={boardRouteTarget("attendance")} className="hg-att-view__btn hg-att-view__btn--list">
+          목록으로
+        </Link>
+        <button
+          type="button"
+          className="hg-att-view__btn hg-att-view__btn--delete"
+          onClick={handleDelete}
+        >
+          삭제
+        </button>
+      </div>
     </section>
   );
 }
