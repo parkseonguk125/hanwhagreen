@@ -1,0 +1,4 @@
+hanwhagreen.duckdns.org {
+	encode gzip
+	reverse_proxy web:80
+}
