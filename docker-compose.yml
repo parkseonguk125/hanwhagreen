@@ -13,7 +13,7 @@ services:
 
     ports:
 
-      - "0.0.0.0:8083:80"
+      - "0.0.0.0:${WEB_PORT:-8083}:80"
 
     volumes:
 
