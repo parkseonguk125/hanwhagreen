@@ -143,6 +143,12 @@ export function useHgHeaderAutoHide({ disabled = false, heroAware = false } = {}
 const HG_STICKY_SCROLL_LERP = 0.32;
 const HG_STICKY_SCROLL_SETTLE = 0.002;
 
+/* 히어로 축소 전용: 낮은 lerp로 휠 입력을 부드럽게 따라가고,
+   smoothstep 이징으로 축소의 시작/끝을 완만하게 처리 */
+const HG_HERO_SCROLL_LERP = 0.12;
+const HG_HERO_SCROLL_SETTLE = 0.0008;
+const easeHeroProgress = (p) => p * p * (3 - 2 * p);
+
 export function useHgStickyScroll(scrollRef, progressVar = "--hg-sticky-progress", enabled = true) {
   useEffect(() => {
     const zone = scrollRef.current;
@@ -165,7 +171,7 @@ export function useHgStickyScroll(scrollRef, progressVar = "--hg-sticky-progress
     };
 
     const applyProgress = (progress) => {
-      zone.style.setProperty(progressVar, progress.toFixed(4));
+      zone.style.setProperty(progressVar, easeHeroProgress(progress).toFixed(4));
       zone.classList.toggle("is-scrolled-through", progress >= 0.98);
     };
 
@@ -173,8 +179,8 @@ export function useHgStickyScroll(scrollRef, progressVar = "--hg-sticky-progress
       const target = getTargetProgress();
       const diff = target - displayProgress;
 
-      if (Math.abs(diff) > HG_STICKY_SCROLL_SETTLE) {
-        displayProgress += diff * HG_STICKY_SCROLL_LERP;
+      if (Math.abs(diff) > HG_HERO_SCROLL_SETTLE) {
+        displayProgress += diff * HG_HERO_SCROLL_LERP;
         applyProgress(displayProgress);
         frame = requestAnimationFrame(tick);
         return;
@@ -185,7 +191,13 @@ export function useHgStickyScroll(scrollRef, progressVar = "--hg-sticky-progress
     };
 
     const kick = () => {
-      if (isProgrammaticScrollActive()) return;
+      if (isProgrammaticScrollActive()) {
+        /* TOP 스크롤 중: lerp 없이 현재 위치를 즉시 반영해 화면이 멈춰 보이지 않게 */
+        cancelAnimationFrame(frame);
+        displayProgress = getTargetProgress();
+        applyProgress(displayProgress);
+        return;
+      }
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(tick);
     };
@@ -311,7 +323,14 @@ export function useHgStoryVisionScroll(scrollRef, stageCount = 3) {
     };
 
     const kick = () => {
-      if (isProgrammaticScrollActive()) return;
+      if (isProgrammaticScrollActive()) {
+        /* TOP 스크롤 중: lerp 없이 즉시 반영 */
+        cancelAnimationFrame(frame);
+        display = getTarget();
+        setProgress(display);
+        derive(display);
+        return;
+      }
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(tick);
     };
@@ -600,6 +619,13 @@ function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2;
 }
 
+/* 히어로→첫 카드 진입처럼 이미 움직이던 중에는 관성이 이어지도록 빠르게 시작해 완만히 정지 */
+function easeOutCubic(t) {
+  return 1 - (1 - t) ** 3;
+}
+
+const HD_BIZ_ENTRY_SNAP_DURATION = 760;
+
 function getBusinessSnapRaws(panelCount) {
   const expandPortion = getBusinessExpandPortion(panelCount);
   const maxIndex = Math.max(panelCount - 1, 0);
@@ -701,6 +727,8 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
     let wheelLockTimer = 0;
     let displaySlideIndex = 0;
     let revealIndex = -1;
+    let snapDuration = HD_BIZ_SNAP_DURATION;
+    let snapEase = easeInOutCubic;
 
     const notifyReveal = (index) => {
       if (revealIndex === index) return;
@@ -771,7 +799,8 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
     const applyRaw = (raw) => {
       const { expand, slide } = (() => {
         if (raw <= expandPortion) {
-          return { expand: raw / expandPortion, slide: 0 };
+          /* smoothstep으로 확장의 시작/끝을 완만하게 */
+          return { expand: smoothstep(raw / expandPortion), slide: 0 };
         }
         return {
           expand: 1,
@@ -782,7 +811,10 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
       const maxIndex = Math.max(panelCount - 1, 0);
       const targetSlideIndex = maxIndex === 0 ? 0 : slide * maxIndex;
 
-      if (!isSnapping) {
+      if (isProgrammaticScrollActive()) {
+        /* TOP 스크롤 중에는 지연 없이 위치 그대로 반영 */
+        displaySlideIndex = targetSlideIndex;
+      } else if (!isSnapping) {
         displaySlideIndex += (targetSlideIndex - displaySlideIndex) * 0.24;
         if (Math.abs(targetSlideIndex - displaySlideIndex) < 0.002) {
           displaySlideIndex = targetSlideIndex;
@@ -823,6 +855,7 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
         !motionQuery.matches &&
         !mobileQuery.matches &&
         !isSnapping &&
+        !isProgrammaticScrollActive() &&
         isZonePinned() &&
         raw >= expandPortion * 0.9 &&
         Math.abs(displaySlideIndex - snapIndex) < 0.06
@@ -833,7 +866,7 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
       }
     };
 
-    const startSnapAnimation = (toRaw, nextSnapIndex) => {
+    const startSnapAnimation = (toRaw, nextSnapIndex, options = {}) => {
       if (isProgrammaticScrollActive()) return;
 
       const maxIndex = Math.max(panelCount - 1, 0);
@@ -844,6 +877,8 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
       snapFromSlideIndex = displaySlideIndex;
       snapToSlideIndex = maxIndex === 0 ? 0 : nextSnapIndex;
       snapStart = performance.now();
+      snapDuration = options.duration ?? HD_BIZ_SNAP_DURATION;
+      snapEase = options.ease ?? easeInOutCubic;
       isSnapping = true;
       notifyReveal(-1);
 
@@ -882,8 +917,8 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
       }
 
       if (isSnapping) {
-        const progress = Math.min((now - snapStart) / HD_BIZ_SNAP_DURATION, 1);
-        const eased = easeInOutCubic(progress);
+        const progress = Math.min((now - snapStart) / snapDuration, 1);
+        const eased = snapEase(progress);
 
         displayRaw = snapFromRaw + (snapToRaw - snapFromRaw) * eased;
         displaySlideIndex =
@@ -906,6 +941,22 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
         applyRaw(displayRaw);
         notifyReveal(snapIndex);
         lockScrollToCurrentSnap();
+        return;
+      }
+
+      /* 히어로에서 내려와 섹션이 핀 되는 순간, 첫 카드 확장을
+         관성이 이어지는 easeOut 스냅으로 처리해 끊김 없이 도착 */
+      if (
+        !motionQuery.matches &&
+        !mobileQuery.matches &&
+        isZonePinned() &&
+        snapIndex === 0 &&
+        displayRaw < snapRaws[0] - 0.02
+      ) {
+        startSnapAnimation(snapRaws[0], 0, {
+          duration: HD_BIZ_ENTRY_SNAP_DURATION,
+          ease: easeOutCubic,
+        });
         return;
       }
 
@@ -958,10 +1009,12 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
       if (wheelLocked || isSnapping) return;
 
       let nextSnapIndex = snapIndex;
+      let isEntry = false;
 
       if (goingDown) {
         if (displayRaw < snapRaws[0] - 0.015) {
           nextSnapIndex = 0;
+          isEntry = true;
         } else {
           nextSnapIndex = Math.min(snapIndex + 1, snapRaws.length - 1);
         }
@@ -971,18 +1024,27 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
 
       if (
         nextSnapIndex === snapIndex &&
+        !isEntry &&
         Math.abs(displayRaw - snapRaws[snapIndex]) < 0.02
       ) {
         return;
       }
 
       armWheelLock();
-      startSnapAnimation(snapRaws[nextSnapIndex], nextSnapIndex);
+      startSnapAnimation(
+        snapRaws[nextSnapIndex],
+        nextSnapIndex,
+        isEntry ? { duration: HD_BIZ_ENTRY_SNAP_DURATION, ease: easeOutCubic } : {}
+      );
     };
 
     const onScroll = () => {
       if (isProgrammaticScrollActive()) {
+        /* TOP 스크롤 중: 스냅·잠금은 멈추되 패널 위치는 즉시 반영해 멈춤 없이 지나가게 */
         isSnapping = false;
+        cancelAnimationFrame(frame);
+        displayRaw = getScrollRaw();
+        applyRaw(displayRaw);
         return;
       }
       // 스냅 애니 중 scroll 이벤트가 잠금을 재실행하며 끊기는 느낌 생김
@@ -995,6 +1057,8 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
     const onTopEnd = () => {
       isSnapping = false;
       displayRaw = getScrollRaw();
+      snapIndex = getNearestSnapIndex(displayRaw, snapRaws);
+      displaySlideIndex = Math.max(panelCount - 1, 0) === 0 ? 0 : snapIndex;
       applyRaw(displayRaw);
       kick();
     };
@@ -1101,7 +1165,13 @@ export function useHgSnapShowcase(scrollRef, panelCount, progressVar = "--hg-sho
     };
 
     const kick = () => {
-      if (isProgrammaticScrollActive()) return;
+      if (isProgrammaticScrollActive()) {
+        /* TOP 스크롤 중: lerp 없이 즉시 반영 */
+        cancelAnimationFrame(frame);
+        displayProgress = getTargetProgress();
+        applyProgress(displayProgress);
+        return;
+      }
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(tick);
     };
@@ -1190,7 +1260,13 @@ export function useHgHorizontalScroll(scrollRef, panelCount, progressVar = "--hg
     };
 
     const kick = () => {
-      if (isProgrammaticScrollActive()) return;
+      if (isProgrammaticScrollActive()) {
+        /* TOP 스크롤 중: lerp 없이 즉시 반영 */
+        cancelAnimationFrame(frame);
+        displayProgress = getTargetProgress();
+        applyProgress(displayProgress);
+        return;
+      }
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(tick);
     };
