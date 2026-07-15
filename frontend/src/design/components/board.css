@@ -2019,10 +2019,10 @@
 
 .hg-att-view__title {
   margin: 0.9rem 0 0;
-  font-size: clamp(1.4rem, 2.8vw, 2.05rem);
+  font-size: clamp(1.02rem, 1.55vw, 1.35rem);
   font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: -0.03em;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
   color: var(--hg-green-900);
   word-break: keep-all;
 }
