@@ -1,0 +1,254 @@
+.sub .visual {
+  width: 100%;
+  height: 470px;
+  position: relative;
+  overflow: hidden;
+  background-color: #2d5a3d;
+}
+
+.sub .visual .visual-banner-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.sub .visual::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.visual .text_box {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 9;
+}
+
+.visual .text_box h2 {
+  font-size: 3em;
+  font-weight: bold;
+  color: #fff;
+}
+
+.visual .text_box p.text {
+  font-size: 20px;
+  font-weight: 400;
+  color: #f6f6f6;
+}
+
+.sub .visual.visual-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#navigation {
+  width: 100%;
+  position: relative;
+  background-color: #f6f6f6;
+  border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+#navigation .inner {
+  width: 1240px;
+  height: 60px;
+  line-height: 60px;
+  margin: 0 auto;
+  position: relative;
+  display: flex;
+  background-color: #fff;
+  z-index: 99;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+#navigation #navi_home {
+  padding: 0 20px;
+  line-height: 70px;
+  border-right: 1px solid #ddd;
+}
+
+#navigation #navi_home a {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#navigation .navi-home-icon {
+  width: 36px;
+  height: 36px;
+  color: #333;
+}
+
+#navigation .navi {
+  width: 300px;
+  height: 100%;
+  border-right: 1px solid #ddd;
+  box-sizing: border-box;
+  position: relative;
+  cursor: pointer;
+}
+
+#navigation .tit {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #333;
+  padding-left: 20px;
+  margin: 0;
+}
+
+#navigation .slide {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+#navigation .navi ul {
+  background-color: #fff;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 9999;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#navigation ul li {
+  height: 50px;
+  line-height: 50px;
+  padding-left: 20px;
+  border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  list-style: none;
+  position: relative;
+}
+
+#navigation ul li:hover {
+  background-color: #333;
+}
+
+#navigation ul li:hover a {
+  display: block;
+  color: #f6f6f6;
+}
+
+#navigation ul li:hover a::after {
+  right: 20px;
+  opacity: 1;
+  transition: all 0.3s;
+}
+
+#navigation ul li a::after {
+  content: "›";
+  position: absolute;
+  right: 30px;
+  opacity: 0;
+  font-size: 18px;
+}
+
+#navigation ul li a {
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  position: relative;
+}
+
+#navigation .navi_btn {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 20px;
+  cursor: pointer;
+}
+
+#navigation .navi_btn span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+#navigation .navi-arrow-icon {
+  width: 28px;
+  height: 28px;
+  color: #333;
+  opacity: 0.8;
+}
+
+#mysubmenu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#mysubmenu > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#qna .sec1 .inner {
+  padding: 5% 0;
+}
+
+@media screen and (max-width: 1240px) {
+  #navigation .inner {
+    width: 98%;
+  }
+
+  .listSkin .inner {
+    width: 98%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .sub .visual {
+    height: 280px;
+  }
+
+  .visual .text_box h2 {
+    font-size: 2em;
+  }
+
+  #navigation .inner {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+  }
+
+  #navigation #navi_home {
+    width: 10%;
+    padding: 0;
+  }
+
+  #navigation .navi {
+    width: 45%;
+  }
+
+  #navigation .navi_btn span::after {
+    font-size: 1.8em;
+  }
+}

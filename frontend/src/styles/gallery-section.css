@@ -1,0 +1,128 @@
+/* 인증서 갤러리 — 이미지 잘림 방지 (hanwhagreen.com) */
+
+.gallery.background {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* PC(1024px+) — 배경 하단 여백·이미지 위치 (hanwhagreen.com 대비) */
+@media screen and (min-width: 1024px) {
+  .gallery.background {
+    padding-top: 150px !important;
+    padding-bottom: 65px !important;
+    background-position: center 25%;
+    background-size: cover;
+  }
+}
+
+.gallery .inner {
+  display: flex;
+  align-items: flex-start;
+}
+
+.gall_tit {
+  flex-shrink: 0;
+  min-width: 30%;
+}
+
+.gall_arrow {
+  gap: 5px;
+}
+
+.gall_con_wrap {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.gallery .gall_contents.swiper {
+  width: 100%;
+  overflow: hidden;
+  height: auto !important;
+}
+
+.gallery .gall_contents .swiper-wrapper {
+  align-items: flex-start !important;
+  height: auto !important;
+}
+
+.gall_contents .swiper-slide {
+  padding: 10px;
+  height: auto !important;
+  box-sizing: border-box;
+  overflow: visible !important;
+}
+
+.gall_con {
+  width: 100%;
+  position: relative;
+  display: block !important;
+  overflow: visible !important;
+}
+
+.gall_con a {
+  text-decoration: none;
+  display: block;
+  overflow: visible !important;
+}
+
+.gall_con_img {
+  width: 100%;
+  overflow: visible !important;
+  line-height: 0;
+}
+
+.gall_con img {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  display: block;
+  aspect-ratio: unset !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  object-fit: unset !important;
+  object-position: center top;
+}
+
+.gall_con dl {
+  position: relative !important;
+  bottom: auto !important;
+  transform: none !important;
+  padding: 12px 0 0 !important;
+  background: transparent !important;
+  color: #000 !important;
+  z-index: 1;
+  overflow: visible !important;
+}
+
+.gall_con:hover dl {
+  transform: none !important;
+}
+
+.gall_con dl dt {
+  color: #000 !important;
+  font-size: 18px !important;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 4px;
+  white-space: normal !important;
+  word-break: keep-all;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
+
+.gall_con dl dd {
+  color: #333 !important;
+  opacity: 1 !important;
+  text-align: center;
+  font-size: 14px !important;
+  max-height: none !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+  white-space: normal !important;
+  word-break: keep-all;
+}

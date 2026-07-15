@@ -1,0 +1,188 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--color-white);
+  box-shadow: 0 1px 0 var(--color-border);
+}
+
+.innerTop {
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-bg);
+}
+
+.topRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+.tpLink {
+  display: flex;
+  gap: 20px;
+}
+
+.tpLink a {
+  font-size: 13px;
+  color: var(--color-text);
+  transition: color 0.2s;
+}
+
+.tpLink a:hover {
+  color: var(--color-green);
+}
+
+.userBox ul {
+  display: flex;
+  gap: 12px;
+}
+
+.userBox a {
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.mainBar {
+  background: var(--color-white);
+}
+
+.mainRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 80px;
+  gap: 24px;
+}
+
+.logo {
+  display: flex;
+  align-items: baseline;
+  font-size: 1.75rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.logoHan {
+  color: var(--color-dark);
+}
+
+.logoGreen {
+  color: var(--color-green);
+}
+
+.desktopNav {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.navItem {
+  position: relative;
+}
+
+.menuTit {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-dark);
+  transition: color 0.2s;
+}
+
+.menuTit:hover {
+  color: var(--color-green);
+}
+
+.subMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 160px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+  z-index: 10;
+}
+
+.navItem:hover .subMenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.subMenu li a {
+  display: block;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.subMenu li a:hover {
+  background: var(--color-bg);
+  color: var(--color-green);
+}
+
+.hamburger {
+  display: none;
+  color: var(--color-dark);
+}
+
+.mobileNav {
+  display: none;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  padding: 16px 24px 24px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.mobileNavOpen {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.mobileGroup {
+  margin-bottom: 16px;
+}
+
+.mobileGroupTitle {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-green);
+  margin-bottom: 8px;
+}
+
+.mobileGroup ul li a {
+  display: block;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+@media (max-width: 1024px) {
+  .desktopNav {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobileNav {
+    display: block;
+  }
+
+  .mobileNav:not(.mobileNavOpen) {
+    padding: 0 24px;
+  }
+}

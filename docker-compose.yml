@@ -1,0 +1,141 @@
+services:
+
+  web:
+
+    build:
+      context: .
+      args:
+        VITE_NAVER_MAP_CLIENT_ID: ${VITE_NAVER_MAP_CLIENT_ID:-}
+
+    image: hanwhagreen-web:local
+
+    container_name: hanwhagreen-web
+
+    ports:
+
+      - "0.0.0.0:8083:80"
+
+    volumes:
+
+      - ./nginx/default.conf:/etc/nginx/http.d/default.conf:ro
+
+      - ./nginx/maintenance.html:/etc/nginx/maintenance/maintenance.html:ro
+
+      - ./nginx/flags:/etc/nginx/flags:ro
+
+    depends_on:
+
+      api:
+
+        condition: service_healthy
+
+    restart: unless-stopped
+
+    healthcheck:
+
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/"]
+
+      interval: 10s
+
+      timeout: 3s
+
+      retries: 3
+
+      start_period: 5s
+
+
+
+  api:
+
+    build: ./backend
+
+    image: hanwhagreen-api:local
+
+    container_name: hanwhagreen-api
+
+    ports:
+
+      - "3003:3000"
+
+    environment:
+
+      DATABASE_URL: postgres://hanwha:hanwha_local@db:5432/hanwhagreen
+
+      PORT: "3000"
+
+      QA_UPLOAD_DIR: /app/uploads/qa
+      ATTENDANCE_UPLOAD_DIR: /app/uploads/attendance
+
+    env_file:
+      - .env
+
+    volumes:
+
+      - qa_uploads:/app/uploads/qa
+      - attendance_uploads:/app/uploads/attendance
+
+    depends_on:
+
+      db:
+
+        condition: service_healthy
+
+    restart: unless-stopped
+
+    healthcheck:
+
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/ping"]
+
+      interval: 10s
+
+      timeout: 3s
+
+      retries: 5
+
+      start_period: 20s
+
+
+
+  db:
+
+    build: ./db
+
+    image: hanwhagreen-db:local
+
+    container_name: hanwhagreen-db-hw
+
+    environment:
+
+      POSTGRES_USER: hanwha
+
+      POSTGRES_PASSWORD: hanwha_local
+
+      POSTGRES_DB: hanwhagreen
+
+    volumes:
+
+      - postgres_data:/var/lib/postgresql/data
+
+    restart: unless-stopped
+
+    healthcheck:
+
+      test: ["CMD-SHELL", "pg_isready -U hanwha -d hanwhagreen"]
+
+      interval: 5s
+
+      timeout: 3s
+
+      retries: 10
+
+      start_period: 10s
+
+
+
+volumes:
+
+  postgres_data:
+
+  qa_uploads:
+
+  attendance_uploads:

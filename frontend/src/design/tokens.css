@@ -1,0 +1,85 @@
+/* Hanwha Green v2 — Design Tokens */
+:root {
+  /* Brand */
+  --hg-green-900: #0a2e1c;
+  --hg-green-800: #0d5c3a;
+  --hg-green-700: #147a4d;
+  --hg-green-600: #1a8f5c;
+  --hg-green-500: #2cb573;
+  --hg-green-100: #e8f7ef;
+  --hg-green-50: #f4fbf7;
+
+  /* Neutrals */
+  --hg-white: #ffffff;
+  --hg-gray-50: #f8f9fa;
+  --hg-gray-100: #f1f3f5;
+  --hg-gray-200: #e9ecef;
+  --hg-gray-300: #dee2e6;
+  --hg-gray-400: #adb5bd;
+  --hg-gray-500: #868e96;
+  --hg-gray-600: #495057;
+  --hg-gray-700: #343a40;
+  --hg-gray-800: #212529;
+  --hg-gray-900: #0d1117;
+
+  /* Semantic */
+  --hg-bg: var(--hg-white);
+  --hg-bg-alt: var(--hg-gray-50);
+  --hg-bg-dark: var(--hg-green-900);
+  --hg-text: var(--hg-gray-800);
+  --hg-text-muted: var(--hg-gray-600);
+  --hg-text-light: var(--hg-gray-500);
+  --hg-border: var(--hg-gray-200);
+  --hg-accent: var(--hg-green-600);
+  --hg-accent-hover: var(--hg-green-700);
+
+  /* Typography */
+  --hg-font: "Noto Sans KR", "Pretendard", "Malgun Gothic", -apple-system, sans-serif;
+  --hg-font-display: var(--hg-font);
+
+  /* Spacing */
+  --hg-space-xs: 0.25rem;
+  --hg-space-sm: 0.5rem;
+  --hg-space-md: 1rem;
+  --hg-space-lg: 1.5rem;
+  --hg-space-xl: 2rem;
+  --hg-space-2xl: 3rem;
+  --hg-space-3xl: 4rem;
+  --hg-space-4xl: 6rem;
+  --hg-space-5xl: 8rem;
+
+  /* Layout */
+  --hg-container: 1280px;
+  --hg-container-wide: 1440px;
+  --hg-header-height: 72px;
+  --hg-header-height-scrolled: 64px;
+  --hg-header-offset: var(--hg-header-height);
+
+  /* Radius */
+  --hg-radius-sm: 4px;
+  --hg-radius-md: 8px;
+  --hg-radius-lg: 16px;
+  --hg-radius-xl: 24px;
+  --hg-radius-full: 9999px;
+
+  /* Shadow */
+  --hg-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --hg-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --hg-shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --hg-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.16);
+
+  /* Transitions */
+  --hg-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --hg-duration-fast: 150ms;
+  --hg-duration: 300ms;
+  --hg-duration-slow: 500ms;
+
+  /* Z-index */
+  --hg-z-header: 100;
+  --hg-z-overlay: 200;
+  --hg-z-modal: 300;
+}
+
+html.hg-header-hidden {
+  --hg-header-offset: 0px;
+}

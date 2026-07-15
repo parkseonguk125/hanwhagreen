@@ -1,0 +1,1067 @@
+/* s:게시판 기본셋팅 */
+
+/* s:list.skin.php */
+.listSkin {
+    width:100%;
+    overflow: hidden;
+}
+.listSkin .inner {
+    width:1240px;
+    padding:2% 20px;
+    margin:0 auto;
+    position:relative;
+}
+@media screen and (max-width:1240px) {
+    .listSkin .inner {
+        width:98%;
+        padding:5% 1%;
+    }
+}
+/* e:list.skin.php */
+/* s:view.skin.php */
+.viewSkin {
+    width:100%;
+    overflow: hidden;
+}
+.viewSkin .inner {
+    width:1240px;
+    padding:5% 20px;
+    margin:0 auto;
+    position:relative;
+}
+.viewSkin_admin .inner{
+    width:1240px;
+    padding:0 20px;
+    margin:0 auto;
+}
+.viewSkin_admin .textBox {
+    text-align:center;
+    padding:2% 0;
+}
+.viewSkin_admin .textBox h2 {
+    font-size:2em;
+    font-weight: 700;
+    font-family: 'Eoe_Zno_EB';
+    letter-spacing:-0.6px;
+    color:#c91d1d;
+    display: block;
+}
+.viewSkin_admin .textBox .title {
+    font-size:5em;
+    font-weight:bold;
+    font-family: 'Noto Sans KR', sans-serif;
+    margin-bottom:20px;
+    color:#333;
+}
+.viewSkin_admin .textBox dl {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+}
+.viewSkin_admin .textBox dl dt {
+    font-size:1.3em;
+    font-weight:300;
+    color:#8d9291;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.viewSkin_admin .textBox dl dd {
+    font-size:1.3em;
+    font-weight:300;
+    color:#8d9291;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.viewSkin_admin .textBox dl dd span {
+    color:#8d9291;
+    display:inline-block;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.viewSkin_admin .textBox dl dd:nth-child(2) {
+    padding:0 20px;
+    position:relative;
+}
+.viewSkin_admin .textBox dl dd:nth-child(2)::before {
+    content:'';
+    position:absolute;
+    top:3px;
+    left:10px;
+    width:1px;
+    height:18px;
+    display:block;
+    background-color:#8d9291;
+}
+.viewSkin_admin .textBox dl dd:nth-child(2)::after {
+    content:'';
+    position:absolute;
+    top:3px;
+    right:10px;
+    width:1px;
+    height:18px;
+    display:block;
+    background-color:#8d9291;
+}
+
+.viewSkin2 {
+    width:100%;
+    overflow: hidden;
+}
+.viewSkin2 .inner {
+    width:1240px;
+    padding:5% 20px;
+    margin:0 auto;
+    position:relative;
+}
+.viewSkin_admin .inner{
+    width:1240px;
+    padding:0 20px;
+    margin:0 auto;
+}
+@media screen and (max-width:1240px) {
+    .viewSkin .inner{
+        width:98%;
+        padding:5% 1%;
+    }
+    .viewSkin_admin .inner{
+        width:98%;
+        padding:5% 1%;
+    }
+    .viewSkin2 .inner{
+        width:98%;
+        padding:5% 1%;
+    }
+}
+/* e:view.skin.php */
+/* s:write.skin.php */
+.writeSkin {
+    width:100%;
+    overflow: hidden;
+}
+.writeSkin .inner {
+    width:1240px;
+    padding:5% 20px;
+    margin:0 auto;
+    position:relative;
+}
+@media screen and (max-width:1240px) {
+    .writeSkin .inner {
+        width:98%;
+        padding:5% 1%;
+    }
+    .writeSkin .inner {
+        width:98%;
+        padding:5% 1%;
+    }
+}
+/* e:write.skin.php */
+
+.board_inner {
+    width:1240px;
+    margin:0 auto;
+    position:relative;
+    padding:5% 20px;
+}
+
+@media screen and (max-width:1200px) {
+    .board_inner {
+        width:100%;
+    }
+}
+/* s:category */
+#board_cate ul {
+    overflow: hidden;
+}
+#board_cate ul li {
+    float:left;
+    vertical-align:middle;
+    min-width:120px;
+    margin-bottom:10px;
+    height:40px;
+    line-height:40px;
+    text-align:center;
+    margin-right:10px;
+}
+#bo_cate_on {
+    background-color:#c91d1d;
+    color:#fff;
+    font-weight:bold;
+}
+#board_cate ul li a {
+    width:100%;
+    height:100%;
+    font-size:1.2em;
+    font-weight:400;
+    display:block;
+    border:1px solid #ccc;
+    box-sizing:border-box;
+    padding:0 5px;
+}
+.tbl_wrap {
+    padding:20px 0;
+}
+
+.td_subject {
+    padding-left:40px;
+}
+@media screen and (max-width:1200px) {
+    #board_cate ul li {
+        min-width:80px;
+        height:35px;
+        line-height:35px;
+        margin-right:5px;
+    }
+    #board_cate ul li a {
+        font-size:14px;
+    }
+}
+@media screen and (max-width:600px) {
+    #board_cate ul li {
+        min-width:60px;
+    }
+    #board_cate ul li a {
+        font-size:12px;
+    }
+}
+/* e:category */
+
+/* e:게시판 기본셋팅 */
+
+
+
+/* s:view.skin.php style */
+.viewSkin .textBox {
+    text-align:center;
+}
+.viewSkin .textBox h2 {
+    font-size:2em;
+    font-weight: 700;
+    font-family: 'Eoe_Zno_EB';
+    letter-spacing:-0.6px;
+    color:#c91d1d;
+    display: block;
+}
+.viewSkin .textBox .title {
+    font-size:5em;
+    font-weight:bold;
+    font-family: 'Noto Sans KR', sans-serif;
+    margin-bottom:20px;
+    color:#333;
+}
+.viewSkin .textBox dl {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+}
+.viewSkin .textBox dl dt {
+    font-size:1.3em;
+    font-weight:300;
+    color:#8d9291;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.viewSkin .textBox dl dd {
+    font-size:1.3em;
+    font-weight:300;
+    color:#8d9291;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.viewSkin .textBox dl dd span {
+    color:#8d9291;
+    display:inline-block;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+.viewSkin .textBox dl dd:nth-child(2) {
+    padding:0 20px;
+    position:relative;
+}
+.viewSkin .textBox dl dd:nth-child(2)::before {
+    content:'';
+    position:absolute;
+    top:3px;
+    left:10px;
+    width:1px;
+    height:18px;
+    display:block;
+    background-color:#8d9291;
+}
+.viewSkin .textBox dl dd:nth-child(2)::after {
+    content:'';
+    position:absolute;
+    top:3px;
+    right:10px;
+    width:1px;
+    height:18px;
+    display:block;
+    background-color:#8d9291;
+}
+.viewSkin .img_box {
+    display:block;
+    padding:5% 0;
+}
+.viewSkin .img_box img {
+    display:block;
+    margin:20px auto;
+}
+.viewSkin .cont_box {
+    padding-bottom:5%;
+}
+.viewSkin .cont_box p {
+    font-size:1.5em;
+    font-weight:400;
+    font-family: 'Noto Sans KR', sans-serif;
+    color:#333;
+    text-align:center;
+}
+.viewSkin .info_box {
+    border-top:1px solid #525252;
+    border-bottom:1px solid #525252;
+}
+.viewSkin .info_box ul li {
+    position:relative;
+    padding:20px 0;
+    position:relative;
+}
+.viewSkin .info_box ul li:nth-child(1)::after {
+    content:'';
+    position:absolute;
+    top:100%;
+    left:0;
+    width:100%;
+    height:1px;
+    background-color:#ccc;
+    z-index:-1;
+}
+.viewSkin .info_box ul li a {
+    width:100%;
+    height:100%;
+    display:block;
+    padding-left:20px;
+    overflow: hidden;
+}
+.viewSkin .info_box ul li .tit {
+    font-size:1.5em;
+    font-weight:600;
+    color:#525252;
+    font-family: 'Noto Sans KR', sans-serif;
+    letter-spacing:-0.6px;
+}
+.viewSkin .info_box ul li .icon {
+    font-size:16px;
+    display:inline-block;
+    padding-left:10px;
+    color:#8d9291;
+}
+.viewSkin .info_box ul li div {
+    float:left;
+}
+.viewSkin .info_box ul li .txt {
+    font-size:1.5em;
+    font-weight:400;
+    color:#525252;
+    font-family: 'Noto Sans KR', sans-serif;
+    letter-spacing:-0.6px;
+    padding-left:20px;
+}
+.viewSkin .list_move {
+    overflow:hidden;
+    padding-top:2%;
+}
+.viewSkin .list_move a {
+    float:right;
+    width: 130px;
+    height:40px;
+    line-height:40px;
+    text-align:center;
+    background-color:#333;
+    font-size:1.3em;
+    font-weight:400;
+    color:#fff;
+    margin-right:10px
+}
+.viewSkin .view_box {
+    width:150px;
+    position:absolute;
+    top:20px;
+    left:50%;
+    margin-left:-75px;
+    z-index:9;
+}
+
+.viewSkin2 .info_box {
+    border-top:1px solid #525252;
+    border-bottom:1px solid #525252;
+}
+.viewSkin2 .info_box ul li {
+    position:relative;
+    padding:20px 0;
+    position:relative;
+}
+.viewSkin2 .info_box ul li:nth-child(1)::after {
+    content:'';
+    position:absolute;
+    top:100%;
+    left:0;
+    width:100%;
+    height:1px;
+    background-color:#ccc;
+    z-index:-1;
+}
+.viewSkin2 .info_box ul li a {
+    width:100%;
+    height:100%;
+    display:block;
+    padding-left:20px;
+    overflow: hidden;
+}
+.viewSkin2 .info_box ul li .tit {
+    font-size:1.5em;
+    font-weight:600;
+    color:#525252;
+    font-family: 'Noto Sans KR', sans-serif;
+    letter-spacing:-0.6px;
+}
+.viewSkin2 .info_box ul li .icon {
+    font-size:16px;
+    display:inline-block;
+    padding-left:10px;
+    color:#8d9291;
+}
+.viewSkin2 .info_box ul li div {
+    float:left;
+}
+.viewSkin2 .info_box ul li .txt {
+    font-size:1.5em;
+    font-weight:400;
+    color:#525252;
+    font-family: 'Noto Sans KR', sans-serif;
+    letter-spacing:-0.6px;
+    padding-left:20px;
+}
+.viewSkin2 .list_move {
+    overflow:hidden;
+    padding-top:2%;
+}
+.viewSkin2 .list_move a {
+    float:right;
+    width:150px;
+    height:40px;
+    line-height:40px;
+    text-align:center;
+    background-color:#333;
+    font-size:1.3em;
+    font-weight:400;
+    color:#fff;
+}
+/* e : view */
+
+/* s:qna */
+#qna .td_num2 p{
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+}
+#qna .td_num2 span {
+    display:table-cell;
+    vertical-align:middle;
+}
+#qna .td_num2 .icon {
+    font-size:1.5em;
+    padding-right:5px;
+}
+#qna .td_num2 .text {
+    font-size:12px;
+}
+#qna td {
+    text-align:center;
+}
+
+@media screen and (max-width:900px) {
+    #qna .td_num2 p {
+        display:block;
+    }
+    #qna .td_num2 p span {
+        display:block;
+    }
+    #bo_list .td_num2 {
+        width:50px;
+    }
+    #bo_list .td_datetime {
+        width:45px;
+    }
+}
+/* e:qna */
+
+#bo_v_img img{
+    display:block;
+    margin:0 auto;
+}
+@media screen and (max-width:1240px) {
+
+    .viewSkin .view_box {
+        left:auto;
+        margin-left:0px;
+        right:20px;
+    }
+    .viewSkin  .textBox h2 {
+        font-size:1.5em;
+    }
+    .viewSkin  .textBox .title {
+        font-size:3em;
+    }
+    .viewSkin  .textBox dl dt {
+        font-size:1.1em;
+    }
+    .viewSkin  .textBox dl dd {
+        font-size:1.1em;
+    }
+    .viewSkin  .info_box ul li .tit {
+        font-size:1.2em;
+    }
+    .viewSkin .info_box ul li .txt {
+        font-size:1.2em;
+    }
+    .viewSkin  .info_box ul li {
+        padding:15px 0;
+    }
+    .viewSkin .img_box img {
+        width:100%;
+    }
+    .viewSkin .list_move {
+        padding-top:5%;
+    }
+}
+@media screen and (max-width:900px) {
+    .viewSkin  .textBox .title {
+        font-size:2em;
+        margin-bottom:0;
+    }
+}
+/* e:view.skin.php style*/
+
+
+/* s:skin>board>list01 */
+#board_list01 {
+    /* 전체감싸는태그 */
+    width:100%;
+    overflow: hidden;
+}
+#board_list01 .listForm {
+    padding:5% 0;
+}
+#board_list01 .listFormul {
+    border-top:2px solid #333;
+    box-sizing:border-box;
+}
+#board_list01 .listForm ul li {
+    border-bottom:1px solid #ccc;
+    padding:2%;
+    overflow: hidden;
+    cursor: pointer;
+}
+#board_list01 .listForm ul li:hover {
+    background-color:#f9f7f7;
+    box-shadow:3px 3px 5px rgba(0,0,0,0.2);
+}
+#board_list01 .listForm ul li .lf_box {
+    width:70%;
+    float:left;
+}
+#board_list01 .listForm ul li dl{
+    display:flex;
+    padding-bottom:20px;
+}
+#board_list01 .listForm ul li dl dt {
+    font-size:2em;
+    font-weight:bold;
+    color:#333;
+    padding-right:30px;
+    position:relative;
+}
+#board_list01 .listForm ul li dl dt::after {
+    content:'';
+    position:absolute;
+    top:8px;
+    right:15px;
+    width:1px;
+    height:22px;
+    background-color:#c7c7c7;
+}
+#board_list01 .listForm ul li dl dd {
+    font-size:2em;
+    font-weight:bold;
+    color:#333;
+}
+#board_list01 .listForm .info_box {
+    display:table;
+}
+#board_list01 .listForm .info_box p {
+    display:table-cell;
+    padding-right:20px;
+}
+#board_list01 .listForm .info_box i {
+    font-size:1.1em;
+    font-weight:400;
+    color:#9f9f9f;
+    padding-right:5px;
+}
+#board_list01 .listForm .info_box span {
+    font-size:1em;
+    font-weight:400;
+    color:#9f9f9f;
+}
+#board_list01 .listForm ul li .rt_box {
+    width:30%;
+    float:right;
+    padding-top:2%;
+}
+#board_list01 .listForm ul li .rt_box i {
+    font-size:1.5em;
+}
+#board_list01 .listForm .info_txt {
+    font-size:1.8em;
+    font-weight:bold;
+    color:#333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4% 0;
+}
+
+@media screen and (max-width:800px) {
+    #board_list01 .listForm ul li .lf_box {
+        width:100%;
+    }
+    #board_list01 .listForm ul li dl {
+        padding-bottom:10px;
+    }
+    #board_list01 .listForm ul li dl dt {
+        font-size:18px;
+    }
+    #board_list01 .listForm ul li dl dd {
+        font-size:18px;
+    }
+}
+/* e:skin>board>list01 */
+
+
+
+/* s:skin>board>webzine01 */
+#board_webzine01 {
+    /* 전체감싸는태그 */
+    width:100%;
+    overflow: hidden;
+}
+#board_webzine01 .listForm {
+    margin-top:3%;
+    border-top:2px solid #333;
+}
+#board_webzine01 .listForm  li{
+    padding:2%;
+    cursor: pointer;
+    display:table;
+    border-bottom:1px solid #ccc;
+}
+#board_webzine01 .listForm  li:hover {
+    background-color:#f9f7f7;
+    box-shadow:3px 3px 5px rgba(0,0,0,0.2);
+}
+#board_webzine01 .listForm  li .lf_box {
+    display:table-cell;
+    vertical-align: middle;
+    width:750px;
+}
+#board_webzine01 .listForm  li dl dt {
+    font-size:1.8em;
+    font-weight:bold;
+    color:#333;
+    padding-bottom:10px;
+}
+#board_webzine01 .listForm  li dl dd:nth-child(2) {
+    font-size:1.2em;
+    font-weight:400;
+    color:#333;
+    padding-bottom:10px;
+}
+#board_webzine01 .listForm  li dl dd:nth-child(3) {
+    font-size:1em;
+    font-weight:400;
+    color:#454545;
+    display:table;
+}
+#board_webzine01 .listForm  li dl dd:nth-child(3) span {
+    display:table-cell;
+    padding-right:10px;
+}
+#board_webzine01 .listForm  li .rt_box {
+    display:table-cell;
+    vertical-align: middle;
+    width:40%;
+    padding-left:10%;
+    overflow:hidden;
+}
+#board_webzine01 .listForm  li .rt_box div {
+    display:inline-block;
+}
+#board_webzine01 .listForm  li .rt_box div:nth-child(2) {
+    font-size:1.2em;
+    font-weight:500;
+    color:#333;
+    text-align:center;
+    padding-left:50px;
+}
+#board_webzine01 .listForm  .info_txt {
+    font-size:1.8em;
+    font-weight:bold;
+    color:#333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4% 0;
+}
+@media screen and (max-width:800px) {
+    #board_webzine01 .listForm li {
+        display:block;
+        padding:20px;
+    }
+    #board_webzine01 .listForm li .lf_box {
+        display:block;
+        width:auto;
+        margin-bottom:20px;
+    }
+    #board_webzine01 .listForm li .lf_box {
+        width:auto;
+    }
+    #board_webzine01 .listForm li .rt_box {
+        width:auto;
+        padding-left:0px;
+    }
+    #board_webzine01 .listForm li dl dt {
+        font-size:18px;
+    }
+    #board_webzine01 .listForm li dl dd:nth-child(3) span {
+        padding-right:0px;
+    }
+    #board_webzine01 .listForm li dl dd:nth-child(2) {
+        font-size:14px;
+    }
+    #board_webzine01 .listForm li .rt_box div:nth-child(2) {
+        padding-top:10px;
+        padding-left:0;
+        width:100%;
+        text-align:left;
+    }
+}
+/* e:skin>board>webzine01 */
+
+
+/* s:skin>board>webzine02 */
+#board_webzine02 .listForm{
+    margin-top:3%;
+    border-top:2px solid #333;
+}
+#board_webzine02 .listForm li{
+    padding:2%;
+    cursor: pointer;
+    display:table;
+    border-bottom:1px solid #ccc;
+}
+#board_webzine02 li:hover {
+    background-color:#f9f7f7;
+    box-shadow:3px 3px 5px rgba(0,0,0,0.2);
+}
+#board_webzine02 li .lf_box {
+    display:table-cell;
+    vertical-align: middle;
+    width:20%;
+    overflow:hidden;
+}
+#board_webzine02 li .rt_box {
+    display:table-cell;
+    vertical-align: middle;
+    width:1000px;
+}
+#board_webzine02 li dl dt {
+    font-size:1.8em;
+    font-weight:bold;
+    color:#333;
+    padding-bottom:10px;
+}
+#board_webzine02 li dl dd:nth-child(2) {
+    font-size:1.2em;
+    font-weight:400;
+    color:#333;
+    padding-bottom:10px;
+}
+#board_webzine02 li dl dd:nth-child(3) {
+    font-size:1em;
+    font-weight:400;
+    color:#454545;
+    display:table;
+}
+#board_webzine02 li dl dd:nth-child(3) span {
+    display:table-cell;
+    padding-right:10px;
+}
+#board_webzine02 .info_txt {
+    font-size:1.8em;
+    font-weight:bold;
+    color:#333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 4% 0;
+}
+@media screen and (max-width:1200px) {
+    #board_webzine02 li .rt_box {
+        width:55%;
+    } 
+    #board_webzine02 li dl dd:nth-child(3) span {
+        padding-left:0px;
+    }
+}
+@media screen and (max-width:800px) {
+    #board_webzine02 .listForm li {
+        display:block;
+    }
+    #board_webzine02 li .lf_box {
+        display:block;
+        width:100%;
+        padding:20px 0;
+    } 
+    #board_webzine01 .listForm li dl dt {
+        font-size:18px;
+    }
+    #board_webzine01 .listForm li dl dd:nth-child(2) {
+        font-size:14px;
+    }
+    #board_webzine02 li dl dd:nth-child(3) span {
+        padding-left:2px;
+        padding-right:0px;
+    }
+}
+/* e:skin>board>webzine02 */
+
+/* s:skin>board>gallery01 */
+#board_gallery01 .listForm {
+    width:100%;
+    padding:4% 0;
+    overflow:hidden;
+}
+#board_gallery01 .listForm li {
+    width:32%; /*갤러리 한줄 갯수 조절*/
+    margin-right:1.33%;
+    margin-bottom:5%;
+    height:330px;
+    float:left;
+    position:relative;
+    overflow: hidden;
+    box-shadow:3px 3px 8px rgba(0, 0, 0, .075);
+}
+
+#board_gallery01 .listForm li:hover .img_box img{
+    transform:scale(1.1);
+    transition:all 0.6s;
+}
+#board_gallery01 .listForm li .img_box {
+    width:100%;
+    height:220px;
+    overflow: hidden;
+    transition:0.6s;
+}
+#board_gallery01 .listForm li .text_box{
+    padding:5% 4% 8% 4%;
+}
+#board_gallery01 .listForm li .text_box h2 {
+    font-size:1.8em;
+    font-weight:bold;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding-bottom:10px;
+    color:#333;
+}
+#board_gallery01 .listForm li:hover .text_box h2{
+    font-size:1.7em;
+    transition:all 0.6s;
+}
+#board_gallery01 .listForm li .text_box p {
+    font-size:1.2em;
+    font-weight:300;
+    font-family: 'Noto Sans KR', sans-serif;
+    color:#333;
+}
+#board_gallery01 .listForm li:hover .text_box p{
+    font-size:1.1em;
+    transition:all 0.6s;
+}
+
+@media screen and (max-width:960px) {
+    #board_gallery01 .listForm li {
+        width:48%; /*갤러리 한줄 갯수 조절*/
+        margin-right:0;
+        margin-bottom:4%;
+        height:330px;
+        float:left;
+        position:relative;
+        overflow: hidden;
+    }
+    #board_gallery01 .listForm li .img_box img{
+        width:100%;
+    }
+    #board_gallery01 .listForm li:nth-child(2n) {
+        margin-left:4%;
+    }
+}
+@media screen and (max-width:800px) {
+    #board_gallery01 .listForm li {
+        width:384px; /*갤러리 한줄 갯수 조절*/
+        margin-right:0;
+        margin-bottom:4%;
+        float:none;
+        position:relative;
+        overflow: hidden;
+        margin:0 auto;
+    }
+    #board_gallery01 .listForm li:nth-child(2n) {
+        margin:20px auto;
+    }
+    #board_gallery01 .listForm li:nth-child(3n) {
+        margin:20px auto;
+    }
+    #board_gallery01 .listForm li .text_box h2 {
+        font-size:18px;
+    }
+}
+@media screen and (max-width:384px) {
+    #board_gallery01 .listForm li {
+        width:280px;
+        height:270px;
+    }
+    #board_gallery01 .listForm li .img_box {
+        height:160px;
+    }
+}
+/* e:skin>board>gallery01 */
+
+
+/* s:skin>board>gallery02 */
+#board_gallery02 .listForm {
+    width:100%;
+    padding:4% 0;
+    overflow:hidden;
+}
+#board_gallery02 .listForm li {
+    width:32%; /*갤러리 한줄 갯수 조절*/
+    margin-right:1.33%;
+    margin-bottom:5%;
+    height:300px;
+    float:left;
+    position:relative;
+    overflow: hidden;
+}
+#board_gallery02 .listForm li:hover {
+    transform: scale3d(0.985, 0.985, 0.985) translateX(0);
+    transition:0.6s;
+}
+#board_gallery02 .listForm li .img_box {
+    width:100%;
+    height:300px;
+    overflow: hidden;
+}
+#board_gallery02 .listForm li .text_box{
+    padding:5%;
+    position:absolute;
+    bottom:10px;
+    z-index:1;
+}
+#board_gallery02 .listForm li .text_box h2 {
+    font-size:2.5em;
+    font-weight:bold;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding-bottom:10px;
+    color:#fff;
+}
+#board_gallery02 .listForm li:hover .text_box {
+    display:none;
+}
+#board_gallery02 .listForm li .text_box p {
+    font-size:1.3em;
+    font-weight:300;
+    font-family: 'Noto Sans KR', sans-serif;
+    color:#f6f6f6;
+}
+#board_gallery02 .listForm li:hover .text_hover {
+    opacity:1;
+    transition:all 0.6s;
+}
+#board_gallery02 .listForm li .text_hover {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:2;
+    width:100%;
+    height:100%;
+    background-color:#c91d1d;
+    padding:10% 6% 0 6%;
+    opacity:0;
+}
+#board_gallery02 .listForm li .text_hover h2 {
+    font-size:2em;
+    font-weight:bold;
+    color:#fff;
+    padding-bottom:10%;
+}
+#board_gallery02 .listForm li .text_hover p {
+    font-size:1.1em;
+    font-weight:400;
+    color:#ddd;
+}
+
+@media screen and (max-width:960px) {
+    #board_gallery02 .listForm li {
+        width:48%; /*갤러리 한줄 갯수 조절*/
+        margin-right:0;
+        margin-bottom:4%;
+        height:300px;
+        float:left;
+        position:relative;
+        overflow: hidden;
+    }
+    #board_gallery02 .listForm li:nth-child(2n) {
+        margin-left:4%;
+    }
+
+}
+@media screen and (max-width:800px) {
+    #board_gallery02 .listForm li {
+        width:384px; /*갤러리 한줄 갯수 조절*/
+        margin-right:0;
+        margin-bottom:4%;
+        height:300px;
+        float:none;
+        position:relative;
+        overflow: hidden;
+        margin:0 auto;
+    }
+    #board_gallery02 .listForm li:nth-child(2n) {
+        margin:20px auto;
+    }
+    #board_gallery02 .listForm li:nth-child(3n) {
+        margin:20px auto;
+    }
+}
+@media screen and (max-width:384px) {
+    #board_gallery02 .listForm li {
+        width:100%;
+        height:auto;
+    }
+    #board_gallery02 .listForm li .text_box h2 {
+        font-size:18px;
+        padding-bottom:0px;
+    }
+    #board_gallery02 .listForm li .text_box p {
+        font-size:16px;
+    }
+}
+/* e:skin>board>gallery02 */
+
+@media screen and (max-width:1200px) {
+    
+}

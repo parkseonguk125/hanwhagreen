@@ -1,0 +1,59 @@
+/* 주요실적(Product) — hanwhagreen.com 메인 페이지 동일 */
+
+.pro_tit dd {
+  color: #666;
+  margin-top: 4px;
+}
+
+.pro_controll {
+  align-items: center;
+}
+
+.pro_controll a {
+  color: #333 !important;
+  text-decoration: none;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.pro_controll a:hover {
+  color: #333 !important;
+}
+
+.pro_arrow {
+  gap: 5px;
+}
+
+.product .pro_contents {
+  overflow: hidden;
+}
+
+.product .pro_slick.swiper {
+  overflow: visible;
+  width: 100%;
+}
+
+.pro_slick .swiper-slide {
+  padding: 10px;
+  height: auto;
+  box-sizing: border-box;
+}
+
+.pro_con_img {
+  aspect-ratio: 480 / 420;
+}
+
+.pro_con img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pro_con a {
+  text-decoration: none;
+}
+
+.pro_con a > p {
+  color: #333;
+}

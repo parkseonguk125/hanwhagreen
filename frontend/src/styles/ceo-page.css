@@ -1,0 +1,177 @@
+.mo_br {
+  display: block;
+}
+
+#ceo .sec1 {
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+#ceo .sec1::after {
+  content: "GREETINGS";
+  position: absolute;
+  bottom: -60px;
+  left: -33px;
+  display: block;
+  color: #000;
+  font-size: 20rem;
+  font-weight: 700;
+  opacity: 0.05;
+  z-index: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+#ceo .sec1 .inner {
+  width: 1240px;
+  padding: 8% 20px;
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+  z-index: 1;
+}
+
+#ceo .sec1 .lf_box {
+  width: 50%;
+  float: left;
+}
+
+#ceo .sec1 .lf_box img {
+  width: 100%;
+}
+
+#ceo .sec1 .rt_box {
+  padding-left: 2%;
+  width: 48%;
+  float: right;
+}
+
+#ceo .sec1 .rt_box .text_box {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  vertical-align: middle;
+  justify-content: center;
+  justify-items: center;
+}
+
+#ceo .sec1 .rt_box .tit {
+  font-size: 3em;
+  font-weight: 400;
+  color: #000;
+  padding-bottom: 40px;
+  font-family: "Noto Sans KR", sans-serif;
+  letter-spacing: -0.6px;
+  line-height: 1.5;
+  word-break: keep-all;
+  margin: 0;
+}
+
+#ceo .sec1 .rt_box dl {
+  margin: 0;
+}
+
+#ceo .sec1 .rt_box dl dt strong {
+  font-size: 2em;
+  font-weight: bold;
+  color: #333;
+  font-family: "Noto Sans KR", sans-serif;
+  padding-bottom: 30px;
+  display: block;
+}
+
+#ceo .sec1 .rt_box dl .txt p {
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: -0.6px;
+  line-height: 1.5;
+  word-break: keep-all;
+  color: #000;
+  padding-bottom: 20px;
+  margin: 0;
+}
+
+#ceo .sec1 .rt_box dl .txt strong {
+  font-weight: 500;
+}
+
+#ceo .sec1 .rt_box dl .sign {
+  height: 50px;
+  display: flex;
+  margin-top: 20px;
+}
+
+#ceo .sec1 .rt_box dl .sign p:nth-child(1) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 400;
+  color: #333;
+  padding-right: 40px;
+  margin: 0;
+}
+
+@media screen and (max-width: 1240px) {
+  #ceo .sec1 .inner {
+    width: 98%;
+    padding: 8% 1%;
+  }
+
+  #ceo .sec1 .rt_box {
+    width: 50%;
+    padding-left: 20px;
+  }
+
+  #ceo .sec1 .rt_box .tit {
+    font-size: 26px;
+  }
+
+  #ceo .sec1 .rt_box dl dt strong {
+    font-size: 21px;
+  }
+
+  #ceo .sec1 .rt_box dl .txt p {
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .mo_br {
+    display: inline-block;
+  }
+
+  #ceo .sec1 .lf_box {
+    width: 100%;
+    float: none;
+  }
+
+  #ceo .sec1 .rt_box {
+    width: 100%;
+    float: none;
+    padding-top: 40px;
+    padding-left: 0;
+  }
+
+  #ceo .sec1 .rt_box .tit {
+    font-size: 21px;
+    padding-bottom: 20px;
+  }
+
+  #ceo .sec1 .rt_box dl dt strong {
+    position: relative;
+  }
+
+  #ceo .sec1 .rt_box dl dt strong::after {
+    content: "";
+    width: 75%;
+    height: 20px;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 0;
+    bottom: 25px;
+  }
+}

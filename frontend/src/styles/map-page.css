@@ -1,0 +1,327 @@
+.sub .title {
+  font-size: 3em;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  padding: 5% 0;
+  margin: 0;
+}
+
+#map .sec1 {
+  width: 100%;
+}
+
+#map .sec1 .inner {
+  width: 1240px;
+  height: 100%;
+  padding: 5% 20px;
+  margin: 0 auto;
+  position: relative;
+  overflow: visible;
+}
+
+#map .sec1 .root_daum_roughmap {
+  width: 100%;
+  min-height: 360px;
+  height: auto;
+}
+
+.root_daum_roughmap .wrap_map {
+  height: 360px;
+}
+
+.root_daum_roughmap .wrap_map iframe {
+  width: 100%;
+  height: 360px;
+}
+
+#map .sec1 .map_info {
+  width: 100%;
+  padding: 4% 2%;
+  background: #f5f5f5;
+  position: relative;
+  border-top: 1px solid #ccc;
+  word-break: keep-all;
+  display: flex;
+}
+
+#map .sec1 .map_info .lf_box {
+  height: 143px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 50px;
+  cursor: pointer;
+}
+
+#map .sec1 .map_info .map-info-icon {
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  border-radius: 50%;
+  border: 0;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#map .sec1 .map_info .map-info-icon img {
+  width: 100%;
+}
+
+#map .sec1 .map_info .rt_box {
+  height: 100%;
+}
+
+#map .sec1 .map_info strong {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  padding-bottom: 10px;
+}
+
+#map .sec1 .map_info p {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+#map .sec1 .map_info span {
+  display: inline-block;
+}
+
+#map .sec1 .map_info p span:nth-child(1) {
+  font-weight: bold;
+  color: #333;
+  width: 100px;
+  position: relative;
+}
+
+#map .sec1 .map_info p span:nth-child(1)::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  right: 0;
+  width: 1px;
+  height: 20px;
+  background-color: #6a6a6a;
+}
+
+#map .sec1 .map_info p span:nth-child(2) {
+  font-weight: 400;
+  color: #6a6a6a;
+  padding-left: 10px;
+}
+
+#map .topBox {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+#map .topBox > div {
+  width: 100%;
+}
+
+#map .map-directions-box {
+  width: 100%;
+  max-width: 100%;
+}
+
+#map .infoBox .titBox {
+  padding: 40px 0 20px;
+  display: flex;
+}
+
+#map .infoBox .titBox p {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+}
+
+#map .infoBox .titBox i {
+  font-size: 4em;
+  color: #333;
+}
+
+#map .infoBox .titBox .text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  padding-left: 10px;
+}
+
+#map .infoBox ul {
+  width: 100%;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  padding: 20px;
+  margin: 0;
+  list-style: none;
+}
+
+#map .infoBox.infoBox2 ul.map-directions-list {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+}
+
+#map .infoBox2 ul li {
+  padding-bottom: 30px;
+  list-style: none;
+}
+
+#map .infoBox2 dl {
+  margin: 0;
+}
+
+#map .infoBox2 dt {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #333;
+  padding-bottom: 20px;
+  word-break: keep-all;
+  line-height: 1.6;
+}
+
+#map .infoBox2 dt.map-direction-text {
+  font-size: 1.3em;
+  font-weight: bold;
+  line-height: 1.6;
+  padding-bottom: 20px;
+}
+
+#map .infoBox2 dt.map-direction-text:last-child {
+  padding-bottom: 0;
+}
+
+#map .infoBox2 .btnBox {
+  width: 100%;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+#map .infoBox2 .btnBox a {
+  display: inline-block;
+  text-decoration: none;
+}
+
+#map .infoBox2 .btnBox a span {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #333;
+  line-height: 1.4;
+}
+
+@media screen and (max-width: 1240px) {
+  #map .sec1 .title {
+    font-size: 21px;
+    padding-bottom: 5%;
+  }
+
+  #map .sec1 .inner {
+    width: 98%;
+    padding: 8% 1%;
+  }
+
+  #map .topBox {
+    display: block;
+  }
+
+  #map .topBox > div {
+    width: 100%;
+  }
+
+  #map .infoBox ul {
+    height: auto;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .sub .title {
+    font-size: 21px;
+    padding: 8% 0;
+  }
+
+  #map .sec1 .root_daum_roughmap {
+    width: 100%;
+    height: 250px;
+  }
+
+  #map .sec1 .map_info {
+    padding: 4% 2%;
+  }
+
+  #map .sec1 .map_info .lf_box {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9;
+    opacity: 0.2;
+  }
+
+  #map .sec1 .map_info .rt_box {
+    width: 100%;
+    position: relative;
+    z-index: 10;
+  }
+
+  #map .sec1 .map_info strong {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  #map .sec1 .map_info p {
+    font-size: 16px;
+    text-align: center;
+    padding: 20px 10px 10px;
+  }
+
+  #map .sec1 .map_info .map-info-icon {
+    border: none;
+    width: auto;
+  }
+
+  #map .sec1 .map_info span {
+    display: block;
+  }
+
+  #map .sec1 .map_info p span:nth-child(1) {
+    width: 100%;
+    text-align: center;
+    padding-bottom: 10px;
+    z-index: 2;
+  }
+
+  #map .sec1 .map_info p span:nth-child(1)::after {
+    top: 13px;
+    right: 0;
+    width: 70px;
+    height: 10px;
+    background-color: rgba(199, 21, 38, 0.5);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
+  #map .infoBox2 .btnBox a {
+    width: 100%;
+    height: 50px;
+    background-color: #333;
+    display: block;
+  }
+
+  #map .infoBox2 .btnBox a span {
+    display: block;
+    text-align: center;
+    line-height: 50px;
+    font-size: 16px;
+    color: #fff;
+  }
+}

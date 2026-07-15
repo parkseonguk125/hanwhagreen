@@ -1,0 +1,109 @@
+.intro {
+  padding: 100px 0 80px;
+  text-align: center;
+  background: var(--color-white);
+}
+
+.copy {
+  margin-bottom: 24px;
+}
+
+.copyLine {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--color-dark);
+}
+
+.copyLine:first-child {
+  font-weight: 700;
+}
+
+.quickLinks {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--color-text);
+  margin-bottom: 60px;
+}
+
+.divider {
+  color: var(--color-border);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.card {
+  padding: 40px 32px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-light);
+  text-align: left;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+.cardIcon {
+  color: var(--color-green);
+  margin-bottom: 20px;
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--color-dark);
+}
+
+.cardDesc {
+  font-size: 15px;
+  color: var(--color-muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  min-height: 80px;
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-dark);
+  border-bottom: 1px solid var(--color-dark);
+  padding-bottom: 2px;
+  transition: color 0.2s;
+}
+
+.cardLink:hover {
+  color: var(--color-green);
+  border-color: var(--color-green);
+}
+
+@media (max-width: 1024px) {
+  .cards {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .intro {
+    padding: 60px 0 48px;
+  }
+
+  .quickLinks {
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+}

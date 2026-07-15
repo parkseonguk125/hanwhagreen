@@ -1,0 +1,17 @@
+:root {
+  --color-bg: #fbfbfb;
+  --color-white: #fff;
+  --color-dark: #333;
+  --color-text: #666;
+  --color-muted: #787878;
+  --color-border: #ddd;
+  --color-border-light: #e3e3e3;
+  --color-green-dark: #0d5c3a;
+  --color-green: #1a8f5c;
+  --color-green-light: #2cb573;
+  --overlay-dark: rgba(0, 0, 0, 0.3);
+  --overlay-panel: rgba(255, 255, 255, 0.65);
+  --font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --container-max: 1400px;
+  --header-height: 120px;
+}

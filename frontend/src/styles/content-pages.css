@@ -1,0 +1,174 @@
+.content-page .inner {
+  padding: 5% 0;
+}
+
+.content-subtitle {
+  font-size: 1.2em;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.content-intro-box,
+.content-divisions,
+.content-map-info,
+.content-directions,
+.tech-section {
+  margin-bottom: 3rem;
+}
+
+.content-intro-box h3,
+.content-divisions h3,
+.content-heading {
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.content-intro-box p,
+.content-body p,
+.tech-section p {
+  line-height: 1.8;
+  color: #555;
+}
+
+.content-downloads {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.content-downloads a {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid #2d5a3d;
+  color: #2d5a3d;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.content-downloads a:hover {
+  background: #2d5a3d;
+  color: #fff;
+}
+
+.content-divisions ul,
+.tech-section ul,
+.content-directions ul {
+  padding-left: 1.2rem;
+  line-height: 1.8;
+}
+
+.content-label {
+  color: #2d5a3d;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.content-welcome {
+  font-size: 1.1em;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.content-signature {
+  margin-top: 2rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.content-map-info dl {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 8px 16px;
+  margin: 0;
+}
+
+.content-map-info dt {
+  font-weight: 700;
+  color: #333;
+}
+
+.content-map-info dd {
+  margin: 0;
+  color: #555;
+}
+
+.content-map-embed {
+  width: 100%;
+  height: 420px;
+  margin: 2rem 0;
+  border: 1px solid #ddd;
+}
+
+.content-map-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.content-directions li {
+  margin-bottom: 1.5rem;
+  list-style: none;
+}
+
+.content-directions strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.content-branch {
+  padding-top: 2rem;
+  border-top: 1px solid #eee;
+}
+
+.tech-section {
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.tech-section h4 {
+  margin: 1rem 0 0.5rem;
+  font-size: 1.1em;
+  color: #2d5a3d;
+}
+
+.construction-table-wrap {
+  overflow-x: auto;
+}
+
+.construction-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+}
+
+.construction-table th,
+.construction-table td {
+  border: 1px solid #ddd;
+  padding: 10px 8px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.construction-table th {
+  background: #f6f6f6;
+  font-weight: 700;
+}
+
+.construction-table td:nth-child(3),
+.construction-table td:nth-child(6) {
+  text-align: left;
+}
+
+@media screen and (max-width: 800px) {
+  .content-map-embed {
+    height: 280px;
+  }
+
+  .content-map-info dl {
+    grid-template-columns: 1fr;
+  }
+}

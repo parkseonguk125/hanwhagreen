@@ -1,0 +1,20 @@
+/** 전국 17개 시·도 — 기상청 격자(nx,ny) + 에어코리아 sidoName */
+export const LIVE_REGIONS = [
+  { name: "서울", nx: 60, ny: 127, sidoName: "서울" },
+  { name: "부산", nx: 98, ny: 76, sidoName: "부산" },
+  { name: "대구", nx: 89, ny: 90, sidoName: "대구" },
+  { name: "인천", nx: 55, ny: 124, sidoName: "인천" },
+  { name: "광주", nx: 58, ny: 74, sidoName: "광주" },
+  { name: "대전", nx: 67, ny: 100, sidoName: "대전" },
+  { name: "울산", nx: 102, ny: 84, sidoName: "울산" },
+  { name: "세종", nx: 66, ny: 103, sidoName: "세종" },
+  { name: "경기", nx: 60, ny: 120, sidoName: "경기" },
+  { name: "강원", nx: 73, ny: 134, sidoName: "강원" },
+  { name: "충북", nx: 69, ny: 107, sidoName: "충북" },
+  { name: "충남", nx: 68, ny: 100, sidoName: "충남" },
+  { name: "전북", nx: 63, ny: 89, sidoName: "전북" },
+  { name: "전남", nx: 51, ny: 67, sidoName: "전남" },
+  { name: "경북", nx: 91, ny: 106, sidoName: "경북" },
+  { name: "경남", nx: 91, ny: 77, sidoName: "경남" },
+  { name: "제주", nx: 52, ny: 38, sidoName: "제주" },
+];

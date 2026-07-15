@@ -1,0 +1,195 @@
+/* 주요실적 페이지 모바일 — hanwhagreen.com/bbs/board.php?bo_table=project (1024px 이하만) */
+
+@media screen and (max-width: 1024px) {
+  #product03.sub {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  #product03 .visual .text_box h2 {
+    font-size: 2.5em;
+  }
+
+  #product03 #navigation .inner {
+    width: 98%;
+    box-sizing: border-box;
+  }
+
+  /* listSkin — board.css @1240px */
+  #product03 .listSkin .inner {
+    width: 98%;
+    padding: 5% 1%;
+    box-sizing: border-box;
+  }
+
+  /* 페이지네이션 — 1~10 번호와 > >> 아이콘 한 줄 나란히 (원본 동일) */
+  #product03 .pg_wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    text-align: center;
+  }
+
+  #product03 .pg_wrap .pg {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  #product03 .pg_wrap .pg_page,
+  #product03 .pg_wrap .pg_current,
+  #product03 .pg_wrap .pg_arrow_group {
+    flex-shrink: 0;
+  }
+
+  #product03 .pg_wrap .pg_arrow_group {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  /* 카테고리 — board.css @1200px */
+  #product03 #board_cate ul li {
+    min-width: 80px;
+    height: 35px;
+    line-height: 35px;
+    margin-right: 5px;
+  }
+
+  #product03 #board_cate ul li a {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  /* 갤러리 — board.css gallery01 @960px */
+  #product03 .listForm li {
+    width: 48%;
+    margin-right: 0;
+    margin-bottom: 4%;
+    height: 330px;
+    float: left;
+  }
+
+  #product03 .listForm li:nth-child(2n) {
+    margin-left: 4%;
+  }
+
+  #product03 .listForm li.empty_list {
+    width: 48%;
+    margin-left: 0;
+  }
+
+  #product03 .listForm li .img_box img {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  #product03 .visual {
+    height: 280px;
+  }
+
+  #product03 .visual .text_box h2 {
+    font-size: 2em;
+  }
+
+  #product03 #navigation .inner {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+  }
+
+  #product03 #navigation #navi_home {
+    width: 10%;
+    padding: 0;
+    line-height: 50px;
+  }
+
+  #product03 #navigation .navi-home-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  #product03 #navigation .navi {
+    width: 45%;
+  }
+
+  #product03 #navigation .tit {
+    font-size: 1em;
+    padding-left: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 갤러리 — board.css gallery01 @800px */
+  #product03 .listForm li {
+    width: 384px;
+    margin: 0 auto 20px;
+    float: none;
+  }
+
+  #product03 .listForm li.empty_list {
+    width: 384px;
+    height: auto;
+    margin: 0 auto 20px;
+  }
+
+  #product03 .listForm li:nth-child(2n) {
+    margin-left: auto;
+  }
+
+  #product03 .listForm li:nth-child(3n) {
+    margin: 20px auto;
+  }
+
+  #product03 .listForm li .text_box h2,
+  #product03 .listForm li .text_box h2.subject {
+    font-size: 18px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #product03 .visual .text_box h2 {
+    font-size: 1.75em;
+  }
+
+  #product03 #navigation .tit {
+    font-size: 0.9em;
+    padding-left: 8px;
+  }
+
+  #product03 #navigation .navi_btn {
+    right: 10px;
+  }
+
+  /* 카테고리 — board.css @600px */
+  #product03 #board_cate ul li {
+    min-width: 60px;
+  }
+
+  #product03 #board_cate ul li a {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 384px) {
+  /* 갤러리 — board.css gallery01 @384px */
+  #product03 .listForm li {
+    width: 280px;
+    height: 270px;
+  }
+
+  #product03 .listForm li.empty_list {
+    width: 280px;
+    height: auto;
+  }
+
+  #product03 .listForm li .img_box {
+    height: 160px;
+  }
+}

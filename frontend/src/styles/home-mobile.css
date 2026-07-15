@@ -1,0 +1,528 @@
+/* 홈페이지 모바일 — hanwhagreen.com main.css / common.css 반응형 동일 (1024px 이하만) */
+
+/* ── 1024px 이하: 1540 + 1240 + 1050 규칙 (900 미만 레이아웃 전환은 아래 별도) ── */
+@media screen and (max-width: 1024px) {
+  .section .inner {
+    width: 90% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* header — max-width:1050px (common.css) */
+  #header #nav {
+    display: none !important;
+  }
+
+  #header .tp_link {
+    display: none !important;
+  }
+
+  #header .inner-top {
+    padding: 15px 0 !important;
+  }
+
+  #header .logo-brand {
+    position: inherit !important;
+    left: auto !important;
+    transform: none !important;
+    display: flex !important;
+    align-items: center;
+    gap: 6px;
+    z-index: auto;
+  }
+
+  #header .logo-brand .logo {
+    position: inherit !important;
+    transform: none !important;
+  }
+
+  #header .clone-coding-badge {
+    font-size: 10px !important;
+    color: #666 !important;
+  }
+
+  /* hero — max-width:1540px + 1240px */
+  .main_bn {
+    height: 750px !important;
+  }
+
+  .main_news {
+    width: 100% !important;
+  }
+
+  .main_controll {
+    width: 90% !important;
+  }
+
+  /* area — max-width:1540px + 1240px */
+  .area {
+    padding: 100px 0 70px !important;
+  }
+
+  .area_tit_wrap {
+    padding: 0 10px !important;
+  }
+
+  .area_tit_ani p {
+    font-size: 24px !important;
+  }
+
+  .area_contents {
+    margin-top: 20px !important;
+    height: 460px !important;
+  }
+
+  .area_tab ul li {
+    padding: 25px !important;
+    font-size: 17px !important;
+  }
+
+  .area_con {
+    padding-left: 45px !important;
+  }
+
+  .area_con_tit > p {
+    font-size: 26px !important;
+  }
+
+  /* product — max-width:1540px + 1240px */
+  .product .title {
+    font-size: 27px !important;
+  }
+
+  .product .pro_slick.swiper {
+    overflow: visible !important;
+  }
+
+  .product .pro_contents {
+    overflow: visible !important;
+  }
+
+  /* gallery — max-width:1540px + 1240px */
+  .gallery {
+    padding: 80px 0 !important;
+  }
+
+  .gallery .inner {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 90% !important;
+    align-items: flex-start !important;
+  }
+
+  .gall_tit .title {
+    font-size: 27px !important;
+  }
+
+  .gall_con_wrap {
+    min-width: 80% !important;
+    width: auto !important;
+  }
+
+  .gall_con dl dt {
+    font-size: 19px !important;
+  }
+
+  /* news — max-width:1540px + 1240px */
+  .news_tit .title {
+    font-size: 24px !important;
+  }
+
+  .news_tit span {
+    font-size: 35px !important;
+  }
+
+  .news_lt,
+  .news_rt {
+    width: 48% !important;
+  }
+
+  .news_contents img {
+    height: auto !important;
+  }
+
+  .news_contents dl dt {
+    font-size: 17px !important;
+    margin: 5px 0 !important;
+  }
+
+  .news_contents dl dd {
+    word-break: keep-all;
+  }
+
+  .news_contents2 ul li {
+    padding: 12px 0 !important;
+  }
+
+  .news_contents2 ul li a p {
+    font-size: 16px !important;
+  }
+}
+
+/* ── 900px 이하: main.css @media max-width:900px ── */
+@media screen and (max-width: 900px) {
+  .main_latest {
+    padding: 15px 10px !important;
+  }
+
+  .main_latest ul {
+    width: 80% !important;
+  }
+
+  .main_latest {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  .area .inner {
+    width: 95% !important;
+  }
+
+  .area_tit_wrap {
+    flex-flow: row wrap !important;
+  }
+
+  .area_contents {
+    height: 400px !important;
+  }
+
+  .area_con_tit > p {
+    font-size: 20px !important;
+  }
+
+  .area_con_tit a.detail-link {
+    width: 165px !important;
+    border-radius: 20px !important;
+  }
+
+  .area_con_tit a.detail-link .ani_btn p {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .area_con_tit a.detail-link .ani-btn-icon {
+    position: inherit !important;
+    transform: none !important;
+  }
+
+  .pro_con a > p {
+    font-size: 21px !important;
+  }
+
+  .gall_tit a.detail-link {
+    width: 165px !important;
+    border-radius: 20px !important;
+  }
+
+  .gallery .inner {
+    flex-flow: row wrap !important;
+  }
+
+  .gall_tit {
+    width: 50% !important;
+    min-width: 50% !important;
+  }
+
+  .gall_con_wrap {
+    min-width: 50% !important;
+    width: 50% !important;
+  }
+
+  .gall_contents .swiper-slide {
+    padding: 0 !important;
+  }
+
+  .gall_con dl dd {
+    opacity: 1 !important;
+  }
+
+  .gall_con dl {
+    transform: none !important;
+  }
+
+  .news .inner {
+    flex-flow: row wrap !important;
+  }
+
+  .news_lt,
+  .news_rt {
+    width: 100% !important;
+  }
+
+  .news_rt {
+    margin-top: 70px !important;
+  }
+
+  /* footer — max-width:1000px */
+  .foo-inner {
+    flex-flow: row wrap !important;
+    width: 95% !important;
+  }
+
+  .foo-inner .logo {
+    width: 100% !important;
+  }
+
+  .foo-info {
+    width: 100% !important;
+  }
+
+  .foo-inner .logo img {
+    width: auto !important;
+  }
+
+  .foo-tp > ul li {
+    font-size: 14px !important;
+  }
+
+  .foo-tp > ul {
+    width: 100% !important;
+    margin-top: 20px !important;
+  }
+
+  .foo-tp {
+    flex-flow: row wrap !important;
+  }
+
+  .family-tab {
+    font-size: 14px !important;
+    margin-top: 15px !important;
+    width: 250px !important;
+  }
+
+  .foo-btm {
+    flex-flow: row wrap-reverse !important;
+  }
+}
+
+/* ── 600px 이하: main.css @media max-width:600px + 원본 인라인 hero 보정 ── */
+@media screen and (max-width: 600px) {
+  .main_bn {
+    height: 288px !important;
+  }
+
+  .hero-slide-bg {
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+  }
+
+  .main_dot {
+    bottom: 20px !important;
+  }
+
+  .main_latest ul {
+    width: 65% !important;
+  }
+
+  .main_controll {
+    width: 95% !important;
+  }
+
+  .main_controll .main_arrow {
+    width: auto;
+    height: auto;
+  }
+
+  .area_tit_ani p {
+    font-size: inherit;
+  }
+
+  .area_tab ul li {
+    padding: 15px 5px !important;
+    font-size: 15px !important;
+  }
+
+  .area_con {
+    padding-left: 15px !important;
+  }
+
+  .area_con_tit .area-eco-icon {
+    width: 35px !important;
+    height: 35px !important;
+  }
+
+  .area_contents {
+    height: 330px !important;
+  }
+
+  .area_con_tit > p {
+    font-size: 17px !important;
+  }
+
+  .area_con_tit a.detail-link {
+    width: 140px !important;
+    height: 40px !important;
+  }
+
+  .area_con_tit a.detail-link .ani_btn p {
+    font-size: 13px !important;
+  }
+
+  .pro_tit {
+    flex-flow: row wrap !important;
+  }
+
+  .product .title {
+    font-size: 24px !important;
+  }
+
+  .pro_tit dd {
+    font-size: 15px !important;
+  }
+
+  .pro_controll {
+    margin-top: 20px !important;
+  }
+
+  .pro_con a > p {
+    font-size: 16px !important;
+  }
+
+  .pro_controll a {
+    width: 120px !important;
+    height: 40px !important;
+    font-size: 14px !important;
+    line-height: 42px !important;
+    margin-right: 5px !important;
+  }
+
+  .pro_arrow .slick-arrow {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .product .pro_slick.swiper {
+    overflow: hidden !important;
+  }
+
+  .product .pro_contents {
+    overflow: hidden !important;
+  }
+
+  .pro_slick .swiper-slide {
+    opacity: 1 !important;
+  }
+
+  .gall_tit .title {
+    font-size: 24px !important;
+  }
+
+  .gall_arrow .slick-arrow {
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 20px;
+  }
+
+  .gall_tit a.detail-link {
+    width: 140px !important;
+    height: 40px !important;
+    margin-top: 10px !important;
+  }
+
+  .gallery .inner {
+    flex-flow: row wrap !important;
+  }
+
+  .gall_tit {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  .gall_con_wrap {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  .gall_con {
+    margin-top: 20px !important;
+  }
+
+  .gall_con img {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    height: auto !important;
+    object-fit: unset !important;
+    margin: 0;
+  }
+
+  .progress {
+    width: 100% !important;
+  }
+
+  .news_contents ul {
+    flex-flow: row wrap !important;
+  }
+
+  .news_contents ul li {
+    width: 100% !important;
+  }
+
+  .news_contents ul li:nth-of-type(2) {
+    margin-top: 60px !important;
+  }
+
+  .news_contents2 ul li a p {
+    width: 80% !important;
+  }
+
+  .news_contents dl dt {
+    font-size: 20px !important;
+  }
+
+  /* header — max-width:600px */
+  #header .logo {
+    width: 120px !important;
+  }
+
+  #header .logo img {
+    width: 100% !important;
+    max-height: none !important;
+  }
+
+  #header .userBox li {
+    padding: 0 10px !important;
+  }
+
+  /* footer — max-width:700px */
+  .foo-inner {
+    width: 90% !important;
+  }
+
+  .foo-btm {
+    flex-flow: row wrap-reverse !important;
+  }
+
+  .foo-lt {
+    width: 100% !important;
+  }
+
+  .foo-rt {
+    width: 100% !important;
+    text-align: left !important;
+  }
+
+  .foo-rt .sns {
+    justify-content: flex-start !important;
+    padding-right: 0 !important;
+  }
+
+  .foo-rt .phone li {
+    font-size: 16px !important;
+    text-align: left !important;
+  }
+}
+
+/* 주요실적 — 601~900px centerMode peek (opacity), 600 이하 단일 슬라이드 */
+@media screen and (max-width: 900px) and (min-width: 601px) {
+  .pro_slick .swiper-slide:not(.swiper-slide-active) {
+    opacity: 0.3 !important;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .pro_slick .swiper-slide {
+    opacity: 1 !important;
+  }
+}

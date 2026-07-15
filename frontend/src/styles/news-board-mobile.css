@@ -1,0 +1,306 @@
+/* 홍보영상 게시판 모바일 — hanwhagreen.com/bbs/board.php?bo_table=news (1024px 이하) */
+
+@media screen and (max-width: 1024px) {
+  .news-board-page {
+    width: 100%;
+    overflow-x: hidden;
+    font-size: 12px;
+    font-family: "GmarketSansMedium", sans-serif;
+  }
+
+  .news-view-wrap {
+    padding: 72px 10px 24px;
+    box-sizing: border-box;
+  }
+
+  .news-view-wrap.news-list-wrap {
+    padding: 80px 10px 16px;
+  }
+
+  /* 헤더 아래 — 목록(1·2·3번 행)과 상단 영역 사이 여백 */
+  .news-board-page #bo_list {
+    margin-top: 14px;
+  }
+
+  .news-board-page .tbl_head01 {
+    margin: 0;
+  }
+
+  .news-board-page .tbl_wrap {
+    overflow-x: visible;
+  }
+
+  .news-board-page .tbl_wrap table {
+    table-layout: fixed;
+    width: 100%;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  /* thead */
+  .news-board-page .tbl_head01 thead th {
+    padding: 12px 3px;
+    height: auto;
+    min-height: 0;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.3;
+    border-top: 0;
+    border-bottom: 1px solid #e2e2e2;
+    vertical-align: middle;
+    box-sizing: border-box;
+  }
+
+  .news-board-page .tbl_head01 thead th .th_sp {
+    display: inline-block;
+    width: 0.35em;
+  }
+
+  .news-board-page .tbl_head01 thead th.th_num {
+    width: 10%;
+    min-width: 32px;
+    text-align: center;
+    padding-left: 4px;
+    padding-right: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .news-board-page .tbl_head01 thead th.th_subject {
+    width: 36%;
+    text-align: center;
+    padding-left: 6px;
+    padding-right: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .news-board-page .tbl_head01 thead th.th_name {
+    width: 14%;
+    min-width: 42px;
+    text-align: center;
+  }
+
+  .news-board-page .tbl_head01 thead th.th_hit {
+    width: 20%;
+    min-width: 48px;
+    text-align: center;
+  }
+
+  .news-board-page .tbl_head01 thead th.th_date {
+    width: 20%;
+    min-width: 42px;
+    text-align: center;
+    padding-right: 4px;
+  }
+
+  .news-board-page .tbl_head01 thead th a {
+    color: #333;
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  /* tbody — 5열 모두 표시 (글쓴이·조회·날짜 텍스트) */
+  .news-board-page .tbl_head01 td {
+    padding: 12px 3px;
+    height: auto;
+    min-height: 0;
+    font-size: 11px;
+    line-height: 1.35;
+    color: #666;
+    vertical-align: middle;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    box-sizing: border-box;
+    display: table-cell !important;
+    visibility: visible !important;
+    overflow: visible !important;
+  }
+
+  .news-board-page #bo_list .bo_cell_txt {
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    color: #666;
+    font-size: 11px;
+    line-height: 1.4;
+    text-align: center;
+    overflow: visible;
+    visibility: visible;
+  }
+
+  .news-board-page #bo_list .td_num2 {
+    width: 10%;
+    min-width: 32px;
+    font-size: 11px;
+    color: #666;
+    text-align: center;
+    padding: 12px 3px;
+    vertical-align: middle;
+  }
+
+  .news-board-page #bo_list .td_subject {
+    width: 36%;
+    padding: 12px 4px;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .news-board-page #bo_list .td_name {
+    width: 14%;
+    min-width: 42px;
+    padding: 12px 2px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .news-board-page #bo_list .bo_cell_author {
+    color: #666;
+    font-size: 11px;
+    font-weight: normal;
+  }
+
+  .news-board-page #bo_list .td_num {
+    width: 20%;
+    min-width: 48px;
+    padding: 12px 2px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .news-board-page #bo_list .bo_cell_hit {
+    color: #666;
+    font-size: 11px;
+  }
+
+  .news-board-page #bo_list .td_datetime {
+    width: 20%;
+    min-width: 42px;
+    padding: 12px 2px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .news-board-page #bo_list .bo_cell_date {
+    color: #666;
+    font-size: 11px;
+  }
+
+  /* 제목 — 왼쪽 정렬 (원본 이미지) */
+  .news-board-page #bo_list .bo_tit {
+    line-height: 1.4;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .news-board-page #bo_list .bo_tit a {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000;
+    line-height: 1.4;
+    word-break: break-all;
+    text-align: left;
+  }
+
+  .news-board-page #bo_list .bo_tit .fa-heart {
+    color: #ff0000;
+    font-size: 11px;
+    margin-left: 2px;
+    vertical-align: middle;
+  }
+
+  .news-board-page #bo_list .bo_tit_icons {
+    display: block;
+    margin-top: 3px;
+    line-height: 1;
+    text-align: left;
+  }
+
+  .news-board-page #bo_list .bo_tit .fa-download,
+  .news-board-page #bo_list .bo_tit .fa-link {
+    display: inline-block;
+    width: 16px;
+    line-height: 16px;
+    font-size: 10px;
+    text-align: center;
+    border-radius: 2px;
+    margin-left: 0;
+    margin-right: 3px;
+    vertical-align: middle;
+  }
+
+  .news-board-page #bo_list .bo_tit .fa-download {
+    color: #daae37;
+    background: #ffefb9;
+  }
+
+  .news-board-page #bo_list .bo_tit .fa-link {
+    color: #b451fd;
+    background: #edd3fd;
+  }
+
+  /* 상세 보기 */
+  #bo_v_title .bo_v_tit {
+    font-size: 1.5em;
+  }
+
+  #bo_v_info {
+    padding: 16px 0;
+  }
+
+  #bo_v_info .profile_info_ct {
+    font-size: 0.9em;
+  }
+
+  #bo_v_img img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  #bo_v_con {
+    word-break: break-all;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .news-view-wrap,
+  .news-view-wrap.news-list-wrap {
+    padding-top: 74px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .news-board-page .tbl_head01 thead th {
+    padding: 11px 2px;
+    font-size: 11px;
+  }
+
+  .news-board-page .tbl_head01 thead th a {
+    font-size: 11px;
+  }
+
+  .news-board-page .tbl_head01 td {
+    padding: 10px 2px;
+    font-size: 10px;
+  }
+
+  .news-board-page #bo_list .bo_tit a {
+    font-size: 11px;
+  }
+
+  .news-board-page #bo_list .bo_cell_txt,
+  .news-board-page #bo_list .bo_cell_author,
+  .news-board-page #bo_list .bo_cell_hit,
+  .news-board-page #bo_list .bo_cell_date {
+    font-size: 10px;
+  }
+
+  #bo_v_title .bo_v_tit {
+    font-size: 1.3em;
+  }
+
+  .bo_v_nb li .nb_date {
+    float: none;
+    display: block;
+    margin-top: 4px;
+  }
+}

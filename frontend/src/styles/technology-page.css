@@ -1,0 +1,193 @@
+.embed-responsive {
+  position: relative;
+  display: block;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.embed-responsive-16by9 {
+  margin-top: 5%;
+  padding-bottom: 56.25%;
+}
+
+.embed-responsive .embed-responsive-item,
+.embed-responsive iframe,
+.embed-responsive embed,
+.embed-responsive object,
+.embed-responsive video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  border: 0;
+}
+
+#technology .listSkin {
+  width: 100%;
+  overflow: hidden;
+}
+
+#technology .listSkin .inner {
+  width: 1240px;
+  padding: 2% 20px;
+  margin: 0 auto;
+  position: relative;
+}
+
+#technology #bo_list {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+#technology #bo_list .listForm ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#technology #bo_list .qa_li {
+  border-top: 1px solid #ddd;
+  list-style: none;
+}
+
+#technology #bo_list .qa_li:last-child {
+  border-bottom: 1px solid #ddd;
+}
+
+#technology #bo_list .listForm .question {
+  width: 100%;
+  padding: 3% 20px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+
+#technology #bo_list .listForm .question .lf_box {
+  width: 90%;
+  display: table;
+  float: left;
+}
+
+#technology #bo_list .listForm .question .faq_icon {
+  display: table-cell;
+  vertical-align: middle;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+#technology #bo_list .listForm .question .tit {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  padding-left: 20px;
+  margin: 0;
+}
+
+#technology #bo_list .listForm .question .rt_box {
+  position: absolute;
+  top: 50%;
+  margin-top: -7.5px;
+  right: 10px;
+}
+
+#technology #bo_list .listForm .question.on .rt_box {
+  transform: rotate(180deg);
+  transition: all 0.6s;
+}
+
+#technology #bo_list .listForm .answer {
+  padding: 3% 20px;
+  background-color: #f6f6f6;
+  display: none;
+  overflow: hidden;
+}
+
+#technology #bo_list .listForm .answer.on {
+  display: block;
+  transition: all 0.6s;
+}
+
+#technology #bo_list .listForm .answer .lf_box {
+  width: 100%;
+  float: left;
+}
+
+#technology #bo_list .listForm .answer .tit {
+  font-size: 17px;
+  font-weight: 400;
+  color: #333;
+  margin: 0;
+  line-height: 1.5;
+  padding-left: 0;
+}
+
+#technology #bo_list .listForm .answer .img_box2 {
+  margin-top: 20px;
+}
+
+#technology #bo_list .listForm .answer .img_box2 img {
+  width: 100%;
+  height: auto;
+}
+
+#business2 .sec3-inner {
+  width: 1240px;
+  margin: 0 auto;
+  padding-bottom: 10em;
+}
+
+#business2 .sec3-inner ul {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+#business2 .sec3-inner ul li {
+  width: 49%;
+  height: auto;
+}
+
+#business2 .sec3-inner ul li h4 {
+  font-size: 30px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  margin: 0;
+}
+
+#business2 .sec3-inner ul li dl {
+  padding-top: 15px;
+  height: 300px;
+  margin: 0;
+}
+
+#business2 .sec3-inner dd {
+  display: flex;
+  font-size: 17px;
+  align-items: flex-start;
+  line-height: 1.3;
+  margin-top: 30px;
+  color: #666;
+}
+
+#business2 .sec3-inner dd span {
+  color: #9b9b9b;
+  margin-right: 10px;
+}
+
+@media screen and (max-width: 1240px) {
+  #technology .listSkin .inner,
+  #business2 .sec3-inner {
+    width: 98%;
+  }
+}
+

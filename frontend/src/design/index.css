@@ -1,0 +1,66 @@
+/* Hanwha Green v2 — Global reset & base */
+@import "./tokens.css";
+@import "./typography.css";
+@import "./layout.css";
+@import "./motion.css";
+@import "./components/header.css";
+@import "./components/footer.css";
+@import "./components/hero.css";
+@import "./components/home.css";
+@import "./components/live-info.css";
+@import "./components/sub-layout.css";
+@import "./components/board.css";
+@import "./components/board-legacy.css";
+@import "./components/content.css";
+@import "./responsive.css";
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* TOP 이동 중 섹션 효과 동결 — 스크롤과 효과 갱신이 겹쳐 끊기는 현상 완화 */
+html.hg-scrolling-top .hg-hero-shell,
+html.hg-scrolling-top .hg-biz,
+html.hg-scrolling-top .hg-project-sticky,
+html.hg-scrolling-top .hg-story,
+html.hg-scrolling-top .hg-vision {
+  pointer-events: none;
+}
+
+body {
+  font-family: var(--hg-font);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--hg-text);
+  background: var(--hg-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+#root {
+  min-height: 100svh;
+}

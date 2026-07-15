@@ -1,0 +1,110 @@
+/* Hanwha Green v2 board toolbar (legacy class compatibility) */
+.bo_btn_wrap,
+.hg-board-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--hg-space-md);
+  margin-bottom: var(--hg-space-lg);
+  padding-bottom: var(--hg-space-md);
+  border-bottom: 2px solid var(--hg-text);
+}
+
+.bo_btn_wrap .btn_bo_user button,
+.bo_btn_wrap .btn_bo_user a,
+.hg-board-toolbar button,
+.hg-board-toolbar a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--hg-text);
+  background: var(--hg-gray-100);
+  border: 1px solid var(--hg-border);
+  border-radius: var(--hg-radius-sm);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--hg-duration-fast);
+}
+
+.bo_btn_wrap .btn_bo_user button:hover,
+.bo_btn_wrap .btn_bo_user a:hover {
+  background: var(--hg-green-50);
+  color: var(--hg-accent);
+}
+
+/* Legacy board view inside v2 shell */
+.viewSkin,
+.listSkin {
+  width: 100%;
+}
+
+.viewSkin .inner,
+.listSkin .inner {
+  max-width: none;
+  padding: 0;
+}
+
+.viewSkin .bo_v_tit,
+.viewSkin .bo_v_con {
+  font-family: var(--hg-font);
+}
+
+.viewSkin .bo_v_tit {
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: var(--hg-space-xl) 0;
+  border-bottom: 1px solid var(--hg-border);
+}
+
+.viewSkin .bo_v_con {
+  padding: var(--hg-space-2xl) 0;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.viewSkin .bo_v_btn {
+  padding: var(--hg-space-lg) 0;
+  border-top: 1px solid var(--hg-border);
+}
+
+.viewSkin .bo_v_btn a,
+.viewSkin .bo_v_btn button {
+  display: inline-flex;
+  padding: 0.6rem 1.25rem;
+  margin-right: var(--hg-space-sm);
+  background: var(--hg-accent);
+  color: var(--hg-white);
+  border: none;
+  border-radius: var(--hg-radius-full);
+  text-decoration: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+/* Map page legacy inside v2 */
+.sec1 .title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: var(--hg-space-lg);
+}
+
+.map_info {
+  margin: var(--hg-space-lg) 0;
+  padding: var(--hg-space-lg);
+  background: var(--hg-gray-50);
+  border-radius: var(--hg-radius-md);
+}
+
+/* News board legacy */
+.news-board-page {
+  padding-top: var(--hg-header-height);
+}
+
+.news-view-wrap {
+  max-width: var(--hg-container);
+  margin: 0 auto;
+  padding: var(--hg-space-3xl) var(--hg-space-lg);
+}

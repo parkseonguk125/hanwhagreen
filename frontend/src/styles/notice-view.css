@@ -1,0 +1,220 @@
+/* 게시판 상세(공지·온라인문의) — viewSkin */
+
+#board_list01 .sec1,
+#qna .sec1 {
+  width: 100%;
+}
+
+#board_list01 .viewSkin .inner,
+#qna .viewSkin .inner {
+  width: 1240px;
+  padding: 5% 20px;
+  margin: 0 auto;
+  position: relative;
+  box-sizing: border-box;
+}
+
+#board_list01 .viewSkin .textBox,
+#qna .viewSkin .textBox {
+  text-align: center;
+}
+
+#board_list01 .viewSkin .textBox .title,
+#qna .viewSkin .textBox .title {
+  font-size: 5em;
+  font-weight: bold;
+  font-family: "Noto Sans KR", sans-serif;
+  margin-bottom: 20px;
+  color: #333;
+  line-height: 1.2;
+  word-break: keep-all;
+}
+
+#board_list01 .viewSkin .textBox dl,
+#qna .viewSkin .textBox dl {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  position: relative;
+}
+
+#board_list01 .viewSkin .textBox dl dt,
+#qna .viewSkin .textBox dl dt {
+  font-size: 1.3em;
+  font-weight: 300;
+  color: #8d9291;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+#board_list01 .viewSkin .textBox dl dd,
+#qna .viewSkin .textBox dl dd {
+  font-size: 1.3em;
+  font-weight: 300;
+  color: #8d9291;
+  font-family: "Noto Sans KR", sans-serif;
+  margin: 0;
+}
+
+#board_list01 .viewSkin .textBox dl dd span,
+#qna .viewSkin .textBox dl dd span {
+  color: #8d9291;
+  display: inline-block;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+#board_list01 .viewSkin .textBox dl dd:nth-child(2),
+#qna .viewSkin .textBox dl dd:nth-child(2) {
+  padding: 0 20px;
+  position: relative;
+}
+
+#board_list01 .viewSkin .textBox dl dd:nth-child(2)::before,
+#qna .viewSkin .textBox dl dd:nth-child(2)::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 10px;
+  width: 1px;
+  height: 18px;
+  background-color: #8d9291;
+}
+
+#board_list01 .viewSkin .textBox dl dd:nth-child(2)::after,
+#qna .viewSkin .textBox dl dd:nth-child(2)::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 10px;
+  width: 1px;
+  height: 18px;
+  background-color: #8d9291;
+}
+
+#board_list01 .viewSkin .img_box,
+#qna .viewSkin .img_box {
+  display: block;
+  padding: 5% 0;
+}
+
+#board_list01 .viewSkin .img_box #bo_v_img:empty,
+#qna .viewSkin .img_box #bo_v_img:empty {
+  display: block;
+  min-height: 0;
+}
+
+#board_list01 .viewSkin .cont_box,
+#qna .viewSkin .cont_box {
+  padding-bottom: 5%;
+}
+
+#board_list01 .viewSkin .cont_box p,
+#qna .viewSkin .cont_box p {
+  font-size: 1.5em;
+  font-weight: 400;
+  font-family: "Noto Sans KR", sans-serif;
+  color: #333;
+  text-align: center;
+  line-height: 1.7;
+  margin: 0;
+}
+
+#board_list01 .viewSkin .info_box,
+#qna .viewSkin .info_box {
+  border-top: 1px solid #525252;
+  border-bottom: 1px solid #525252;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#board_list01 .viewSkin .list_move,
+#qna .viewSkin .list_move {
+  overflow: hidden;
+  padding-top: 2%;
+}
+
+#board_list01 .viewSkin .list_move a,
+#qna .viewSkin .list_move a {
+  float: right;
+  width: 130px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background-color: #333;
+  font-size: 1.3em;
+  font-weight: 400;
+  color: #fff;
+  margin-right: 10px;
+  text-decoration: none;
+  border-radius: 0;
+  border: 0;
+  box-sizing: border-box;
+}
+
+#board_list01 .viewSkin .list_move a:hover,
+#qna .viewSkin .list_move a:hover {
+  background-color: #222;
+  color: #fff;
+}
+
+#board_list01 .viewSkin .list_move .btn_delete,
+#qna .viewSkin .list_move .btn_delete {
+  float: right;
+  width: 130px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background-color: #666;
+  font-size: 1.3em;
+  font-weight: 400;
+  color: #fff;
+  margin-right: 10px;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+#board_list01 .viewSkin .list_move .btn_delete:hover,
+#qna .viewSkin .list_move .btn_delete:hover {
+  background-color: #444;
+}
+
+@media screen and (max-width: 1240px) {
+  #board_list01 .viewSkin .inner,
+  #qna .viewSkin .inner {
+    width: 98%;
+    padding: 5% 1%;
+  }
+
+  #board_list01 .viewSkin .textBox .title,
+  #qna .viewSkin .textBox .title {
+    font-size: 3em;
+  }
+
+  #board_list01 .viewSkin .textBox dl dt,
+  #board_list01 .viewSkin .textBox dl dd,
+  #qna .viewSkin .textBox dl dt,
+  #qna .viewSkin .textBox dl dd {
+    font-size: 1.1em;
+  }
+
+  #board_list01 .viewSkin .cont_box p,
+  #qna .viewSkin .cont_box p {
+    font-size: 1.2em;
+  }
+
+  #board_list01 .viewSkin .list_move,
+  #qna .viewSkin .list_move {
+    padding-top: 5%;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  #board_list01 .viewSkin .textBox .title,
+  #qna .viewSkin .textBox .title {
+    font-size: 2em;
+    margin-bottom: 0;
+  }
+}

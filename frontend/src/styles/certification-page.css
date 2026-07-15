@@ -1,0 +1,89 @@
+#product01 .pro_list > li {
+  margin-bottom: 50px;
+}
+
+#product01 .top_box {
+  overflow: hidden;
+  padding-bottom: 40px;
+}
+
+#product01 .lf_box {
+  float: left;
+  width: 50%;
+}
+
+#product01 .lf_box img {
+  max-width: 100%;
+  height: auto;
+}
+
+#product01 .rt_box {
+  float: right;
+  width: 50%;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#product01 .rt_box strong.tit {
+  font-size: 2em;
+  font-weight: bold;
+  color: #333;
+  padding-bottom: 30px;
+  display: block;
+}
+
+#product01 .rt_box .moreBtn {
+  width: 120px;
+  height: 40px;
+  line-height: 40px;
+  background-color: #333;
+  color: #fff;
+  display: block;
+  margin-top: 20px;
+  text-decoration: none;
+}
+
+#product01 .rt_box .moreBtn span {
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  color: #fff;
+  text-align: center;
+}
+
+#product01 .bottom_box a.drop_btn {
+  width: 100%;
+  padding: 2% 0;
+  border-top: 1px solid #797979;
+  border-bottom: 0.5px solid #ccc;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#product01 .viewSkin .textBox .title2 {
+  font-size: 5em;
+  font-weight: bold;
+  font-family: "Noto Sans KR", sans-serif;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+#product01 .viewSkin .img_box2 {
+  padding-top: 5%;
+}
+
+#product01 .viewSkin .cont_box {
+  padding: 5% 0 10% 0;
+  text-align: center;
+}
+
+#product01 .viewSkin .cont_box p {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: 400;
+  font-family: "Noto Sans KR", sans-serif;
+  color: #333;
+}

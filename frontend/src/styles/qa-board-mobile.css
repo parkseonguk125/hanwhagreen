@@ -1,0 +1,330 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+
+/* 온라인문의 모바일 — hanwhagreen.com/bbs/board.php?bo_table=qa (1024px 이하만) */
+
+@media screen and (max-width: 1024px) {
+  #qna.qa-page {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* 비주얼 · 브레드크럼 */
+  #qna.qa-page .visual {
+    height: 280px;
+  }
+
+  #qna.qa-page .visual .text_box h2 {
+    font-size: 2em;
+  }
+
+  #qna.qa-page #navigation .inner {
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    box-sizing: border-box;
+  }
+
+  #qna.qa-page #navigation #navi_home {
+    width: 10%;
+    padding: 0;
+  }
+
+  #qna.qa-page #navigation .navi {
+    width: 45%;
+  }
+
+  #qna.qa-page #navigation .navi-home-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  #qna.qa-page #navigation .tit {
+    font-size: 13px;
+  }
+
+  /* 목록 영역 — 네비게이션 아래 여백 */
+  #qna.qa-page .listSkin .inner {
+    width: 100%;
+    padding: 8px 10px 20px;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  #qna.qa-page #bo_btn_top {
+    margin: 0;
+    padding: 14px 0 12px;
+    min-height: 36px;
+  }
+
+  #qna.qa-page #bo_list_total {
+    display: none;
+  }
+
+  #qna.qa-page .btn_bo_user {
+    float: right;
+    margin: 0;
+  }
+
+  #qna.qa-page .btn_bo_user .board-icon-btn .hg-icon {
+    width: 20px;
+    height: 20px;
+    color: #bababa;
+  }
+
+  #qna.qa-page .bo_fx {
+    float: right;
+    margin: 12px 0 0;
+  }
+
+  #qna.qa-page .bo_fx .btn_bo_user .board-icon-btn .hg-icon {
+    width: 20px;
+    height: 20px;
+    color: #bababa;
+  }
+
+  /* 글쓴이·조회 숨김 → 3열(진행상황·제목·날짜) */
+  #qna.qa-page .col4,
+  #qna.qa-page .col5,
+  #qna.qa-page #bo_list .td_name,
+  #qna.qa-page #bo_list .td_num {
+    display: none !important;
+  }
+
+  #qna.qa-page #bo_list .tbl_head01 {
+    margin: 0;
+  }
+
+  #qna.qa-page #bo_list .tbl_wrap {
+    overflow-x: hidden;
+  }
+
+  #qna.qa-page #bo_list .tbl_head01 table {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+  }
+
+  /* thead */
+  #qna.qa-page #bo_list .tbl_head01 thead th {
+    padding: 12px 4px;
+    height: auto;
+    font-size: 12px;
+    font-weight: bold;
+    color: #333;
+    line-height: 1.3;
+    border-top: 0;
+    border-bottom: 1px solid #e2e2e2;
+    background: #fafafa;
+    vertical-align: middle;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  #qna.qa-page #bo_list .tbl_head01 thead th.th_status {
+    width: 22%;
+    min-width: 56px;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  #qna.qa-page #bo_list .tbl_head01 thead th.th_subject {
+    width: 58%;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  #qna.qa-page #bo_list .tbl_head01 thead th.th_date {
+    width: 20%;
+    min-width: 44px;
+    padding-right: 6px;
+  }
+
+  #qna.qa-page #bo_list .tbl_head01 thead th.th_date a {
+    color: #333;
+    font-weight: bold;
+    font-size: 12px;
+    text-decoration: none;
+  }
+
+  /* tbody */
+  #qna.qa-page #bo_list .tbl_head01 td {
+    padding: 12px 4px !important;
+    height: auto;
+    min-height: 0;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #666;
+    vertical-align: middle;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+    box-sizing: border-box;
+  }
+
+  #qna.qa-page #bo_list tbody tr {
+    text-align: inherit;
+    border-left: 0;
+  }
+
+  #qna.qa-page #bo_list tbody tr:hover {
+    border-left: 0;
+  }
+
+  /* 진행상황 — 아이콘 위 / 텍스트 아래 */
+  #qna.qa-page #bo_list .td_num2 {
+    width: 22%;
+    min-width: 56px;
+    padding: 12px 3px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  #qna.qa-page #bo_list .td_num2 p {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    margin: 0;
+  }
+
+  #qna.qa-page #bo_list .td_num2 .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15em;
+    padding: 0;
+    line-height: 1;
+    color: #888;
+  }
+
+  #qna.qa-page #bo_list .td_num2 .icon .hg-icon {
+    width: 16px;
+    height: 16px;
+    color: #888;
+  }
+
+  #qna.qa-page #bo_list .td_num2 .text {
+    display: block;
+    font-size: 10px;
+    line-height: 1.3;
+    color: #666;
+    white-space: nowrap;
+  }
+
+  /* 제목 */
+  #qna.qa-page #bo_list .td_subject {
+    width: 58%;
+    padding: 12px 5px !important;
+    padding-left: 4px !important;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  #qna.qa-page #bo_list .bo_tit {
+    display: block;
+    text-align: left;
+    font-size: 12px;
+    line-height: 1.45;
+    font-weight: bold;
+  }
+
+  #qna.qa-page #bo_list .bo_tit a {
+    font-size: 12px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+    word-break: break-all;
+    line-height: 1.45;
+  }
+
+  #qna.qa-page #bo_list .bo_tit .bo-lock-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 3px;
+    font-size: 10px;
+  }
+
+  #qna.qa-page #bo_list .bo_tit .bo-lock-icon .hg-icon {
+    width: 10px;
+    height: 10px;
+  }
+
+  #qna.qa-page #bo_list .bo_tit .fa-download {
+    display: inline-block;
+    width: 16px;
+    line-height: 16px;
+    font-size: 10px;
+    text-align: center;
+    border-radius: 2px;
+    margin-left: 3px;
+    vertical-align: middle;
+    color: #daae37;
+    background: #ffefb9;
+  }
+
+  /* 날짜 */
+  #qna.qa-page #bo_list .td_datetime {
+    width: 20%;
+    min-width: 44px;
+    padding: 12px 4px !important;
+    padding-right: 6px !important;
+    font-size: 11px;
+    color: #666;
+    text-align: right;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  #qna.qa-page #bo_list .qa_date_txt {
+    display: inline-block;
+    font-size: 11px;
+    color: #666;
+    line-height: 1.3;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #qna.qa-page .visual {
+    height: 240px;
+  }
+
+  #qna.qa-page .visual .text_box h2 {
+    font-size: 1.75em;
+  }
+
+  #qna.qa-page .listSkin .inner {
+    padding: 6px 8px 16px;
+  }
+
+  #qna.qa-page #bo_btn_top {
+    padding: 12px 0 10px;
+  }
+
+  #qna.qa-page #bo_list .tbl_head01 thead th {
+    padding: 11px 3px;
+    font-size: 11px;
+  }
+
+  #qna.qa-page #bo_list .tbl_head01 thead th.th_date a {
+    font-size: 11px;
+  }
+
+  #qna.qa-page #bo_list .tbl_head01 td {
+    padding: 10px 3px !important;
+  }
+
+  #qna.qa-page #bo_list .bo_tit a {
+    font-size: 11px;
+  }
+
+  #qna.qa-page #bo_list .td_num2 .text {
+    font-size: 9px;
+  }
+
+  #qna.qa-page #bo_list .td_datetime,
+  #qna.qa-page #bo_list .qa_date_txt {
+    font-size: 10px;
+  }
+}

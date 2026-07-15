@@ -1,0 +1,146 @@
+@media screen and (max-width: 1024px) {
+  .live-info-section {
+    --live-panel-h: 280px;
+    --live-map-h: 200px;
+    margin-top: 0;
+    padding: 32px 0 40px;
+    background: #f4f7f5;
+  }
+
+  .live-info-inner {
+    margin: 0 14px;
+    padding: 22px 16px 18px;
+    border-radius: 16px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+  }
+
+  .live-info-head {
+    text-align: left;
+    margin-bottom: 16px;
+  }
+
+  .live-info-title {
+    font-size: 22px;
+  }
+
+  .live-info-desc {
+    font-size: 13px;
+  }
+
+  .live-info-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .live-panel:hover {
+    transform: none;
+  }
+
+  .live-stock-card-link:hover {
+    transform: none;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+  }
+
+  .live-panel-header {
+    padding: 10px 12px 8px;
+    flex-wrap: wrap;
+  }
+
+  .live-panel-header h3 {
+    font-size: 13px;
+  }
+
+  .live-panel-meta {
+    white-space: normal;
+    font-size: 9px;
+  }
+
+  .live-panel-body {
+    padding: 6px 10px 8px;
+  }
+
+  .live-region-item {
+    grid-template-columns: 42px 40px 1fr;
+    font-size: 11px;
+    padding: 4px 0;
+  }
+
+  .live-air-item {
+    grid-template-columns: 42px 1fr;
+  }
+
+  .live-air-values {
+    font-size: 10px;
+  }
+
+  .live-panel-stocks {
+    height: 300px;
+    max-height: 300px;
+  }
+
+  .live-stock-header {
+    padding: 10px 10px 7px;
+    flex-wrap: wrap;
+  }
+
+  .live-stock-header-left h3 {
+    font-size: 13px;
+  }
+
+  .live-stock-time-meta {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+
+  .live-stock-summary {
+    padding: 0 10px 4px;
+    font-size: 9px;
+  }
+
+  .live-panel-body-stocks {
+    padding: 2px 6px 6px;
+  }
+
+  .live-stock-card-link {
+    padding: 7px 8px;
+    gap: 8px;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .live-stock-name {
+    font-size: 11px;
+  }
+
+  .live-stock-price {
+    font-size: 12px;
+  }
+
+  .live-stock-change {
+    font-size: 9px;
+    padding: 2px 5px;
+  }
+
+  .live-stock-range-labels {
+    display: none;
+  }
+
+  .live-stock-table {
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .live-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .live-info-section {
+    --live-panel-h: 270px;
+    --live-map-h: 190px;
+    padding: 24px 0 32px;
+  }
+
+  .live-info-inner {
+    margin: 0 12px;
+  }
+}

@@ -1,0 +1,50 @@
+.DS_Store
+Thumbs.db
+
+# 의존성·빌드 결과
+node_modules
+frontend/node_modules
+frontend/dist
+backend/node_modules
+
+# Playwright E2E 결과
+playwright-report/
+test-results/
+
+# 비밀·로컬 설정 (예시 파일 .env.example 은 커밋 가능)
+.env
+.env.local
+.env.ssl
+ec2.env.upload
+*.pem
+
+# Docker/터널·로그 (PC마다 다름)
+PUBLIC_URL.txt
+tunnel.log
+tunnel.err.log
+
+# QA 첨부 업로드 (볼륨 데이터, Git 제외)
+uploads/
+
+# Flutter SDK (로컬 개발용, 용량 큼 — docs/출격서비스_0단계_사전준비.md)
+.tools/
+
+# EC2 HTTPS 생성 파일 (도메인별)
+nginx/ssl-active.conf
+
+# 스크래핑·덤프 임시 파일
+scripts/*.txt
+scripts/*.json
+
+# 작업 중 생긴 임시 폴더·스크린샷 (루트 한정)
+/.tmp-*
+/.tmp-stocks.json
+/*.png
+
+# DB 백업·사전점검 결과 (Git 제외, backups/.gitkeep 만 커밋)
+backups/*.sql
+backups/pre-check_*.txt
+backups/pre-check_latest.txt
+backups/incident_*/
+backups/blocked-ips.log
+nginx/flags/maintenance.on

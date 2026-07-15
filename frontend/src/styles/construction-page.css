@@ -1,0 +1,49 @@
+.table-responsive {
+  min-height: 0.01%;
+  overflow-x: auto;
+}
+
+#board_list01.construction-page #bo_list .tbl_head01 table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#board_list01.construction-page #bo_list .tbl_head01 thead th {
+  padding: 20px 0;
+  font-weight: normal;
+  text-align: center;
+  border-bottom: 1px solid #ececec;
+  height: 40px;
+}
+
+#board_list01.construction-page #bo_list .tbl_head01 td {
+  color: #666;
+  padding: 10px 5px;
+  border-top: 1px solid #ecf0f1;
+  border-bottom: 1px solid #ecf0f1;
+  line-height: 1.4em;
+  height: 60px;
+  word-break: break-all;
+  text-align: center;
+}
+
+#board_list01.construction-page #bo_list .td_subject {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#board_list01.construction-page #bo_list tbody .even td {
+  background: #fbfbfb;
+}
+
+#board_list01.construction-page #bo_list tbody tr:hover td {
+  background: #fafafa;
+}
+
+@media screen and (max-width: 1240px) {
+  #board_list01.construction-page .listSkin .inner {
+    width: 98%;
+    padding: 5% 1%;
+  }
+}
+
