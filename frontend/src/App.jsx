@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import HgHomePage from "./pages/HgHomePage";
 import ContentPage from "./pages/ContentPage";
@@ -7,6 +7,16 @@ import BoardWritePage from "./pages/BoardWritePage";
 import BoardPasswordPage from "./pages/BoardPasswordPage";
 import LoginPage from "./pages/LoginPage";
 import NewsLinkPage from "./pages/NewsLinkPage";
+
+function hardScrollToTop() {
+  try {
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  } catch {
+    window.scrollTo(0, 0);
+  }
+  document.documentElement.scrollTop = 0;
+  if (document.body) document.body.scrollTop = 0;
+}
 
 function ScrollToTop() {
   const { pathname, search } = useLocation();
@@ -22,8 +32,8 @@ function ScrollToTop() {
     params.get("w") || "",
   ].join("|");
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
+  useLayoutEffect(() => {
+    hardScrollToTop();
   }, [scrollKey]);
 
   return null;
