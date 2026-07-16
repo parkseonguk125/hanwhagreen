@@ -110,7 +110,18 @@ export default function HgHeader({ hideHamburger = false }) {
         <header className="hg-header" onMouseLeave={handleHeaderMouseLeave}>
           <div className="hg-header__inner">
             <div className="hg-header__cluster">
-              <Link to="/" className="hg-header__logo" onClick={() => setOpenNav(null)}>
+              <Link
+                to="/"
+                className="hg-header__logo"
+                onClick={(event) => {
+                  setOpenNav(null);
+                  /* 이미 메인 홈이면 SPA 이동이 무시되므로 새로고침으로 최상단 홈을 다시 표시 */
+                  if (isHome) {
+                    event.preventDefault();
+                    window.location.reload();
+                  }
+                }}
+              >
                 <HgLogo variant={logoVariant} />
               </Link>
 
