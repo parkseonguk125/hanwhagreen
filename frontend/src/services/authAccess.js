@@ -1,3 +1,5 @@
+import { clearAllUnlockedQaPosts } from "./boardAccess";
+
 const TOKEN_KEY = "hg_auth_token";
 const MEMBER_KEY = "hg_auth_member";
 const PERSISTENT_KEY = "hg_auth_persistent";
@@ -43,6 +45,7 @@ export function clearAuth() {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(MEMBER_KEY);
   localStorage.removeItem(PERSISTENT_KEY);
+  clearAllUnlockedQaPosts();
 }
 
 export function isLoggedIn() {

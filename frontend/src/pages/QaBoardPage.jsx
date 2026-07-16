@@ -11,7 +11,6 @@ import {
   getQaPassword,
   getUnlockedQaPost,
   isQaPostUnlocked,
-  storeUnlockedQaPost,
 } from "../services/boardAccess";
 import { isAdmin } from "../services/authAccess";
 import { filterPosts, boardWriteUrl } from "../services/boardStorage";
@@ -312,8 +311,13 @@ export default function QaBoardPage() {
   const [searchState, setSearchState] = useState({ field: "wr_subject", keyword: "" });
   const [qaPosts, setQaPosts] = useState([]);
   const [qaLoading, setQaLoading] = useState(!wrId);
-  const [viewPost, setViewPost] = useState(() => (wrId ? getUnlockedQaPost(wrId) : null));
-  const [viewLoading, setViewLoading] = useState(() => Boolean(wrId) && !getUnlockedQaPost(wrId));
+  const [viewPost, setViewPost] = useState(() => {
+    if (!wrId || !getQaPassword(wrId)) return null;
+    return getUnlockedQaPost(wrId);
+  });
+  const [viewLoading, setViewLoading] = useState(
+    () => Boolean(wrId) && !(getQaPassword(wrId) && getUnlockedQaPost(wrId))
+  );
   const [needsPassword, setNeedsPassword] = useState(false);
   const [leadRef, leadArmed] = useArmOnView("80px 0px 0px 0px", 0.05);
 
@@ -344,8 +348,14 @@ export default function QaBoardPage() {
       return undefined;
     }
 
+    /* 비밀번호 인증(또는 작성 직후)으로만 캐시 허용 — 관리자 열람 캐시는 게스트 우회로 쓰이지 않음 */
     const unlockedPost = getUnlockedQaPost(wrId);
-    if (unlockedPost && Object.prototype.hasOwnProperty.call(unlockedPost, "content")) {
+    const hasPasswordUnlock = Boolean(getQaPassword(wrId));
+    if (
+      hasPasswordUnlock &&
+      unlockedPost &&
+      Object.prototype.hasOwnProperty.call(unlockedPost, "content")
+    ) {
       setViewPost(unlockedPost);
       setViewLoading(false);
       setNeedsPassword(false);
@@ -375,7 +385,7 @@ export default function QaBoardPage() {
           return;
         }
 
-        storeUnlockedQaPost(post);
+        /* 관리자/공개 열람은 sessionStorage에 저장하지 않음 (로그아웃 후 보호 우회 방지) */
         setViewPost(post);
       })
       .catch(() => {
@@ -411,7 +421,7 @@ export default function QaBoardPage() {
     navGroupIndex: 4,
   };
 
-  if (wrId && needsPassword && !isQaPostUnlocked(wrId) && !adminLoggedIn) {
+  if (wrId && needsPassword && !(getQaPassword(wrId) && isQaPostUnlocked(wrId)) && !adminLoggedIn) {
     return <Navigate to={boardPasswordRouteTarget("qa", wrId)} replace />;
   }
 
