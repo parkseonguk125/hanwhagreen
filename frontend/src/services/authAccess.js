@@ -8,16 +8,16 @@ function readStorage(persistent) {
 
 export function getAuthToken() {
   if (localStorage.getItem(PERSISTENT_KEY) === "1") {
-    return localStorage.getItem(TOKEN_KEY) || "";
+    return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY) || "";
   }
-  return sessionStorage.getItem(TOKEN_KEY) || "";
+  return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || "";
 }
 
 export function getStoredMember() {
-  const raw =
-    localStorage.getItem(PERSISTENT_KEY) === "1"
-      ? localStorage.getItem(MEMBER_KEY)
-      : sessionStorage.getItem(MEMBER_KEY);
+  const persistent = localStorage.getItem(PERSISTENT_KEY) === "1";
+  const raw = persistent
+    ? localStorage.getItem(MEMBER_KEY) || sessionStorage.getItem(MEMBER_KEY)
+    : sessionStorage.getItem(MEMBER_KEY) || localStorage.getItem(MEMBER_KEY);
 
   if (!raw) return null;
   try {
@@ -51,5 +51,6 @@ export function isLoggedIn() {
 
 export function isAdmin() {
   const member = getStoredMember();
-  return Boolean(member && member.level >= 10);
+  const level = Number(member?.level ?? member?.mb_level ?? 0);
+  return Boolean(member && level >= 10);
 }

@@ -8,6 +8,7 @@ import {
   storeQaPassword,
   storeUnlockedQaPost,
 } from "../services/boardAccess";
+import { isAdmin } from "../services/authAccess";
 import { boardRouteTarget, boardViewRouteTarget, boardWriteRouteTarget } from "../utils/navRoutes";
 
 const MODE_LABEL = {
@@ -67,6 +68,13 @@ export default function BoardPasswordPage() {
       document.title = "한화그린";
     };
   }, [mode]);
+
+  useEffect(() => {
+    /* 관리자는 비밀번호 없이 열람/수정/삭제 가능 */
+    if (table === "qa" && wrId && isAdmin() && mode === "s") {
+      navigate(boardViewRouteTarget("qa", wrId), { replace: true });
+    }
+  }, [table, wrId, mode, navigate]);
 
   useEffect(() => {
     if (table !== "qa" || !wrId) {

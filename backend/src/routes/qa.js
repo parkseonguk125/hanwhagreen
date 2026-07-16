@@ -215,15 +215,18 @@ router.delete("/:id", async (req, res, next) => {
   try {
     const { password } = req.body || {};
     const id = req.params.id;
+    const isAdmin = await attachAdminIfPresent(req);
 
-    if (!password?.trim()) {
-      res.status(400).json({ message: "비밀번호를 입력해 주세요." });
-      return;
-    }
+    if (!isAdmin) {
+      if (!password?.trim()) {
+        res.status(400).json({ message: "비밀번호를 입력해 주세요." });
+        return;
+      }
 
-    if (!(await verifyQaPassword(id, password))) {
-      res.status(401).json({ message: "비밀번호가 올바르지 않습니다." });
-      return;
+      if (!(await verifyQaPassword(id, password))) {
+        res.status(401).json({ message: "비밀번호가 올바르지 않습니다." });
+        return;
+      }
     }
 
     const meta = await getQaPostAttachmentMeta(id);

@@ -224,17 +224,22 @@ function QaArticleView({ post }) {
     ? rawContent.split(/\n\n+/).map((part) => part.trim()).filter(Boolean)
     : [];
   const qaUnlocked = isQaPostUnlocked(post.id);
+  const adminLoggedIn = isAdmin();
 
   const handleDelete = async () => {
     if (!window.confirm("정말 삭제하시겠습니까?")) return;
 
     try {
-      const password = getQaPassword(post.id);
-      if (!password) {
-        navigate(boardPasswordRouteTarget("qa", post.id, "d"));
-        return;
+      if (adminLoggedIn) {
+        await deleteQaPost(post.id);
+      } else {
+        const password = getQaPassword(post.id);
+        if (!password) {
+          navigate(boardPasswordRouteTarget("qa", post.id, "d"));
+          return;
+        }
+        await deleteQaPost(post.id, password);
       }
-      await deleteQaPost(post.id, password);
       clearUnlockedQaPost(post.id);
       alert("삭제되었습니다.");
       navigate(boardRouteTarget("qa"));
@@ -244,9 +249,9 @@ function QaArticleView({ post }) {
   };
 
   const editTarget =
-    post.isSecret && !qaUnlocked
-      ? boardPasswordRouteTarget("qa", post.id, "u")
-      : boardWriteRouteTarget("qa", { wrId: post.id, mode: "u" });
+    adminLoggedIn || qaUnlocked || !post.isSecret
+      ? boardWriteRouteTarget("qa", { wrId: post.id, mode: "u" })
+      : boardPasswordRouteTarget("qa", post.id, "u");
 
   return (
     <article className="hg-notice-view">
@@ -298,6 +303,7 @@ function QaArticleView({ post }) {
 
 export default function QaBoardPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const wrId = searchParams.get("wr_id");
   const adminLoggedIn = isAdmin();
@@ -339,7 +345,7 @@ export default function QaBoardPage() {
     }
 
     const unlockedPost = getUnlockedQaPost(wrId);
-    if (unlockedPost) {
+    if (unlockedPost && Object.prototype.hasOwnProperty.call(unlockedPost, "content")) {
       setViewPost(unlockedPost);
       setViewLoading(false);
       setNeedsPassword(false);
@@ -355,13 +361,25 @@ export default function QaBoardPage() {
       .then((post) => {
         if (cancelled) return;
 
-        if (post.isSecret && !post.content) {
+        /* 비밀글이면서 content 필드가 없으면 잠금 상태 (빈 문자열 content는 열람 가능) */
+        const locked = Boolean(post.isSecret) && !Object.prototype.hasOwnProperty.call(post, "content");
+
+        if (locked) {
+          if (adminLoggedIn) {
+            /* 관리자인데 content가 없으면 세션 만료 등으로 인증 실패 → 로그인으로 */
+            const returnPath = `/bbs/board.php?bo_table=qa&wr_id=${wrId}`;
+            navigate(`/bbs/login.php?url=${encodeURIComponent(returnPath)}`, { replace: true });
+            return;
+          }
           setNeedsPassword(true);
           return;
         }
 
         storeUnlockedQaPost(post);
         setViewPost(post);
+      })
+      .catch(() => {
+        if (!cancelled) setViewPost(null);
       })
       .finally(() => {
         if (!cancelled) setViewLoading(false);
@@ -370,7 +388,7 @@ export default function QaBoardPage() {
     return () => {
       cancelled = true;
     };
-  }, [wrId, adminLoggedIn, location.pathname, location.search]);
+  }, [wrId, adminLoggedIn, location.pathname, location.search, navigate]);
 
   useEffect(() => {
     if (!viewPost) return undefined;

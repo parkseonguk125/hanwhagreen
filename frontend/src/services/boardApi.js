@@ -84,9 +84,9 @@ export async function fetchQaPosts() {
 
 export async function fetchQaPost(id) {
   try {
-    const token = getAuthToken();
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
-    const response = await apiFetch(`/qa/${id}`, { headers });
+    const response = await apiFetch(`/qa/${id}`, {
+      headers: jsonHeaders(true),
+    });
     return await parseResponse(response);
   } catch {
     const post = getFallbackQaPost(id);
@@ -190,8 +190,8 @@ export async function downloadQaAttachment(id, password) {
 export async function deleteQaPost(id, password) {
   const response = await apiFetch(`/qa/${id}`, {
     method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ password }),
+    headers: jsonHeaders(true),
+    body: JSON.stringify(password ? { password } : {}),
   });
   return parseResponse(response);
 }
