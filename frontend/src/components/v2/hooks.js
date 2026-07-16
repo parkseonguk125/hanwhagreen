@@ -701,6 +701,7 @@ function getPanelMotion(offset) {
 }
 
 export function useHgBusinessScroll(scrollRef, panelCount) {
+  const { isMobile } = useHgViewport();
   const [activeIndex, setActiveIndex] = useState(0);
   const [contentRevealIndex, setContentRevealIndex] = useState(-1);
 
@@ -708,11 +709,41 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
     const zone = scrollRef.current;
     if (!zone || panelCount < 1) return undefined;
 
-    zone.style.height = getBusinessZoneHeight(panelCount);
-
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const mobileQuery = window.matchMedia(`(max-width: ${HG_MOBILE_BREAKPOINT}px)`);
     const { raws: snapRaws, expandPortion } = getBusinessSnapRaws(panelCount);
+
+    const resetMobilePanels = () => {
+      zone.style.height = "";
+      zone.style.removeProperty("--hg-biz-expand");
+      zone.style.removeProperty("--hg-biz-slide");
+      zone.style.removeProperty("--hg-biz-slide-index");
+      zone.querySelectorAll("[data-hg-panel-index]").forEach((panel) => {
+        panel.style.setProperty("--hg-panel-offset", "0");
+        panel.style.setProperty("--hg-panel-travel", "0");
+        panel.style.setProperty("--hg-panel-scale", "1");
+        panel.style.setProperty("--hg-panel-rotate", "0");
+        panel.style.setProperty("--hg-panel-z", "0");
+        panel.style.setProperty("--hg-panel-origin-x", "50%");
+        panel.style.setProperty("--hg-panel-opacity", "1");
+        panel.style.zIndex = "";
+      });
+      zone.classList.remove("is-scrolled-through", "is-snapping");
+      setActiveIndex(0);
+      setContentRevealIndex(0);
+    };
+
+    if (isMobile || mobileQuery.matches || motionQuery.matches) {
+      resetMobilePanels();
+      return () => {
+        zone.style.removeProperty("height");
+        zone.style.removeProperty("--hg-biz-expand");
+        zone.style.removeProperty("--hg-biz-slide");
+        zone.style.removeProperty("--hg-biz-slide-index");
+      };
+    }
+
+    zone.style.height = getBusinessZoneHeight(panelCount);
 
     let frame = 0;
     let displayRaw = 0;
@@ -1092,7 +1123,7 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
       zone.classList.remove("is-scrolled-through");
       zone.classList.remove("is-snapping");
     };
-  }, [scrollRef, panelCount]);
+  }, [scrollRef, panelCount, isMobile]);
 
   const goToPanel = (index) => {
     const maxIndex = Math.max(panelCount - 1, 0);

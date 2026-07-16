@@ -220,9 +220,9 @@
   }
 
   .hg-hero-shell {
-    transform: none;
-    border-radius: 0;
-    box-shadow: none;
+    transform: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 
   .hg-hero__content,
@@ -250,7 +250,7 @@
   }
 
   .hg-biz-shell {
-    transform: none;
+    transform: none !important;
     border-radius: 0;
     box-shadow: none;
     min-height: auto;
@@ -258,7 +258,7 @@
 
   .hg-biz-viewport {
     height: auto;
-    min-height: 78svh;
+    min-height: 0;
   }
 
   .hg-biz-panel {
@@ -267,14 +267,14 @@
     opacity: 1 !important;
     flex: none;
     width: 100%;
-    min-height: 78svh;
+    min-height: 0;
     display: block;
     pointer-events: auto;
   }
 
   .hg-biz-panel__inner {
     position: relative;
-    min-height: 78svh;
+    min-height: 0;
     transform: none !important;
     box-shadow: none;
     border-radius: clamp(1rem, 3vw, 1.5rem);
