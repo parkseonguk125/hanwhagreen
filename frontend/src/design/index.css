@@ -13,6 +13,7 @@
 @import "./components/board-legacy.css";
 @import "./components/content.css";
 @import "./responsive.css";
+@import "./mobile-site.css";
 
 *, *::before, *::after {
   box-sizing: border-box;

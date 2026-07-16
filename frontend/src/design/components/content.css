@@ -2318,7 +2318,7 @@
 
   .hg-tech__row.is-reversed .hg-tech__row-copy {
     order: 1;
-    transform: translate3d(-24px, 0, 0);
+    transform: none;
   }
 
   .hg-tech__row.is-reversed .hg-tech__row-visual {
