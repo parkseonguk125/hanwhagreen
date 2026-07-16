@@ -28,11 +28,13 @@ function lockCssSmoothScroll() {
   savedScrollBehavior = html.style.scrollBehavior;
   html.style.scrollBehavior = "auto";
   html.classList.add("hg-scrolling-top");
+  html.classList.add("hg-route-jump");
 }
 
 function unlockCssSmoothScroll() {
   const html = document.documentElement;
   html.classList.remove("hg-scrolling-top");
+  html.classList.remove("hg-route-jump");
   if (savedScrollBehavior === null) return;
   html.style.scrollBehavior = savedScrollBehavior;
   savedScrollBehavior = null;
@@ -44,10 +46,28 @@ function hardScrollTo(y) {
   try {
     window.scrollTo({ top, left: 0, behavior: "instant" });
   } catch {
-    window.scrollTo(0, top);
+    try {
+      window.scrollTo({ top, left: 0, behavior: "auto" });
+    } catch {
+      window.scrollTo(0, top);
+    }
   }
   document.documentElement.scrollTop = top;
   if (document.body) document.body.scrollTop = top;
+}
+
+/**
+ * 라우트 이동 시 즉시 최상단 고정 (CSS scroll-behavior: smooth 무시)
+ */
+export function scrollToTopInstant() {
+  lockCssSmoothScroll();
+  hardScrollTo(0);
+  beginProgrammaticScroll(400);
+
+  requestAnimationFrame(() => {
+    hardScrollTo(0);
+    unlockCssSmoothScroll();
+  });
 }
 
 function stopTopAnimation() {

@@ -25,6 +25,11 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* 라우트 이동 직후 — smooth 스크롤 비활성 (페이지가 아래에서 올라오는 느낌 방지) */
+html.hg-route-jump {
+  scroll-behavior: auto !important;
+}
+
 /* TOP 이동 중 섹션 효과 동결 — 스크롤과 효과 갱신이 겹쳐 끊기는 현상 완화 */
 html.hg-scrolling-top .hg-hero-shell,
 html.hg-scrolling-top .hg-biz,

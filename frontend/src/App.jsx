@@ -7,16 +7,7 @@ import BoardWritePage from "./pages/BoardWritePage";
 import BoardPasswordPage from "./pages/BoardPasswordPage";
 import LoginPage from "./pages/LoginPage";
 import NewsLinkPage from "./pages/NewsLinkPage";
-
-function hardScrollToTop() {
-  try {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  } catch {
-    window.scrollTo(0, 0);
-  }
-  document.documentElement.scrollTop = 0;
-  if (document.body) document.body.scrollTop = 0;
-}
+import { scrollToTopInstant } from "./utils/scrollControl";
 
 function ScrollToTop() {
   const { pathname, search } = useLocation();
@@ -33,7 +24,7 @@ function ScrollToTop() {
   ].join("|");
 
   useLayoutEffect(() => {
-    hardScrollToTop();
+    scrollToTopInstant();
   }, [scrollKey]);
 
   return null;

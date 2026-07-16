@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import HgAppLink from "./HgAppLink";
 import { boardRouteTarget } from "../../utils/navRoutes";
 
 export default function HgContactCta() {
@@ -18,12 +18,12 @@ export default function HgContactCta() {
           </p>
         </div>
         <div className="hg-cta__actions">
-          <Link to={boardRouteTarget("qa")} className="hg-btn hg-btn--primary hg-cta__btn">
+          <HgAppLink to={boardRouteTarget("qa")} className="hg-btn hg-btn--primary hg-cta__btn">
             온라인 문의
-          </Link>
-          <Link to="/bbs/content.php?co_id=map" className="hg-btn hg-btn--outline hg-cta__btn">
+          </HgAppLink>
+          <HgAppLink to="/bbs/content.php?co_id=map" className="hg-btn hg-btn--outline hg-cta__btn">
             오시는 길
-          </Link>
+          </HgAppLink>
         </div>
       </div>
     </section>

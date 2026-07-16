@@ -5,6 +5,7 @@ import { logoutMember } from "../../services/authApi";
 import { clearAuth, getStoredMember, isLoggedIn } from "../../services/authAccess";
 import { parseAppHref } from "../../utils/navRoutes";
 import { HgNavLink } from "./HgNavLink";
+import HgAppLink from "./HgAppLink";
 import HgMobileMenu from "./HgMobileMenu";
 import HgDesktopMenu from "./HgDesktopMenu";
 import HgLogo from "./HgLogo";
@@ -172,9 +173,9 @@ export default function HgHeader({ hideHamburger = false }) {
                     </button>
                   </>
                 ) : (
-                  <Link to="/bbs/login.php" className="hg-header__login">
+                  <HgAppLink to="/bbs/login.php" className="hg-header__login">
                     로그인
-                  </Link>
+                  </HgAppLink>
                 )}
               </div>
 

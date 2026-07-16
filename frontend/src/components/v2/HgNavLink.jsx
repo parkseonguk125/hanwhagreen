@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { parseAppHref } from "../../utils/navRoutes";
 import { preloadBannerForHref } from "../../utils/preloadImage";
+import { scrollToTopInstant } from "../../utils/scrollControl";
 
 export function HgNavLink({ item, className = "", onNavigate, children }) {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export function HgNavLink({ item, className = "", onNavigate, children }) {
         onClick={(e) => {
           e.preventDefault();
           navigate(target);
+          scrollToTopInstant();
           onNavigate?.();
         }}
       >

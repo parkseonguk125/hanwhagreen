@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import HgAppLink from "./HgAppLink";
 import { certificates } from "../../data/mock";
 
 const pillars = [
@@ -35,7 +35,7 @@ function mainCertImage(cert) {
 
 function CertCard({ cert, duplicate = false }) {
   return (
-    <Link
+    <HgAppLink
       to={`/bbs/board.php?bo_table=certification&wr_id=${cert.id}`}
       className="hg-cert__item"
       tabIndex={duplicate ? -1 : undefined}
@@ -44,7 +44,7 @@ function CertCard({ cert, duplicate = false }) {
         <img src={mainCertImage(cert)} alt={duplicate ? "" : cert.title} loading="lazy" />
       </div>
       <p className="hg-cert__caption">{cert.title}</p>
-    </Link>
+    </HgAppLink>
   );
 }
 
@@ -106,14 +106,14 @@ export default function HgCertGallery() {
                 <span>한화그린의 약속</span>
               </h2>
             </div>
-            <Link to="/bbs/board.php?bo_table=certification" className="hg-link-arrow hg-link-arrow--light">
+            <HgAppLink to="/bbs/board.php?bo_table=certification" className="hg-link-arrow hg-link-arrow--light">
               전체 보기 →
-            </Link>
+            </HgAppLink>
           </header>
 
           <div className="hg-pillars hg-reveal">
             {pillars.map((item, i) => (
-              <Link
+              <HgAppLink
                 key={item.label}
                 to={item.href}
                 className="hg-pillars__card"
@@ -124,7 +124,7 @@ export default function HgCertGallery() {
                 <h3 className="hg-pillars__title">{item.title}</h3>
                 <p className="hg-pillars__desc">{item.desc}</p>
                 <span className="hg-pillars__arrow" aria-hidden="true">→</span>
-              </Link>
+              </HgAppLink>
             ))}
           </div>
         </div>
