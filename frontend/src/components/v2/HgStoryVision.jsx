@@ -175,19 +175,28 @@ function StoryDesktop({ scrollRef, active, phase, progress, introFill, introPinn
 
 function StoryMobile() {
   return (
-    <section className="hg-story-mobile" aria-label="한화그린 비전 스토리">
-      {STAGES.map((stage) => (
-        <article key={stage.keyword} className="hg-story-mobile__card">
-          <div className="hg-story-mobile__media" aria-hidden="true">
-            <img src={stage.image} alt="" loading="lazy" />
-            <div className="hg-story__shade" />
+    <section className="hg-m-story" aria-label="한화그린 비전 스토리">
+      <header className="hg-m-story__intro">
+        <p className="hg-m-sec-head__eyebrow">Our Story</p>
+        <h2 className="hg-m-story__intro-title">
+          깨끗한 축사환경과
+          <br />
+          스마트한 생산관리로
+          <br />
+          <span>지속가능한 미래</span>를 엽니다
+        </h2>
+      </header>
+
+      {STAGES.map((stage, index) => (
+        <article key={stage.keyword} className="hg-m-story__card">
+          <div className="hg-m-story__media" aria-hidden="true">
+            <img src={stage.image} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" />
+            <div className="hg-m-story__shade" />
           </div>
-          <div className="hg-story-mobile__body">
-            <strong className="hg-story-mobile__keyword">
-              {stage.keyword}
-              <i className="hg-story__underline" aria-hidden="true" />
-            </strong>
-            <p className="hg-story-mobile__caption">
+          <div className="hg-m-story__body">
+            <span className="hg-m-story__index">{String(index + 1).padStart(2, "0")}</span>
+            <h3 className="hg-m-story__keyword">{stage.keyword}</h3>
+            <p className="hg-m-story__caption">
               {stage.caption.map((line) => (
                 <span key={line}>{line}</span>
               ))}
@@ -204,7 +213,7 @@ export default function HgStoryVision() {
   const { isMobile } = useHgViewport();
   const { active, phase, progress, introFill, introPinned } = useHgStoryVisionScroll(
     scrollRef,
-    STAGES.length
+    isMobile ? 0 : STAGES.length
   );
 
   if (isMobile) return <StoryMobile />;

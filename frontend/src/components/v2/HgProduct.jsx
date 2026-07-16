@@ -1,28 +1,28 @@
 import { useEffect, useRef } from "react";
 import HgAppLink from "./HgAppLink";
 import { projects } from "../../data/projects";
-import { useHgHorizontalScroll } from "./hooks";
+import { useHgHorizontalScroll, useHgViewport } from "./hooks";
 import { isProgrammaticScrollActive } from "../../utils/scrollControl";
 
 const featuredProjects = projects.slice(0, 11);
+const mobileProjects = projects.slice(0, 6);
 
 function formatProjectTitle(title) {
   return title.replace(/_/g, " ").replace(/\s+/g, " ").trim();
 }
 
-/**
- * 화면을 꽉 채운 뒤 카드가 아래에서 위로 올라오게 한다.
- * - 스크롤을 내릴 때만 재생
- * - 위로 다시 올라올 때는 재생하지 않음
- * - 섹션보다 위(페이지 상단 쪽)로 완전히 벗어나면 리셋 → 다시 내려올 때 재생
- */
-function useProjectCardScrollRise(stickyRef) {
+function useProjectCardScrollRise(stickyRef, enabled) {
   useEffect(() => {
     const sticky = stickyRef.current;
-    if (!sticky) return undefined;
+    if (!sticky || !enabled) {
+      if (sticky) {
+        sticky.classList.add("is-cards-up");
+        sticky.style.setProperty("--hg-card-up", "1");
+      }
+      return undefined;
+    }
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0;
     let revealed = false;
     let armed = false;
     let lastScrollY = window.scrollY;
@@ -42,11 +42,9 @@ function useProjectCardScrollRise(stickyRef) {
     const play = () => {
       if (revealed) return;
       revealed = true;
-
       sticky.classList.remove("is-cards-up");
       sticky.style.setProperty("--hg-card-up", "0");
       void sticky.offsetWidth;
-
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           sticky.style.setProperty("--hg-card-up", "1");
@@ -55,15 +53,8 @@ function useProjectCardScrollRise(stickyRef) {
       });
     };
 
-    const isFullyFilled = () => {
-      const rect = sticky.getBoundingClientRect();
-      const vh = window.innerHeight;
-      return rect.top <= 2 && rect.bottom >= vh * 0.9;
-    };
-
     const sync = () => {
       if (!armed) return;
-
       const scrollY = window.scrollY;
       const goingDown = scrollY >= lastScrollY;
       lastScrollY = scrollY;
@@ -76,82 +67,63 @@ function useProjectCardScrollRise(stickyRef) {
       const rect = sticky.getBoundingClientRect();
       const vh = window.innerHeight;
 
-      // 섹션보다 위(아직 도착 전 / 위로 완전히 빠져나감) → 다음 하강 진입용 리셋
       if (rect.top > vh * 0.12) {
         hide();
         return;
       }
 
-      // 섹션보다 아래(지나감) → 상태 유지. 위로 다시 올 때 재생 안 함
-      if (rect.bottom < vh * 0.2) {
-        return;
-      }
-
-      if (isFullyFilled()) {
+      if (rect.top <= 2 && rect.bottom >= vh * 0.9) {
         if (goingDown) play();
-        else showInstant();
+        else if (!revealed) showInstant();
       }
     };
 
-    const onScroll = () => {
-      if (isProgrammaticScrollActive()) return;
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(sync);
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            armed = true;
+            if (isProgrammaticScrollActive()) showInstant();
+            else sync();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
 
-    hide();
-    const armTimer = window.setTimeout(() => {
-      armed = true;
-      lastScrollY = window.scrollY;
-      sync();
-    }, 80);
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    reduceMotion.addEventListener("change", sync);
+    observer.observe(sticky);
+    window.addEventListener("scroll", sync, { passive: true });
 
     return () => {
-      window.clearTimeout(armTimer);
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      reduceMotion.removeEventListener("change", sync);
-      sticky.style.removeProperty("--hg-card-up");
-      sticky.classList.remove("is-cards-up");
+      observer.disconnect();
+      window.removeEventListener("scroll", sync);
     };
-  }, [stickyRef]);
+  }, [stickyRef, enabled]);
 }
 
 export default function HgProduct() {
+  const { isMobile } = useHgViewport();
   const scrollRef = useRef(null);
   const stickyRef = useRef(null);
   const trackRef = useRef(null);
 
-  useHgHorizontalScroll(scrollRef, featuredProjects.length, "--hg-project-progress");
-  useProjectCardScrollRise(stickyRef);
+  useHgHorizontalScroll(scrollRef, isMobile ? 0 : featuredProjects.length);
+  useProjectCardScrollRise(stickyRef, !isMobile);
 
   useEffect(() => {
+    if (isMobile) return undefined;
     const zone = scrollRef.current;
     const track = trackRef.current;
     if (!zone || !track) return undefined;
 
     const syncHeight = () => {
-      const mobileQuery = window.matchMedia("(max-width: 1024px)");
-      if (mobileQuery.matches) {
-        zone.style.height = "";
-        return;
-      }
-
-      const overflow = Math.max(track.scrollWidth - window.innerWidth, 0);
-      const scrollExtra = Math.max(overflow, Math.round(window.innerHeight * 0.45));
-
-      zone.style.setProperty("--hg-project-shift", `${overflow}px`);
-      zone.style.height = `calc(100svh + ${scrollExtra}px)`;
+      const shift = Math.max(track.scrollWidth - window.innerWidth, 0);
+      zone.style.setProperty("--hg-project-shift", `${shift}px`);
+      zone.style.height = shift > 0 ? `${window.innerHeight + shift}px` : "";
     };
 
     syncHeight();
     window.addEventListener("resize", syncHeight);
-
     const observer = new ResizeObserver(syncHeight);
     observer.observe(track);
 
@@ -159,8 +131,49 @@ export default function HgProduct() {
       window.removeEventListener("resize", syncHeight);
       observer.disconnect();
       zone.style.removeProperty("height");
+      zone.style.removeProperty("--hg-project-shift");
     };
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) {
+    return (
+      <section className="hg-m-projects" id="home-business" aria-labelledby="hg-m-projects-title">
+        <div className="hg-m-projects__inner">
+          <header className="hg-m-sec-head">
+            <p className="hg-m-sec-head__eyebrow">Projects</p>
+            <h2 id="hg-m-projects-title" className="hg-m-sec-head__title">
+              현장에서 검증된
+              <br />
+              주요 실적
+            </h2>
+            <HgAppLink to="/bbs/board.php?bo_table=project" className="hg-m-sec-head__link">
+              전체 보기
+            </HgAppLink>
+          </header>
+
+          <div className="hg-m-projects__grid">
+            {mobileProjects.map((project, index) => (
+              <HgAppLink
+                key={project.id}
+                to={`/bbs/board.php?bo_table=project&wr_id=${project.id}`}
+                className={`hg-m-project-card${index === 0 ? " is-featured" : ""}`}
+              >
+                <div
+                  className="hg-m-project-card__media"
+                  style={{ backgroundImage: `url(${project.image})` }}
+                  aria-hidden="true"
+                />
+                <div className="hg-m-project-card__body">
+                  <h3 className="hg-m-project-card__title">{formatProjectTitle(project.title)}</h3>
+                  <span className="hg-m-project-card__more">자세히</span>
+                </div>
+              </HgAppLink>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
@@ -173,7 +186,7 @@ export default function HgProduct() {
       <div className="hg-project-sticky" ref={stickyRef}>
         <div className="hg-project-stage">
           <header className="hg-project-stage__head hg-reveal">
-            <p className="hg-project-stage__eyebrow">현장에서 검증된 역량</p>
+            <p className="hg-project-stage__eyebrow">현장에서 검증된 실적</p>
             <h2 id="hg-business-title" className="hg-project-stage__title">
               <span>한화그린의</span>
               <span>주요 실적</span>

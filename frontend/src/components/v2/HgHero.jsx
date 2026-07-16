@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { assets } from "../../data/mock";
-import { useHgHeroScroll } from "./hooks";
+import HgAppLink from "./HgAppLink";
+import { useHgHeroScroll, useHgViewport } from "./hooks";
 
 const slideCopy = [
   {
@@ -28,10 +29,11 @@ const SLIDE_DURATION_MS = 6000;
 export default function HgHero() {
   const slides = assets.heroSlides;
   const scrollRef = useRef(null);
+  const { isMobile } = useHgViewport();
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
 
-  useHgHeroScroll(scrollRef);
+  useHgHeroScroll(scrollRef, !isMobile);
 
   useEffect(() => {
     if (paused) return undefined;
@@ -42,6 +44,71 @@ export default function HgHero() {
   }, [slides.length, paused, index]);
 
   const copy = slideCopy[index] ?? slideCopy[0];
+
+  if (isMobile) {
+    return (
+      <section className="hg-m-hero" aria-label="메인 비주얼">
+        <div className="hg-m-hero__media">
+          {slides.map((image, i) => (
+            <img
+              key={image}
+              className={`hg-m-hero__img${i === index ? " is-active" : ""}`}
+              src={image}
+              alt=""
+              loading={i === 0 ? "eager" : "lazy"}
+              decoding="async"
+            />
+          ))}
+          <div className="hg-m-hero__shade" aria-hidden="true" />
+        </div>
+
+        <div className="hg-m-hero__content">
+          <p className="hg-m-hero__eyebrow">Hanwha Green</p>
+          <p className="hg-m-hero__tagline">{copy.tagline}</p>
+          <h1 className="hg-m-hero__title">
+            {copy.title}
+            <br />
+            {copy.subtitle}
+          </h1>
+          <div className="hg-m-hero__actions">
+            <HgAppLink to="/bbs/content.php?co_id=company" className="hg-m-hero__btn hg-m-hero__btn--primary">
+              회사소개
+            </HgAppLink>
+            <HgAppLink to="/bbs/board.php?bo_table=project" className="hg-m-hero__btn hg-m-hero__btn--ghost">
+              실적 보기
+            </HgAppLink>
+          </div>
+        </div>
+
+        <div className="hg-m-hero__footer">
+          <div className="hg-m-hero__dots" role="tablist" aria-label="메인 슬라이드">
+            {slideCopy.map((slide, i) => (
+              <button
+                key={slide.tabLabel}
+                type="button"
+                role="tab"
+                className={`hg-m-hero__dot${i === index ? " is-active" : ""}`}
+                aria-label={slide.tabLabel}
+                aria-selected={i === index}
+                onClick={() => setIndex(i)}
+              />
+            ))}
+            <button
+              type="button"
+              className="hg-m-hero__pause"
+              aria-label={paused ? "슬라이드 재생" : "슬라이드 정지"}
+              onClick={() => setPaused((value) => !value)}
+            >
+              {paused ? "▶" : "Ⅱ"}
+            </button>
+          </div>
+          <a href="#home-about" className="hg-m-hero__scroll" aria-label="아래로 스크롤">
+            <span />
+          </a>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <div className="hg-hero-scroll" ref={scrollRef} aria-label="메인 비주얼">

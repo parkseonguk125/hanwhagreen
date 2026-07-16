@@ -250,7 +250,7 @@ export function useHgStoryVisionScroll(scrollRef, stageCount = 3) {
 
   useEffect(() => {
     const zone = scrollRef.current;
-    if (!zone) return undefined;
+    if (!zone || stageCount < 1) return undefined;
 
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const mobileQuery = window.matchMedia(`(max-width: ${HG_MOBILE_BREAKPOINT}px)`);
@@ -377,20 +377,24 @@ function getVisionZoneHeight() {
   return `calc(100svh + ${HG_VISION_PAUSE_VH}vh)`;
 }
 
-export function useHgVisionScroll(scrollRef) {
+export function useHgVisionScroll(scrollRef, enabled = true) {
   useEffect(() => {
-    const zone = scrollRef.current;
-    if (!zone) return undefined;
+    const zone = scrollRef?.current;
+    if (!zone || !enabled) return undefined;
 
     const vision = zone.querySelector(".hg-vision");
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     const mobileQuery = window.matchMedia(`(max-width: ${HG_MOBILE_BREAKPOINT}px)`);
 
+    if (mobileQuery.matches || motionQuery.matches) {
+      zone.style.height = "";
+      vision?.classList.add("is-animated");
+      return () => {
+        zone.style.removeProperty("height");
+      };
+    }
+
     const syncHeight = () => {
-      if (motionQuery.matches || mobileQuery.matches) {
-        zone.style.height = "";
-        return;
-      }
       zone.style.height = getVisionZoneHeight();
     };
 
@@ -589,7 +593,7 @@ export function useHgVisionScroll(scrollRef) {
       zone.classList.remove("is-holding", "is-scrolled-through");
       hideVision();
     };
-  }, [scrollRef]);
+  }, [scrollRef, enabled]);
 }
 
 const HG_BUSINESS_EXPAND_SEGMENT = 0.55;

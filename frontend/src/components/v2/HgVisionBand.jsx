@@ -1,15 +1,34 @@
 import { useRef } from "react";
-import { useHgVisionScroll } from "./hooks";
+import { useHgVisionScroll, useHgViewport } from "./hooks";
+
+const lines = [
+  "환경 기술력으로 여는",
+  "성공적인 미래",
+  "글로벌 친환경 솔루션의 선두주자",
+];
 
 export default function HgVisionBand() {
   const scrollRef = useRef(null);
-  const lines = [
-    "환경 기술력으로 여는",
-    "성공적인 미래",
-    "글로벌 친환경 솔루션의 선두주자",
-  ];
+  const { isMobile } = useHgViewport();
 
-  useHgVisionScroll(scrollRef);
+  useHgVisionScroll(scrollRef, !isMobile);
+
+  if (isMobile) {
+    return (
+      <section className="hg-m-vision" aria-label="비전">
+        <p className="hg-m-vision__eyebrow">Vision</p>
+        <h2 className="hg-m-vision__title">
+          환경 기술력으로 여는
+          <br />
+          성공적인 미래
+        </h2>
+        <p className="hg-m-vision__desc">글로벌 친환경 솔루션의 선두주자</p>
+        <p className="hg-m-vision__tag">
+          Beyond Waste <span>Forward to Green</span>
+        </p>
+      </section>
+    );
+  }
 
   return (
     <div className="hg-vision-scroll" ref={scrollRef}>
