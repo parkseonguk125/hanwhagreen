@@ -1892,6 +1892,25 @@
   word-break: break-all;
 }
 
+.hg-write__file-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hg-write__file-list .hg-write__file-name {
+  max-width: min(100%, 22rem);
+}
+
+.hg-write__file-list .hg-write__file-name span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .hg-write__file-del {
   display: inline-flex;
   align-items: center;

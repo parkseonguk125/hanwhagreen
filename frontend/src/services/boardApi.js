@@ -116,12 +116,13 @@ function appendQaFormFields(formData, payload) {
   }
 }
 
-export async function createQaPost(payload, file) {
+export async function createQaPost(payload, files = []) {
   const formData = new FormData();
   appendQaFormFields(formData, payload);
-  if (file) {
-    formData.append("attachment", file);
-  }
+  const list = Array.isArray(files) ? files : files ? [files] : [];
+  list.forEach((file) => {
+    if (file) formData.append("attachments", file);
+  });
 
   const response = await apiFetch("/qa", {
     method: "POST",
@@ -130,12 +131,13 @@ export async function createQaPost(payload, file) {
   return parseResponse(response);
 }
 
-export async function updateQaPost(id, payload, file) {
+export async function updateQaPost(id, payload, files = []) {
   const formData = new FormData();
   appendQaFormFields(formData, payload);
-  if (file) {
-    formData.append("attachment", file);
-  }
+  const list = Array.isArray(files) ? files : files ? [files] : [];
+  list.forEach((file) => {
+    if (file) formData.append("attachments", file);
+  });
 
   const response = await apiFetch(`/qa/${id}`, {
     method: "PUT",
@@ -155,7 +157,7 @@ function parseFilenameFromDisposition(header) {
   }
 }
 
-export async function downloadQaAttachment(id, password) {
+export async function downloadQaAttachment(id, password, attachmentId) {
   const headers = {};
   const token = getAuthToken();
   if (token) {
@@ -166,7 +168,10 @@ export async function downloadQaAttachment(id, password) {
     throw new Error("첨부파일을 받으려면 비밀번호 확인이 필요합니다.");
   }
 
-  const response = await apiFetch(`/qa/${id}/attachment`, { headers });
+  const path = attachmentId
+    ? `/qa/${id}/attachments/${attachmentId}`
+    : `/qa/${id}/attachment`;
+  const response = await apiFetch(path, { headers });
   if (!response.ok) {
     const data = await response.json().catch(() => ({}));
     throw new Error(data.message || "첨부파일을 받을 수 없습니다.");

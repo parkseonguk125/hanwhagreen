@@ -68,8 +68,18 @@ function mapNoticeRow(row, { includeContent = true } = {}) {
   return post;
 }
 
-function mapQaRow(row, { includeContent = true } = {}) {
+function mapQaRow(row, { includeContent = true, attachments = [] } = {}) {
   if (!row) return null;
+
+  const normalizedAttachments = (attachments || [])
+    .map((item) => ({
+      id: item.id,
+      name: item.attachment_name || item.name || "",
+    }))
+    .filter((item) => item.id && item.name);
+
+  const legacyName = row.attachment_name || "";
+  const firstName = normalizedAttachments[0]?.name || legacyName;
 
   const post = {
     id: row.id,
@@ -84,8 +94,9 @@ function mapQaRow(row, { includeContent = true } = {}) {
     homepage: row.homepage || "",
     link1: row.link1 || "",
     link2: row.link2 || "",
-    attachmentName: row.attachment_name || "",
-    hasAttachment: Boolean(row.attachment_path),
+    attachments: normalizedAttachments,
+    attachmentName: firstName,
+    hasAttachment: normalizedAttachments.length > 0 || Boolean(row.attachment_path) || Boolean(legacyName),
     receiveMail: Boolean(row.receive_mail),
   };
 
@@ -94,6 +105,68 @@ function mapQaRow(row, { includeContent = true } = {}) {
   }
 
   return post;
+}
+
+async function listQaAttachmentRows(postId) {
+  const { rows } = await pool.query(
+    `
+      SELECT id, attachment_name, attachment_path, sort_order
+      FROM qa_post_attachments
+      WHERE post_id = $1
+      ORDER BY sort_order ASC, id ASC
+    `,
+    [Number(postId)]
+  );
+  return rows;
+}
+
+async function mapQaRowWithAttachments(row, options = {}) {
+  if (!row) return null;
+  const attachments = await listQaAttachmentRows(row.id);
+  return mapQaRow(row, { ...options, attachments });
+}
+
+export async function replaceQaAttachments(postId, attachments = []) {
+  const id = Number(postId);
+  const existing = await listQaAttachmentRows(id);
+
+  await pool.query("DELETE FROM qa_post_attachments WHERE post_id = $1", [id]);
+
+  const first = attachments[0] || { attachmentName: "", attachmentPath: "" };
+  await pool.query(
+    `
+      UPDATE qa_posts
+      SET attachment_name = $1, attachment_path = $2
+      WHERE id = $3
+    `,
+    [first.attachmentName || "", first.attachmentPath || "", id]
+  );
+
+  for (let i = 0; i < attachments.length; i += 1) {
+    const item = attachments[i];
+    if (!item?.attachmentPath) continue;
+    await pool.query(
+      `
+        INSERT INTO qa_post_attachments (post_id, attachment_name, attachment_path, sort_order)
+        VALUES ($1, $2, $3, $4)
+      `,
+      [id, item.attachmentName || "", item.attachmentPath, i]
+    );
+  }
+
+  return existing.map((row) => row.attachment_path).filter(Boolean);
+}
+
+export async function getQaAttachmentById(postId, attachmentId) {
+  const { rows } = await pool.query(
+    `
+      SELECT id, attachment_name, attachment_path
+      FROM qa_post_attachments
+      WHERE post_id = $1 AND id = $2
+    `,
+    [Number(postId), Number(attachmentId)]
+  );
+  return rows[0] || null;
 }
 
 export async function initDb() {
@@ -198,6 +271,27 @@ async function migrateQaPosts() {
     ALTER TABLE qa_posts ADD COLUMN IF NOT EXISTS link2 TEXT DEFAULT '';
     ALTER TABLE qa_posts ADD COLUMN IF NOT EXISTS attachment_name TEXT DEFAULT '';
     ALTER TABLE qa_posts ADD COLUMN IF NOT EXISTS attachment_path TEXT DEFAULT '';
+
+    CREATE TABLE IF NOT EXISTS qa_post_attachments (
+      id SERIAL PRIMARY KEY,
+      post_id INTEGER NOT NULL REFERENCES qa_posts(id) ON DELETE CASCADE,
+      attachment_name TEXT NOT NULL DEFAULT '',
+      attachment_path TEXT NOT NULL DEFAULT '',
+      sort_order INTEGER NOT NULL DEFAULT 0
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_qa_post_attachments_post_id
+      ON qa_post_attachments(post_id);
+  `);
+
+  await pool.query(`
+    INSERT INTO qa_post_attachments (post_id, attachment_name, attachment_path, sort_order)
+    SELECT id, attachment_name, attachment_path, 0
+    FROM qa_posts
+    WHERE attachment_path <> ''
+      AND NOT EXISTS (
+        SELECT 1 FROM qa_post_attachments a WHERE a.post_id = qa_posts.id
+      );
   `);
 }
 
@@ -350,7 +444,7 @@ export async function getNoticePost(id, { incrementHits = false } = {}) {
 
 export async function listQaPosts() {
   const { rows } = await pool.query("SELECT * FROM qa_posts ORDER BY id DESC");
-  return rows.map((row) => mapQaRow(row, { includeContent: false }));
+  return Promise.all(rows.map((row) => mapQaRowWithAttachments(row, { includeContent: false })));
 }
 
 export async function getQaPost(id, { includeContent = true } = {}) {
@@ -361,14 +455,14 @@ export async function getQaPost(id, { includeContent = true } = {}) {
   if (!row) return null;
 
   const shouldIncludeContent = includeContent && !row.is_secret;
-  return mapQaRow(row, { includeContent: shouldIncludeContent });
+  return mapQaRowWithAttachments(row, { includeContent: shouldIncludeContent });
 }
 
 export async function getQaPostFull(id) {
   const { rows } = await pool.query("SELECT * FROM qa_posts WHERE id = $1", [
     Number(id),
   ]);
-  return mapQaRow(rows[0], { includeContent: true });
+  return mapQaRowWithAttachments(rows[0], { includeContent: true });
 }
 
 export async function verifyQaPassword(id, password) {
@@ -381,6 +475,18 @@ export async function verifyQaPassword(id, password) {
 }
 
 export async function createQaPost(payload) {
+  const attachments = Array.isArray(payload.attachments)
+    ? payload.attachments.filter((item) => item?.attachmentPath)
+    : payload.attachmentPath
+      ? [
+          {
+            attachmentName: payload.attachmentName || "",
+            attachmentPath: payload.attachmentPath,
+          },
+        ]
+      : [];
+  const first = attachments[0] || { attachmentName: "", attachmentPath: "" };
+
   const { rows } = await pool.query(
     `
       INSERT INTO qa_posts (
@@ -401,13 +507,18 @@ export async function createQaPost(payload) {
       payload.link1 || "",
       payload.link2 || "",
       payload.content,
-      payload.attachmentName || "",
-      payload.attachmentPath || "",
+      first.attachmentName || "",
+      first.attachmentPath || "",
       Boolean(payload.receiveMail),
     ]
   );
 
-  return getQaPostFull(rows[0].id);
+  const postId = rows[0].id;
+  if (attachments.length) {
+    await replaceQaAttachments(postId, attachments);
+  }
+
+  return getQaPostFull(postId);
 }
 
 export async function incrementQaHits(id) {
@@ -450,11 +561,34 @@ export async function deleteNoticePost(id) {
 }
 
 export async function getQaPostAttachmentMeta(id) {
+  const attachments = await listQaAttachmentRows(id);
+  if (attachments.length) {
+    return {
+      attachment_name: attachments[0].attachment_name,
+      attachment_path: attachments[0].attachment_path,
+      attachments,
+    };
+  }
+
   const { rows } = await pool.query(
     "SELECT attachment_name, attachment_path FROM qa_posts WHERE id = $1",
     [Number(id)]
   );
-  return rows[0] || null;
+  const row = rows[0] || null;
+  if (!row) return null;
+  return {
+    ...row,
+    attachments: row.attachment_path
+      ? [
+          {
+            id: null,
+            attachment_name: row.attachment_name,
+            attachment_path: row.attachment_path,
+            sort_order: 0,
+          },
+        ]
+      : [],
+  };
 }
 
 export async function updateQaPost(id, payload) {
@@ -466,56 +600,32 @@ export async function updateQaPost(id, payload) {
     payload.link1 || "",
     payload.link2 || "",
     payload.content,
-    payload.attachmentName ?? null,
-    payload.attachmentPath ?? null,
     Boolean(payload.receiveMail),
     Number(id),
   ];
 
-  const setAttachment =
-    payload.attachmentName !== undefined && payload.attachmentPath !== undefined;
-
   let rowCount;
   if (payload.newPassword?.trim()) {
-    const sql = setAttachment
-      ? `
-        UPDATE qa_posts
-        SET subject = $1, author = $2, email = $3, homepage = $4,
-            link1 = $5, link2 = $6, content = $7,
-            attachment_name = $8, attachment_path = $9,
-            receive_mail = $10, password_hash = $11
-        WHERE id = $12
+    const result = await pool.query(
       `
-      : `
         UPDATE qa_posts
         SET subject = $1, author = $2, email = $3, homepage = $4,
             link1 = $5, link2 = $6, content = $7, receive_mail = $8, password_hash = $9
         WHERE id = $10
-      `;
-    const params = setAttachment
-      ? [...base.slice(0, 10), bcrypt.hashSync(payload.newPassword, 10), base[10]]
-      : [...base.slice(0, 7), Boolean(payload.receiveMail), bcrypt.hashSync(payload.newPassword, 10), base[10]];
-    const result = await pool.query(sql, params);
+      `,
+      [...base.slice(0, 8), bcrypt.hashSync(payload.newPassword, 10), base[8]]
+    );
     rowCount = result.rowCount;
   } else {
-    const sql = setAttachment
-      ? `
-        UPDATE qa_posts
-        SET subject = $1, author = $2, email = $3, homepage = $4,
-            link1 = $5, link2 = $6, content = $7,
-            attachment_name = $8, attachment_path = $9, receive_mail = $10
-        WHERE id = $11
+    const result = await pool.query(
       `
-      : `
         UPDATE qa_posts
         SET subject = $1, author = $2, email = $3, homepage = $4,
             link1 = $5, link2 = $6, content = $7, receive_mail = $8
         WHERE id = $9
-      `;
-    const params = setAttachment
-      ? base
-      : [...base.slice(0, 7), Boolean(payload.receiveMail), base[10]];
-    const result = await pool.query(sql, params);
+      `,
+      base
+    );
     rowCount = result.rowCount;
   }
 

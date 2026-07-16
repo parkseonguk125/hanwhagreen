@@ -29,17 +29,25 @@ function PlainTextItem({ label, value }) {
 }
 
 export default function QaPostExtras({ postId, fields }) {
-  const { email, homepage, link1, link2, attachmentName, hasAttachment } = fields;
+  const { email, homepage, link1, link2, attachments = [], attachmentName, hasAttachment } =
+    fields;
 
-  const handleDownload = async () => {
+  const files =
+    attachments.length > 0
+      ? attachments
+      : hasAttachment
+        ? [{ id: null, name: attachmentName || "첨부파일 다운로드" }]
+        : [];
+
+  const handleDownload = async (attachmentId) => {
     try {
-      await downloadQaAttachment(postId, getQaPassword(postId));
+      await downloadQaAttachment(postId, getQaPassword(postId), attachmentId);
     } catch (error) {
       alert(error.message);
     }
   };
 
-  const hasMeta = email || homepage || link1 || link2 || hasAttachment;
+  const hasMeta = email || homepage || link1 || link2 || files.length > 0;
   if (!hasMeta) return null;
 
   return (
@@ -50,14 +58,18 @@ export default function QaPostExtras({ postId, fields }) {
         <PlainTextItem label="홈페이지" value={homepage} />
         <ExternalLink href={link1} label="링크 1" />
         <PlainTextItem label="링크 2" value={link2} />
-        {hasAttachment && (
-          <li>
-            <span className="qa-extra-label">첨부파일</span>
-            <button type="button" className="qa-extra-download" onClick={handleDownload}>
-              {attachmentName || "첨부파일 다운로드"}
+        {files.map((file, index) => (
+          <li key={file.id || `${file.name}-${index}`}>
+            <span className="qa-extra-label">{files.length > 1 ? `첨부파일 ${index + 1}` : "첨부파일"}</span>
+            <button
+              type="button"
+              className="qa-extra-download"
+              onClick={() => handleDownload(file.id)}
+            >
+              {file.name || "첨부파일 다운로드"}
             </button>
           </li>
-        )}
+        ))}
       </ul>
     </div>
   );

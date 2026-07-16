@@ -1,4 +1,3 @@
-import crypto from "crypto";
 import fs from "fs";
 import path from "path";
 
@@ -17,6 +16,16 @@ export function attachmentFromUpload(file) {
   };
 }
 
+export function attachmentsFromUploads(files = []) {
+  if (!Array.isArray(files)) {
+    return files ? [attachmentFromUpload(files)].filter((item) => item.attachmentPath) : [];
+  }
+  return files
+    .filter(Boolean)
+    .map((file) => attachmentFromUpload(file))
+    .filter((item) => item.attachmentPath);
+}
+
 export function getQaAttachmentAbsolute(storedName) {
   if (!storedName) return null;
   const safe = path.basename(storedName);
@@ -33,5 +42,11 @@ export function deleteQaAttachmentFile(storedName) {
     } catch {
       /* ignore */
     }
+  }
+}
+
+export function deleteQaAttachmentFiles(storedNames = []) {
+  for (const storedName of storedNames) {
+    deleteQaAttachmentFile(storedName);
   }
 }

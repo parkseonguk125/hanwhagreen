@@ -75,8 +75,10 @@ export default function BoardWritePage() {
   const [loading, setLoading] = useState(Boolean(isEdit));
   const [loadError, setLoadError] = useState("");
   const [form, setForm] = useState({ ...emptyForm });
-  const [attachment, setAttachment] = useState(null);
+  const [attachments, setAttachments] = useState([]);
   const fileInputRef = useRef(null);
+
+  const MAX_ATTACHMENTS = 10;
 
   useEffect(() => {
     if (table !== "notice") return undefined;
@@ -165,15 +167,31 @@ export default function BoardWritePage() {
   };
 
   const handleAttachmentChange = (event) => {
-    const file = event.target.files?.[0] ?? null;
-    setAttachment(file);
-  };
+    const selected = Array.from(event.target.files || []);
+    if (!selected.length) return;
 
-  const clearAttachment = () => {
-    setAttachment(null);
+    setAttachments((prev) => {
+      const merged = [...prev];
+      for (const file of selected) {
+        const duplicate = merged.some(
+          (item) => item.name === file.name && item.size === file.size && item.lastModified === file.lastModified
+        );
+        if (!duplicate) merged.push(file);
+      }
+      if (merged.length > MAX_ATTACHMENTS) {
+        alert(`첨부파일은 최대 ${MAX_ATTACHMENTS}개까지 가능합니다.`);
+        return merged.slice(0, MAX_ATTACHMENTS);
+      }
+      return merged;
+    });
+
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+  };
+
+  const removeAttachment = (index) => {
+    setAttachments((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (event) => {
@@ -240,7 +258,7 @@ export default function BoardWritePage() {
               receiveMail: form.mail,
               newPassword: form.wr_new_password.trim() || undefined,
             },
-            attachment
+            attachments
           );
           storeUnlockedQaPost(post);
           storeQaPassword(wrId, form.wr_new_password.trim() || form.wr_password);
@@ -261,7 +279,7 @@ export default function BoardWritePage() {
             content,
             receiveMail: form.mail,
           },
-          attachment
+          attachments
         );
 
         storeUnlockedQaPost(post);
@@ -499,7 +517,7 @@ export default function BoardWritePage() {
                     />
                   </WriteField>
                 </div>
-                <WriteField id="bf_file_0" label="파일 첨부">
+                <WriteField id="bf_file_0" label="파일 첨부" hint={`최대 ${MAX_ATTACHMENTS}개`}>
                   <div className="hg-write__file">
                     <label className="hg-write__file-btn" htmlFor="bf_file_0">
                       <Icon name="folder-open" size="sm" />
@@ -511,24 +529,30 @@ export default function BoardWritePage() {
                       name="bf_file[]"
                       id="bf_file_0"
                       className="hg-write__file-input"
+                      multiple
                       onChange={handleAttachmentChange}
                     />
-                    {attachment ? (
-                      <span className="hg-write__file-name">
-                        {attachment.name}
-                        <button
-                          type="button"
-                          className="hg-write__file-del"
-                          onClick={clearAttachment}
-                          aria-label="첨부 파일 삭제"
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ) : (
+                    {attachments.length === 0 && (
                       <span className="hg-write__file-empty">선택된 파일이 없습니다</span>
                     )}
                   </div>
+                  {attachments.length > 0 && (
+                    <ul className="hg-write__file-list">
+                      {attachments.map((file, index) => (
+                        <li key={`${file.name}-${file.size}-${file.lastModified}-${index}`} className="hg-write__file-name">
+                          <span>{file.name}</span>
+                          <button
+                            type="button"
+                            className="hg-write__file-del"
+                            onClick={() => removeAttachment(index)}
+                            aria-label={`${file.name} 삭제`}
+                          >
+                            ×
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </WriteField>
               </section>
             )}

@@ -38,6 +38,19 @@ export function parseLegacyQaContent(rawContent = "") {
 
 export function getQaDisplayFields(post) {
   const legacy = parseLegacyQaContent(post.content || "");
+  const attachments = Array.isArray(post.attachments)
+    ? post.attachments
+        .map((item) => ({
+          id: item.id,
+          name: (item.name || item.attachmentName || "").trim(),
+        }))
+        .filter((item) => item.name)
+    : [];
+
+  const legacyName = (post.attachmentName || "").trim() || legacy.legacyAttachmentLabel;
+  if (!attachments.length && legacyName) {
+    attachments.push({ id: null, name: legacyName });
+  }
 
   return {
     content: legacy.content,
@@ -45,10 +58,10 @@ export function getQaDisplayFields(post) {
     link2: (post.link2 || "").trim() || legacy.link2,
     email: (post.email || "").trim(),
     homepage: (post.homepage || "").trim(),
-    attachmentName:
-      (post.attachmentName || "").trim() || legacy.legacyAttachmentLabel,
+    attachments,
+    attachmentName: attachments[0]?.name || legacyName,
     hasAttachment: Boolean(
-      post.hasAttachment || post.attachmentName || legacy.legacyAttachmentLabel
+      attachments.length || post.hasAttachment || post.attachmentName || legacy.legacyAttachmentLabel
     ),
   };
 }

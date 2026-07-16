@@ -3,26 +3,36 @@ import path from "path";
 import {
   createQaPost,
   deleteQaPost,
+  getQaAttachmentById,
   getQaPost,
   getQaPostAttachmentMeta,
   getQaPostFull,
   incrementQaHits,
   listQaPosts,
+  replaceQaAttachments,
   updateQaPost,
   verifyQaPassword,
 } from "../db.js";
 import { attachAdminIfPresent } from "../middleware/requireAdmin.js";
 import {
-  attachmentFromUpload,
+  attachmentsFromUploads,
   deleteQaAttachmentFile,
+  deleteQaAttachmentFiles,
   getQaAttachmentAbsolute,
 } from "../qaFiles.js";
 import { qaUpload } from "../qaUpload.js";
 
 const router = Router();
+const MAX_QA_ATTACHMENTS = 10;
 
 function parseReceiveMail(value) {
   return value === true || value === "true" || value === "1";
+}
+
+function uploadedQaFiles(req) {
+  if (Array.isArray(req.files) && req.files.length) return req.files;
+  if (req.file) return [req.file];
+  return [];
 }
 
 async function canAccessQaAttachment(req, id) {
@@ -37,6 +47,32 @@ async function canAccessQaAttachment(req, id) {
 router.get("/", async (_req, res, next) => {
   try {
     res.json(await listQaPosts());
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:id/attachments/:attachmentId", async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!(await canAccessQaAttachment(req, id))) {
+      res.status(403).json({ message: "첨부파일을 받을 권한이 없습니다." });
+      return;
+    }
+
+    const meta = await getQaAttachmentById(id, req.params.attachmentId);
+    if (!meta?.attachment_path) {
+      res.status(404).json({ message: "첨부파일이 없습니다." });
+      return;
+    }
+
+    const filePath = getQaAttachmentAbsolute(meta.attachment_path);
+    if (!filePath) {
+      res.status(404).json({ message: "첨부파일을 찾을 수 없습니다." });
+      return;
+    }
+
+    res.download(filePath, meta.attachment_name || path.basename(filePath));
   } catch (error) {
     next(error);
   }
@@ -123,7 +159,7 @@ router.post("/:id/verify", async (req, res, next) => {
   }
 });
 
-router.post("/", qaUpload.single("attachment"), async (req, res, next) => {
+router.post("/", qaUpload.array("attachments", MAX_QA_ATTACHMENTS), async (req, res, next) => {
   try {
     const body = req.body || {};
     const { author, password, email, homepage, subject, content, link1, link2 } = body;
@@ -133,7 +169,14 @@ router.post("/", qaUpload.single("attachment"), async (req, res, next) => {
       return;
     }
 
-    const fileMeta = attachmentFromUpload(req.file);
+    const files = uploadedQaFiles(req);
+    if (files.length > MAX_QA_ATTACHMENTS) {
+      res.status(400).json({ message: `첨부파일은 최대 ${MAX_QA_ATTACHMENTS}개까지 가능합니다.` });
+      return;
+    }
+
+    const attachments = attachmentsFromUploads(files);
+    const first = attachments[0] || { attachmentName: "", attachmentPath: "" };
 
     const post = await createQaPost({
       author: author.trim(),
@@ -145,8 +188,9 @@ router.post("/", qaUpload.single("attachment"), async (req, res, next) => {
       subject: subject.trim(),
       content: content.trim(),
       receiveMail: parseReceiveMail(body.receiveMail),
-      attachmentName: fileMeta.attachmentName,
-      attachmentPath: fileMeta.attachmentPath,
+      attachmentName: first.attachmentName,
+      attachmentPath: first.attachmentPath,
+      attachments,
     });
 
     res.status(201).json(post);
@@ -155,7 +199,7 @@ router.post("/", qaUpload.single("attachment"), async (req, res, next) => {
   }
 });
 
-router.put("/:id", qaUpload.single("attachment"), async (req, res, next) => {
+router.put("/:id", qaUpload.array("attachments", MAX_QA_ATTACHMENTS), async (req, res, next) => {
   try {
     const body = req.body || {};
     const id = req.params.id;
@@ -176,7 +220,6 @@ router.put("/:id", qaUpload.single("attachment"), async (req, res, next) => {
       return;
     }
 
-    const existingMeta = await getQaPostAttachmentMeta(id);
     const updatePayload = {
       author: author.trim(),
       email: (email || "").trim(),
@@ -186,22 +229,26 @@ router.put("/:id", qaUpload.single("attachment"), async (req, res, next) => {
       subject: subject.trim(),
       content: content.trim(),
       receiveMail: parseReceiveMail(body.receiveMail),
-      password: body.newPassword,
+      newPassword: body.newPassword,
     };
-
-    if (req.file) {
-      if (existingMeta?.attachment_path) {
-        deleteQaAttachmentFile(existingMeta.attachment_path);
-      }
-      const fileMeta = attachmentFromUpload(req.file);
-      updatePayload.attachmentName = fileMeta.attachmentName;
-      updatePayload.attachmentPath = fileMeta.attachmentPath;
-    }
 
     const post = await updateQaPost(id, updatePayload);
 
     if (!post) {
       res.status(404).json({ message: "게시글을 찾을 수 없습니다." });
+      return;
+    }
+
+    const files = uploadedQaFiles(req);
+    if (files.length) {
+      if (files.length > MAX_QA_ATTACHMENTS) {
+        res.status(400).json({ message: `첨부파일은 최대 ${MAX_QA_ATTACHMENTS}개까지 가능합니다.` });
+        return;
+      }
+      const attachments = attachmentsFromUploads(files);
+      const removedPaths = await replaceQaAttachments(id, attachments);
+      deleteQaAttachmentFiles(removedPaths);
+      res.json(await getQaPostFull(id));
       return;
     }
 
@@ -236,7 +283,12 @@ router.delete("/:id", async (req, res, next) => {
       return;
     }
 
-    if (meta?.attachment_path) {
+    const paths = (meta?.attachments || [])
+      .map((item) => item.attachment_path)
+      .filter(Boolean);
+    if (paths.length) {
+      deleteQaAttachmentFiles(paths);
+    } else if (meta?.attachment_path) {
       deleteQaAttachmentFile(meta.attachment_path);
     }
 
