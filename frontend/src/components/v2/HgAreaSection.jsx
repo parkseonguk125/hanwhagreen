@@ -50,7 +50,7 @@ export default function HgAreaSection() {
       <section className="hg-m-biz" id="home-about" aria-label="사업 소개">
         <div className="hg-m-biz__inner">
           <header className="hg-m-sec-head">
-            <p className="hg-m-sec-head__eyebrow">About Us</p>
+            <p className="hg-m-sec-head__eyebrow">사업소개</p>
             <h2 className="hg-m-sec-head__title">
               한화그린이
               <br />
@@ -61,31 +61,31 @@ export default function HgAreaSection() {
           <div className="hg-m-biz__list">
             {showcaseItems.map((item, i) => (
               <article key={item.id} className="hg-m-biz__card">
-                <div className="hg-m-biz__media">
-                  <img
-                    src={item.image}
-                    alt=""
-                    loading={i === 0 ? "eager" : "lazy"}
-                    decoding="async"
-                    style={{ objectPosition: item.objectPosition }}
-                  />
-                  <span className="hg-m-biz__index">{String(i + 1).padStart(2, "0")}</span>
-                </div>
-                <div className="hg-m-biz__body">
-                  <p className="hg-m-biz__label">{item.tab}</p>
-                  <h3 className="hg-m-biz__title">
-                    {item.mobileTitle.split("\n").map((line) => (
-                      <span key={line}>{line}</span>
-                    ))}
-                  </h3>
-                  <p className="hg-m-biz__desc">{item.desc}</p>
-                  <HgNavLink
-                    item={{ label: item.tab, href: item.href }}
-                    className="hg-m-biz__cta"
-                  >
-                    자세히 보기
-                  </HgNavLink>
-                </div>
+                <HgNavLink
+                  item={{ label: item.tab, href: item.href }}
+                  className="hg-m-biz__hit"
+                >
+                  <div className="hg-m-biz__media">
+                    <img
+                      src={item.image}
+                      alt=""
+                      loading={i === 0 ? "eager" : "lazy"}
+                      decoding="async"
+                      style={{ objectPosition: item.objectPosition }}
+                    />
+                    <span className="hg-m-biz__index">{String(i + 1).padStart(2, "0")}</span>
+                  </div>
+                  <div className="hg-m-biz__body">
+                    <p className="hg-m-biz__label">{item.tab}</p>
+                    <h3 className="hg-m-biz__title">
+                      {item.mobileTitle.split("\n").map((line) => (
+                        <span key={line}>{line}</span>
+                      ))}
+                    </h3>
+                    <p className="hg-m-biz__desc">{item.desc}</p>
+                    <span className="hg-m-biz__more">자세히 보기</span>
+                  </div>
+                </HgNavLink>
               </article>
             ))}
           </div>

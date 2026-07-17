@@ -177,7 +177,7 @@ function StoryMobile() {
   return (
     <section className="hg-m-story" aria-label="한화그린 비전 스토리">
       <header className="hg-m-story__intro">
-        <p className="hg-m-sec-head__eyebrow">Our Story</p>
+        <p className="hg-m-sec-head__eyebrow">스토리</p>
         <h2 className="hg-m-story__intro-title">
           깨끗한 축사환경과
           <br />
@@ -187,23 +187,24 @@ function StoryMobile() {
         </h2>
       </header>
 
-      {STAGES.map((stage, index) => (
-        <article key={stage.keyword} className="hg-m-story__card">
-          <div className="hg-m-story__media" aria-hidden="true">
-            <img src={stage.image} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" />
-            <div className="hg-m-story__shade" />
-          </div>
-          <div className="hg-m-story__body">
-            <span className="hg-m-story__index">{String(index + 1).padStart(2, "0")}</span>
-            <h3 className="hg-m-story__keyword">{stage.keyword}</h3>
-            <p className="hg-m-story__caption">
-              {stage.caption.map((line) => (
-                <span key={line}>{line}</span>
-              ))}
-            </p>
-          </div>
-        </article>
-      ))}
+      <div className="hg-m-story__list">
+        {STAGES.map((stage, index) => (
+          <article key={stage.keyword} className="hg-m-story__card">
+            <div className="hg-m-story__media" aria-hidden="true">
+              <img src={stage.image} alt="" loading={index === 0 ? "eager" : "lazy"} decoding="async" />
+            </div>
+            <div className="hg-m-story__body">
+              <span className="hg-m-story__index">{String(index + 1).padStart(2, "0")}</span>
+              <h3 className="hg-m-story__keyword">{stage.keyword}</h3>
+              <p className="hg-m-story__caption">
+                {stage.caption.map((line) => (
+                  <span key={line}>{line}</span>
+                ))}
+              </p>
+            </div>
+          </article>
+        ))}
+      </div>
     </section>
   );
 }

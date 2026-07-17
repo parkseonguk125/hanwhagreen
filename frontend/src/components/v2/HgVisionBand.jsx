@@ -16,7 +16,7 @@ export default function HgVisionBand() {
   if (isMobile) {
     return (
       <section className="hg-m-vision" aria-label="비전">
-        <p className="hg-m-vision__eyebrow">Vision</p>
+        <p className="hg-m-vision__eyebrow">비전</p>
         <h2 className="hg-m-vision__title">
           환경 기술력으로 여는
           <br />

@@ -139,24 +139,27 @@ export default function HgProduct() {
     return (
       <section className="hg-m-projects" id="home-business" aria-labelledby="hg-m-projects-title">
         <div className="hg-m-projects__inner">
-          <header className="hg-m-sec-head">
-            <p className="hg-m-sec-head__eyebrow">Projects</p>
-            <h2 id="hg-m-projects-title" className="hg-m-sec-head__title">
-              현장에서 검증된
-              <br />
-              주요 실적
-            </h2>
+          <header className="hg-m-sec-head hg-m-sec-head--row">
+            <div>
+              <p className="hg-m-sec-head__eyebrow">주요실적</p>
+              <h2 id="hg-m-projects-title" className="hg-m-sec-head__title">
+                현장에서 검증된
+                <br />
+                프로젝트
+              </h2>
+            </div>
             <HgAppLink to="/bbs/board.php?bo_table=project" className="hg-m-sec-head__link">
-              전체 보기
+              전체
             </HgAppLink>
           </header>
 
-          <div className="hg-m-projects__grid">
-            {mobileProjects.map((project, index) => (
+          <div className="hg-m-projects__rail" role="list">
+            {mobileProjects.map((project) => (
               <HgAppLink
                 key={project.id}
                 to={`/bbs/board.php?bo_table=project&wr_id=${project.id}`}
-                className={`hg-m-project-card${index === 0 ? " is-featured" : ""}`}
+                className="hg-m-project-card"
+                role="listitem"
               >
                 <div
                   className="hg-m-project-card__media"
@@ -165,7 +168,9 @@ export default function HgProduct() {
                 />
                 <div className="hg-m-project-card__body">
                   <h3 className="hg-m-project-card__title">{formatProjectTitle(project.title)}</h3>
-                  <span className="hg-m-project-card__more">자세히</span>
+                  <span className="hg-m-project-card__more" aria-hidden="true">
+                    →
+                  </span>
                 </div>
               </HgAppLink>
             ))}

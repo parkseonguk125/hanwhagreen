@@ -71,10 +71,10 @@ export default function HgHero() {
             {copy.subtitle}
           </h1>
           <div className="hg-m-hero__actions">
-            <HgAppLink to="/bbs/content.php?co_id=company" className="hg-m-hero__btn hg-m-hero__btn--primary">
+            <HgAppLink to="/bbs/content.php?co_id=company" className="hg-m-hero__btn">
               회사소개
             </HgAppLink>
-            <HgAppLink to="/bbs/board.php?bo_table=project" className="hg-m-hero__btn hg-m-hero__btn--ghost">
+            <HgAppLink to="/bbs/board.php?bo_table=project" className="hg-m-hero__text-link">
               실적 보기
             </HgAppLink>
           </div>
@@ -102,9 +102,6 @@ export default function HgHero() {
               {paused ? "▶" : "Ⅱ"}
             </button>
           </div>
-          <a href="#home-about" className="hg-m-hero__scroll" aria-label="아래로 스크롤">
-            <span />
-          </a>
         </div>
       </section>
     );
