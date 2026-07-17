@@ -55,22 +55,7 @@ function CertCard({ cert, duplicate = false, mobile = false }) {
 
 function CertMobile() {
   const [playing, setPlaying] = useState(true);
-  const marqueeRef = useRef(null);
   const durationSec = Math.max(certificates.length * 5.5, 28);
-
-  useEffect(() => {
-    const root = marqueeRef.current;
-    if (!root) return undefined;
-
-    const pause = () => setPlaying(false);
-    root.addEventListener("touchstart", pause, { passive: true });
-    root.addEventListener("pointerdown", pause);
-
-    return () => {
-      root.removeEventListener("touchstart", pause);
-      root.removeEventListener("pointerdown", pause);
-    };
-  }, []);
 
   return (
     <section className="hg-m-cert" id="home-cert" aria-labelledby="hg-m-cert-title">
@@ -129,10 +114,7 @@ function CertMobile() {
           </button>
         </div>
 
-        <div
-          ref={marqueeRef}
-          className={`hg-m-cert__marquee${playing ? "" : " is-paused"}`}
-        >
+        <div className={`hg-m-cert__marquee${playing ? "" : " is-paused"}`}>
           <div
             className="hg-m-cert__track"
             style={{ "--hg-m-cert-duration": `${durationSec}s` }}
@@ -149,7 +131,6 @@ function CertMobile() {
             </div>
           </div>
         </div>
-        <p className="hg-m-cert__hint">터치하면 자동 재생이 멈춥니다</p>
       </div>
     </section>
   );

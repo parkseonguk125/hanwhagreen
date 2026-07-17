@@ -836,12 +836,6 @@
   overflow: hidden;
 }
 
-.hg-m-cert__hint {
-  margin: 0.65rem var(--m-pad-x, 1rem) 0;
-  font-size: 0.6875rem;
-  color: rgba(255, 255, 255, 0.45);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .hg-m-cert__track {
     animation: none;
