@@ -139,7 +139,7 @@ function QaToolbar({ total, keyword, onClearSearch, onSearchOpen }) {
         </button>
         <Link
           to={parseAppHref(boardWriteUrl("qa"))}
-          className="hg-qa__write-btn"
+          className="hg-proj__search-btn hg-qa__write-btn"
           title="문의하기"
         >
           <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
