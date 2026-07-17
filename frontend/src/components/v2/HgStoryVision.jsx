@@ -28,6 +28,9 @@ const STAGES = [
   },
 ];
 
+/** Mobile story intro cover — separate from stage cards below */
+const STORY_INTRO_COVER = "/images/story/intro-cover.jpg";
+
 const INTRO_LINES = [
   [{ text: "깨끗한 축사환경과 스마트한 생산관리로" }],
   [{ text: "지속가능한 탄소중립 미래를" }],
@@ -174,14 +177,12 @@ function StoryDesktop({ scrollRef, active, phase, progress, introFill, introPinn
 }
 
 function StoryMobile() {
-  const cover = STAGES[0]?.image;
-
   return (
     <section className="hg-m-story" aria-label="한화그린 비전 스토리">
       <header className="hg-m-story__intro">
         <div
           className="hg-m-story__intro-media"
-          style={cover ? { backgroundImage: `url(${cover})` } : undefined}
+          style={{ backgroundImage: `url(${STORY_INTRO_COVER})` }}
           aria-hidden="true"
         />
         <div className="hg-m-story__intro-shade" aria-hidden="true" />
