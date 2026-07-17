@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { assets, navGroups, topLinks } from "../../data/mock";
 import { HgNavLink } from "./HgNavLink";
+import HgAppLink from "./HgAppLink";
 
-export default function HgMobileMenu({ open, onClose }) {
+export default function HgMobileMenu({ open, onClose, member = null, onLogout, loggingOut = false }) {
   const [expanded, setExpanded] = useState(null);
 
   return (
@@ -41,6 +42,35 @@ export default function HgMobileMenu({ open, onClose }) {
               <HgNavLink key={link.label} item={link} onNavigate={onClose} />
             ))}
           </div>
+        </div>
+
+        <div className="hg-drawer__auth">
+          {member ? (
+            <>
+              <p className="hg-drawer__auth-user">
+                <strong>{member.name || member.id}</strong>님 로그인 중
+              </p>
+              <button
+                type="button"
+                className="hg-drawer__auth-btn hg-drawer__auth-btn--ghost"
+                onClick={async () => {
+                  await onLogout?.();
+                  onClose?.();
+                }}
+                disabled={loggingOut}
+              >
+                {loggingOut ? "로그아웃 중…" : "로그아웃"}
+              </button>
+            </>
+          ) : (
+            <HgAppLink
+              to="/bbs/login.php"
+              className="hg-drawer__auth-btn hg-drawer__auth-btn--primary"
+              onClick={onClose}
+            >
+              로그인
+            </HgAppLink>
+          )}
         </div>
       </div>
     </div>

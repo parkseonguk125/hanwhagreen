@@ -240,7 +240,13 @@ export default function HgHeader({ hideHamburger = false }) {
       </div>
 
       {!hideHamburger && isMobile ? (
-        <HgMobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
+        <HgMobileMenu
+          open={menuOpen}
+          onClose={() => setMenuOpen(false)}
+          member={member}
+          onLogout={handleLogout}
+          loggingOut={loggingOut}
+        />
       ) : null}
       {!hideHamburger && !isMobile ? (
         <HgDesktopMenu open={menuOpen} onClose={() => setMenuOpen(false)} />

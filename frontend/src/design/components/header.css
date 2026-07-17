@@ -883,3 +883,67 @@ body.hg-nav-open {
   text-decoration: none;
   text-align: center;
 }
+
+.hg-drawer__auth {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1rem 1.15rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--hg-border);
+  background: #f7faf8;
+}
+
+.hg-drawer__auth-user {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--hg-text-muted);
+  text-align: center;
+}
+
+.hg-drawer__auth-user strong {
+  color: var(--hg-green-800, #0f5c38);
+  font-weight: 700;
+}
+
+.hg-drawer__auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 2.875rem;
+  padding: 0.7rem 1rem;
+  border-radius: 0.85rem;
+  font-family: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.hg-drawer__auth-btn--primary {
+  border: none;
+  background: linear-gradient(135deg, var(--hg-green-600), var(--hg-green-800));
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(15, 79, 50, 0.22);
+}
+
+.hg-drawer__auth-btn--primary:hover {
+  filter: brightness(1.05);
+}
+
+.hg-drawer__auth-btn--ghost {
+  border: 1px solid rgba(27, 122, 74, 0.22);
+  background: #fff;
+  color: var(--hg-green-800, #0f5c38);
+}
+
+.hg-drawer__auth-btn--ghost:hover {
+  background: #eef6f1;
+}
+
+.hg-drawer__auth-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
