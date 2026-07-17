@@ -10,9 +10,15 @@ function shouldRetry(response) {
   return response.status >= 500;
 }
 
-/** localhost 프록시 충돌 시 직접 API 포트(3001)로 재시도 */
+function isLocalDevHost() {
+  if (typeof window === "undefined") return false;
+  const host = window.location.hostname;
+  return host === "localhost" || host === "127.0.0.1";
+}
+
+/** localhost 프록시 충돌 시 직접 API 포트로 재시도 (운영 HTTPS에서는 사용하지 않음) */
 export async function apiFetch(path, options = {}) {
-  const bases = [PRIMARY_API, FALLBACK_API];
+  const bases = isLocalDevHost() ? [PRIMARY_API, FALLBACK_API] : [PRIMARY_API];
   let lastResponse;
   let lastError;
 

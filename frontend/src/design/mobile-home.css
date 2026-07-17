@@ -21,7 +21,7 @@
   }
 
   .hg-main--home .hg-section--hub {
-    overflow-x: visible;
+    overflow-x: clip;
   }
 }
 
@@ -957,11 +957,14 @@
 
   /* Hub / news — mobile-native */
   .hg-main--home .hg-section--hub {
-    overflow: visible;
+    overflow-x: clip;
   }
 
   .hg-main--home .hg-section--hub .hg-container {
-    overflow: visible;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: clip;
   }
 
   .hg-main--home .hg-hub {
@@ -970,6 +973,9 @@
     grid-template-columns: none !important;
     gap: 0.95rem;
     align-items: stretch;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .hg-main--home .hg-hub__aside {
@@ -978,6 +984,9 @@
     display: flex;
     flex-direction: column;
     gap: 0.85rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .hg-main--home .hg-hub__header {
@@ -1001,6 +1010,8 @@
     gap: 0.4rem;
     width: 100%;
     max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     margin: 0;
     padding: 0.15rem 0 0.4rem;
     overflow-x: auto !important;
@@ -1032,18 +1043,33 @@
     height: auto !important;
     min-height: 0 !important;
     max-height: none !important;
-    overflow: visible !important;
+    max-width: 100%;
+    width: 100%;
+    overflow-x: clip;
+    overflow-y: visible;
   }
 
   .hg-main--home .hg-hub__content {
     display: block;
     width: 100%;
+    min-width: 0;
   }
 
   .hg-main--home .hg-hub__panel {
     display: block;
     flex: none;
     animation: none;
+    opacity: 1;
+    transform: none;
+    min-width: 0;
+  }
+
+  .hg-main--home .hg-hub__env,
+  .hg-main--home .hg-hub__env-block {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .hg-main--home .hg-hub__masonry {

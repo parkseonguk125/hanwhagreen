@@ -59,6 +59,9 @@
   .hg-hub__aside {
     position: relative;
     top: auto;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .hg-hub__tabs {
@@ -67,6 +70,10 @@
     overflow-x: auto;
     gap: 0.5rem;
     padding-bottom: 0.35rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
@@ -87,6 +94,16 @@
   .hg-hub__env-weather,
   .hg-hub__env-aqi {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .hg-hub,
+  .hg-hub__content,
+  .hg-hub__panel,
+  .hg-hub__service,
+  .hg-hub__live-solo--map {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 
   .hg-hub__content,

@@ -373,6 +373,15 @@
   }
 
   /* Hub / cert / cta */
+  .hg-hub,
+  .hg-hub__aside,
+  .hg-hub__content,
+  .hg-hub__panel {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
   .hg-hub__content,
   .hg-hub__service,
   .hg-hub__live-solo--map,
@@ -380,16 +389,29 @@
     min-height: 0 !important;
     height: auto !important;
     max-height: none !important;
-    overflow: visible !important;
+    overflow-x: clip;
+    overflow-y: visible;
   }
 
   .hg-hub__tabs {
     flex-direction: row !important;
     flex-wrap: nowrap !important;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow-x: auto !important;
   }
 
   .hg-hub__live-solo--map {
     min-height: 14rem !important;
+  }
+
+  .hg-hub__env,
+  .hg-hub__env-block {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .hg-hub__env-weather,
