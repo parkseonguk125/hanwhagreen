@@ -160,14 +160,20 @@ export function HgSubNav({ parentTitle, currentTitle, navGroupIndex = 0 }) {
         aria-label="서브 내비게이션"
       >
         <div className="hg-sub-nav__inner">
-          <Link to="/" className="hg-sub-nav__home" aria-label="홈">
-            <Icon name="home" size="md" />
-          </Link>
-          <span className="hg-sub-nav__sep">/</span>
-          <span className="hg-sub-nav__crumb">{parentTitle}</span>
-          <span className="hg-sub-nav__sep">/</span>
-          <span className="hg-sub-nav__crumb">{currentTitle}</span>
-          <div className="hg-sub-nav__tabs">
+          <div className="hg-sub-nav__crumbs">
+            <Link to="/" className="hg-sub-nav__home" aria-label="홈">
+              <Icon name="home" size="sm" />
+            </Link>
+            <span className="hg-sub-nav__sep" aria-hidden="true">
+              /
+            </span>
+            <span className="hg-sub-nav__crumb">{parentTitle}</span>
+            <span className="hg-sub-nav__sep" aria-hidden="true">
+              /
+            </span>
+            <span className="hg-sub-nav__crumb hg-sub-nav__crumb--current">{currentTitle}</span>
+          </div>
+          <div className="hg-sub-nav__tabs" role="tablist" aria-label="하위 메뉴">
             {tabs.map((item) => {
               const target = item.href;
               const isActive =

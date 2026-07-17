@@ -409,15 +409,66 @@
     padding-inline: 1.15rem !important;
   }
 
+  .hg-sub-nav {
+    top: var(--hg-header-height);
+  }
+
   .hg-sub-nav__inner {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.25rem;
+    gap: 0.55rem;
+    padding: 0.65rem 1rem 0.7rem;
+    overflow: visible;
+  }
+
+  .hg-sub-nav__crumbs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .hg-sub-nav__crumbs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hg-sub-nav__home {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .hg-sub-nav__sep {
+    font-size: 0.75rem;
+  }
+
+  .hg-sub-nav__crumb {
+    font-size: 0.75rem;
+    font-weight: 600;
+    max-width: 9.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hg-sub-nav__crumb--current {
+    max-width: 7.5rem;
+    color: var(--hg-green-800);
   }
 
   .hg-sub-nav__tabs {
     margin: 0 !important;
     width: 100%;
+    gap: 0.3rem;
+  }
+
+  .hg-sub-nav__tab {
+    min-height: 2.25rem;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8125rem;
   }
 
   .hg-company__downloads {
