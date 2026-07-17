@@ -2216,20 +2216,6 @@
   .hg-cons__stat:nth-child(3) {
     border-left: none;
   }
-
-  .hg-cons__row {
-    grid-template-columns: auto minmax(0, 1fr) minmax(90px, auto);
-  }
-
-  .hg-cons__row-capacity {
-    grid-column: 3;
-  }
-
-  .hg-cons__row-region {
-    grid-column: 2 / 4;
-    grid-row: 2;
-    text-align: left;
-  }
 }
 
 @media (max-width: 560px) {
