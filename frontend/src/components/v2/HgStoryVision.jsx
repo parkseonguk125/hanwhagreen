@@ -28,9 +28,6 @@ const STAGES = [
   },
 ];
 
-/** Mobile story intro cover — separate from stage cards below */
-const STORY_INTRO_COVER = "/images/story/intro-cover.jpg";
-
 const INTRO_LINES = [
   [{ text: "깨끗한 축사환경과 스마트한 생산관리로" }],
   [{ text: "지속가능한 탄소중립 미래를" }],
@@ -180,26 +177,18 @@ function StoryMobile() {
   return (
     <section className="hg-m-story" aria-label="한화그린 비전 스토리">
       <header className="hg-m-story__intro">
-        <div
-          className="hg-m-story__intro-media"
-          style={{ backgroundImage: `url(${STORY_INTRO_COVER})` }}
-          aria-hidden="true"
-        />
-        <div className="hg-m-story__intro-shade" aria-hidden="true" />
-        <div className="hg-m-story__intro-inner">
-          <p className="hg-m-story__eyebrow">Story</p>
-          <span className="hg-m-story__rule" aria-hidden="true" />
-          <h2 className="hg-m-story__intro-title">
-            <span className="hg-m-story__line">깨끗한 축사환경과</span>
-            <span className="hg-m-story__line">스마트한 생산관리로</span>
-            <span className="hg-m-story__line">
-              <em>지속가능한 미래</em>를 엽니다
-            </span>
-          </h2>
-          <p className="hg-m-story__lead">
-            현장 기술과 친환경 솔루션으로 내일의 농업·축산을 만듭니다.
-          </p>
-        </div>
+        <p className="hg-m-story__eyebrow">Story</p>
+        <span className="hg-m-story__rule" aria-hidden="true" />
+        <h2 className="hg-m-story__intro-title">
+          <span className="hg-m-story__line">깨끗한 축사환경과</span>
+          <span className="hg-m-story__line">스마트한 생산관리로</span>
+          <span className="hg-m-story__line">
+            <em>지속가능한 미래</em>를 엽니다
+          </span>
+        </h2>
+        <p className="hg-m-story__lead">
+          현장 기술과 친환경 솔루션으로 내일의 농업·축산을 만듭니다.
+        </p>
       </header>
 
       <div className="hg-m-story__list">

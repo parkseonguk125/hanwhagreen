@@ -467,72 +467,45 @@
   color: var(--hg-green-700);
 }
 
-/* ── Story: editorial intro + image modules ── */
+/* ── Story: compact text intro + image modules ── */
 .hg-m-story {
   width: 100%;
-  background: #f3f6f4;
+  background: #fff;
   color: var(--hg-gray-900);
-  padding-bottom: 0.35rem;
+  padding-bottom: 0.25rem;
 }
 
 .hg-m-story__intro {
-  position: relative;
-  isolation: isolate;
-  min-height: 18.5rem;
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-  color: #fff;
-  background: #06140e;
-}
-
-.hg-m-story__intro-media {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center 40%;
-  transform: scale(1.04);
-}
-
-.hg-m-story__intro-shade {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(6, 20, 14, 0.55) 0%, rgba(6, 20, 14, 0.42) 38%, rgba(6, 20, 14, 0.92) 100%),
-    linear-gradient(90deg, rgba(6, 20, 14, 0.55) 0%, transparent 70%);
-}
-
-.hg-m-story__intro-inner {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  padding: 2.4rem var(--m-pad-x, 1rem) 1.75rem;
+  padding: 1.65rem var(--m-pad-x, 1rem) 0.85rem;
+  background: #fff;
+  color: var(--hg-gray-900);
 }
 
 .hg-m-story__eyebrow {
   margin: 0;
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(122, 239, 180, 0.92);
+  color: var(--hg-green-700);
 }
 
 .hg-m-story__rule {
   display: block;
-  width: 1.75rem;
+  width: 1.5rem;
   height: 2px;
-  margin: 0.7rem 0 0.95rem;
-  background: linear-gradient(90deg, #5ce09a, rgba(92, 224, 154, 0));
+  margin: 0.45rem 0 0.65rem;
+  background: linear-gradient(90deg, var(--hg-green-500), rgba(44, 181, 115, 0));
   border-radius: 999px;
 }
 
 .hg-m-story__intro-title {
   margin: 0;
-  font-size: clamp(1.35rem, 5.6vw, 1.55rem);
+  font-size: clamp(1.25rem, 5.2vw, 1.4rem);
   font-weight: 800;
-  line-height: 1.42;
+  line-height: 1.38;
   letter-spacing: -0.03em;
+  color: var(--hg-gray-900);
 }
 
 .hg-m-story__line {
@@ -541,26 +514,23 @@
 
 .hg-m-story__intro-title em {
   font-style: normal;
-  color: #7aefb4;
+  color: var(--hg-green-700);
 }
 
 .hg-m-story__lead {
-  margin: 0.9rem 0 0;
-  max-width: 18.5em;
+  margin: 0.55rem 0 0;
+  max-width: 20em;
   font-size: 0.8125rem;
   font-weight: 500;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.5;
+  color: var(--hg-text-muted);
 }
 
 .hg-m-story__list {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  padding: 1.15rem var(--m-pad-x, 1rem) var(--m-sec-y, 2.25rem);
-  margin-top: -0.65rem;
-  position: relative;
-  z-index: 1;
+  padding: 0.85rem var(--m-pad-x, 1rem) var(--m-sec-y, 2.25rem);
 }
 
 .hg-m-story__card {
@@ -568,7 +538,7 @@
   border-radius: 1rem;
   background: #fff;
   border: 1px solid rgba(10, 46, 28, 0.07);
-  box-shadow: 0 10px 28px rgba(10, 46, 28, 0.06);
+  box-shadow: 0 8px 22px rgba(10, 46, 28, 0.05);
 }
 
 .hg-m-story__media {
