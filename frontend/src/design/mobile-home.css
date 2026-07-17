@@ -1175,21 +1175,6 @@
     min-height: 2.875rem;
   }
 
-  .hg-main--home .hg-hub__env {
-    gap: 0.85rem;
-  }
-
-  .hg-main--home .hg-hub__env-weather,
-  .hg-main--home .hg-hub__env-aqi {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 0.5rem;
-  }
-
-  .hg-main--home .hg-hub__env-chip,
-  .hg-main--home .hg-hub__env-aqi-item {
-    min-width: 0;
-  }
-
   .hg-main--home .hg-hub__live-solo--map {
     min-height: 14rem !important;
   }
@@ -1197,15 +1182,6 @@
   .hg-main--home .hg-hub__live-solo--map .hg-live__panel,
   .hg-main--home .hg-hub__live-item .hg-live__panel {
     height: auto !important;
-  }
-
-  .hg-main--home .hg-hub__live-solo--stock .hg-live__panel {
-    padding: 1rem !important;
-  }
-
-  .hg-main--home .hg-hub__live-solo--stock .hg-stock__list {
-    max-height: none !important;
-    overflow: visible !important;
   }
 
   /* CTA */
@@ -1252,6 +1228,281 @@
   }
 }
 
+/* ── Mobile live dashboards (weather / AQI / stocks) ── */
+.hg-m-live,
+.hg-m-stock {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.hg-m-live__head,
+.hg-m-stock__head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.15rem 0.1rem 0.2rem;
+}
+
+.hg-m-live__eyebrow,
+.hg-m-stock__eyebrow {
+  margin: 0 0 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hg-green-700, #1b7a4a);
+}
+
+.hg-m-live__title,
+.hg-m-stock__title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 750;
+  letter-spacing: -0.03em;
+  color: var(--hg-text);
+}
+
+.hg-m-live__stamp,
+.hg-m-stock__stamp {
+  flex: 0 0 auto;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: #eef7f1;
+  color: var(--hg-green-800, #0f5c38);
+  font-size: 0.6875rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.hg-m-live__status,
+.hg-m-stock__status {
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--hg-text-light);
+  border-radius: 0.9rem;
+  background: var(--hg-gray-50, #f8f9fa);
+}
+
+.hg-m-live__status.is-error,
+.hg-m-stock__status.is-error {
+  color: #c92a2a;
+  background: #fff5f5;
+}
+
+.hg-m-live__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.hg-m-live__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+  padding: 0.75rem 0.7rem 0.7rem;
+  border-radius: 0.95rem;
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.96), rgba(244, 250, 246, 0.96)),
+    #fff;
+  border: 1px solid rgba(27, 122, 74, 0.12);
+  box-shadow: 0 8px 20px rgba(15, 40, 28, 0.04);
+}
+
+.hg-m-live__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
+.hg-m-live__city {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--hg-text);
+}
+
+.hg-m-live__grade {
+  flex: 0 0 auto;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.625rem;
+  font-weight: 750;
+  background: #e9ecef;
+  color: #495057;
+}
+
+.hg-m-live__grade.is-good {
+  background: #d3f9d8;
+  color: #2b8a3e;
+}
+
+.hg-m-live__grade.is-moderate {
+  background: #fff3bf;
+  color: #e67700;
+}
+
+.hg-m-live__grade.is-bad {
+  background: #ffe3e3;
+  color: #c92a2a;
+}
+
+.hg-m-live__card-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.hg-m-live__temp {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--hg-green-800, #0f5c38);
+}
+
+.hg-m-live__sky {
+  min-width: 0;
+  font-size: 0.75rem;
+  color: var(--hg-text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hg-m-live__card-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid rgba(15, 40, 28, 0.06);
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.hg-m-stock__featured {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.hg-m-stock__hero {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 0.9rem 0.8rem 0.85rem;
+  border-radius: 1rem;
+  background: linear-gradient(160deg, #123d2c 0%, #1b7a4a 58%, #2cb573 120%);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(18, 61, 44, 0.22);
+}
+
+.hg-m-stock__hero-name {
+  font-size: 0.75rem;
+  font-weight: 650;
+  opacity: 0.88;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hg-m-stock__hero-price {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.hg-m-stock__hero-rate {
+  width: fit-content;
+  margin-top: 0.15rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  font-weight: 750;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.hg-m-stock__hero.is-up .hg-m-stock__hero-rate {
+  background: rgba(255, 107, 107, 0.22);
+}
+
+.hg-m-stock__hero.is-down .hg-m-stock__hero-rate {
+  background: rgba(116, 192, 252, 0.22);
+}
+
+.hg-m-stock__rail {
+  max-height: min(42vh, 18rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid rgba(15, 40, 28, 0.08);
+  border-radius: 0.95rem;
+  background: #fff;
+  padding: 0.15rem 0.7rem;
+}
+
+.hg-m-stock__row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) auto auto;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 2.65rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid rgba(15, 40, 28, 0.06);
+  font-size: 0.8125rem;
+}
+
+.hg-m-stock__row:last-child {
+  border-bottom: 0;
+}
+
+.hg-m-stock__name {
+  min-width: 0;
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--hg-text);
+}
+
+.hg-m-stock__price {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.hg-m-stock__rate {
+  min-width: 3.6rem;
+  text-align: right;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+.hg-m-stock__rate.is-up {
+  color: #e03131;
+}
+
+.hg-m-stock__rate.is-down {
+  color: #1971c2;
+}
+
+.hg-m-stock__rate.is-flat {
+  color: var(--hg-text-light);
+}
+
 @media (max-width: 480px) {
   .hg-main--home {
     --m-pad-x: 0.9rem;
@@ -1274,6 +1525,14 @@
 
   .hg-m-cert__pillar {
     flex-basis: min(78vw, 14.5rem);
+  }
+
+  .hg-m-live__temp {
+    font-size: 1.3rem;
+  }
+
+  .hg-m-stock__hero-price {
+    font-size: 1.05rem;
   }
 }
 

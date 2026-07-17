@@ -1,14 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import HgAppLink from "./HgAppLink";
 import { promoVideos } from "../../data/mock";
 import { fetchNoticePosts } from "../../services/boardApi";
-import { fetchLiveAirQuality, fetchLiveWeather } from "../../services/liveDataApi.js";
+import {
+  fetchLiveAirQuality,
+  fetchLiveStocks,
+  fetchLiveWeather,
+} from "../../services/liveDataApi.js";
 import {
   boardRouteTarget,
   boardViewRouteTarget,
   boardWriteRouteTarget,
 } from "../../utils/navRoutes";
 import useLivePanelPoll from "../live/useLivePanelPoll.js";
+import { useHgViewport } from "./hooks.js";
 import HgStockPanel from "./HgStockPanel.jsx";
 import HgMapPanel from "./HgMapPanel.jsx";
 
@@ -28,6 +33,14 @@ const AQI_BADGE = {
   나쁨: "is-bad",
   매우나쁨: "is-bad",
 };
+
+const FEATURED_STOCKS = ["한화솔루션", "한화에어로스페이스", "한화오션", "삼성전자"];
+
+function stockChangeClass(rate) {
+  if (rate > 0) return "is-up";
+  if (rate < 0) return "is-down";
+  return "is-flat";
+}
 
 function VideoPanel() {
   return (
@@ -112,10 +125,7 @@ function ServicePanel({
   );
 }
 
-function WeatherPanel() {
-  const weather = useLivePanelPoll(fetchLiveWeather);
-  const aqi = useLivePanelPoll(fetchLiveAirQuality);
-
+function WeatherPanelDesktop({ weather, aqi }) {
   return (
     <div className="hg-hub__env">
       <section className="hg-hub__env-block">
@@ -176,7 +186,159 @@ function WeatherPanel() {
   );
 }
 
+function WeatherPanelMobile({ weather, aqi }) {
+  const rows = useMemo(() => {
+    const weatherMap = new Map((weather.data?.regions || []).map((r) => [r.name, r]));
+    const aqiMap = new Map((aqi.data?.regions || []).map((r) => [r.name, r]));
+    const names = weatherMap.size
+      ? [...weatherMap.keys()]
+      : [...aqiMap.keys()];
+    return names.map((name) => ({
+      name,
+      weather: weatherMap.get(name),
+      aqi: aqiMap.get(name),
+    }));
+  }, [weather.data, aqi.data]);
+
+  const loading = (weather.loading && !weather.data) || (aqi.loading && !aqi.data);
+  const error = weather.error || aqi.error;
+  const stamp =
+    weather.data?.baseDate &&
+    `${weather.data.baseDate.slice(4, 6)}/${weather.data.baseDate.slice(6, 8)} ${weather.data.baseTime?.slice(0, 2) || "--"}시`;
+
+  return (
+    <div className="hg-m-live">
+      <header className="hg-m-live__head">
+        <div>
+          <p className="hg-m-live__eyebrow">
+            <span className="hg-live__pulse" aria-hidden="true" />
+            Live Atmosphere
+          </p>
+          <h3 className="hg-m-live__title">날씨 · 미세먼지</h3>
+        </div>
+        {stamp && <span className="hg-m-live__stamp">{stamp}</span>}
+      </header>
+
+      {loading && <p className="hg-m-live__status">불러오는 중…</p>}
+      {error && <p className="hg-m-live__status is-error">{error}</p>}
+
+      {rows.length > 0 && (
+        <div className="hg-m-live__grid">
+          {rows.map(({ name, weather: w, aqi: q }) => {
+            const grade = q?.pm10Grade || "—";
+            return (
+              <article key={name} className="hg-m-live__card">
+                <div className="hg-m-live__card-top">
+                  <span className="hg-m-live__city">{name}</span>
+                  <span className={`hg-m-live__grade ${AQI_BADGE[grade] || ""}`}>
+                    {grade}
+                  </span>
+                </div>
+                <div className="hg-m-live__card-main">
+                  <strong className="hg-m-live__temp">
+                    {w?.temp != null ? `${w.temp}°` : "—"}
+                  </strong>
+                  <span className="hg-m-live__sky">{w?.sky || "—"}</span>
+                </div>
+                <div className="hg-m-live__card-foot">
+                  <span>PM10 {q?.pm10 ?? "—"}</span>
+                  <span>PM2.5 {q?.pm25 ?? "—"}</span>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WeatherPanel() {
+  const { isMobile } = useHgViewport();
+  const weather = useLivePanelPoll(fetchLiveWeather);
+  const aqi = useLivePanelPoll(fetchLiveAirQuality);
+
+  if (isMobile) return <WeatherPanelMobile weather={weather} aqi={aqi} />;
+  return <WeatherPanelDesktop weather={weather} aqi={aqi} />;
+}
+
+function StockPanelMobile() {
+  const { data, error, loading } = useLivePanelPoll(fetchLiveStocks, {
+    shouldPoll: (r) => (r?.pollIntervalMs ?? 0) > 0,
+  });
+
+  const { featured, rest } = useMemo(() => {
+    const stocks = data?.stocks || [];
+    const featuredSet = new Set(FEATURED_STOCKS);
+    const featuredList = FEATURED_STOCKS.map((name) => stocks.find((s) => s.name === name)).filter(
+      Boolean
+    );
+    const restList = stocks.filter((s) => !featuredSet.has(s.name));
+    // 한화 종목이 없으면 상위 4개를 피처로
+    if (featuredList.length === 0 && stocks.length) {
+      return { featured: stocks.slice(0, 4), rest: stocks.slice(4) };
+    }
+    return { featured: featuredList, rest: restList };
+  }, [data?.stocks]);
+
+  return (
+    <div className="hg-m-stock">
+      <header className="hg-m-stock__head">
+        <div>
+          <p className="hg-m-stock__eyebrow">Market Snapshot</p>
+          <h3 className="hg-m-stock__title">핵심 주가</h3>
+        </div>
+        <span className="hg-m-stock__stamp">
+          {data?.basDtDisplay || (data?.live ? "실시간" : "종가")}
+        </span>
+      </header>
+
+      {loading && !data && <p className="hg-m-stock__status">시세 불러오는 중…</p>}
+      {error && <p className="hg-m-stock__status is-error">{error}</p>}
+      {data?.note && <p className="hg-m-stock__status is-error">{data.note}</p>}
+
+      {featured.length > 0 && (
+        <div className="hg-m-stock__featured">
+          {featured.map((stock) => (
+            <article key={stock.name} className={`hg-m-stock__hero ${stockChangeClass(stock.changeRate)}`}>
+              <span className="hg-m-stock__hero-name">{stock.name}</span>
+              <strong className="hg-m-stock__hero-price">
+                {stock.closePrice != null ? stock.closePrice.toLocaleString() : "—"}
+              </strong>
+              <span className="hg-m-stock__hero-rate">
+                {stock.changeRate != null
+                  ? `${stock.changeRate > 0 ? "+" : ""}${stock.changeRate.toFixed(2)}%`
+                  : "—"}
+              </span>
+            </article>
+          ))}
+        </div>
+      )}
+
+      {rest.length > 0 && (
+        <div className="hg-m-stock__rail" role="list">
+          {rest.map((stock) => (
+            <div key={stock.name} className="hg-m-stock__row" role="listitem">
+              <span className="hg-m-stock__name">{stock.name}</span>
+              <span className="hg-m-stock__price">
+                {stock.closePrice != null ? stock.closePrice.toLocaleString() : "—"}
+              </span>
+              <span className={`hg-m-stock__rate ${stockChangeClass(stock.changeRate)}`}>
+                {stock.changeRate != null
+                  ? `${stock.changeRate > 0 ? "+" : ""}${stock.changeRate.toFixed(2)}%`
+                  : "—"}
+              </span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function StockPanel() {
+  const { isMobile } = useHgViewport();
+  if (isMobile) return <StockPanelMobile />;
   return (
     <div className="hg-hub__live-solo hg-hub__live-solo--stock">
       <HgStockPanel />
