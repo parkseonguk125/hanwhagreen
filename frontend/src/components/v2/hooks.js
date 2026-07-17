@@ -23,8 +23,25 @@ export function useHgScrollY(threshold = 40) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > threshold);
-    onScroll();
+    let ticking = false;
+    let last = window.scrollY > threshold;
+
+    const apply = () => {
+      ticking = false;
+      const next = window.scrollY > threshold;
+      if (next !== last) {
+        last = next;
+        setScrolled(next);
+      }
+    };
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(apply);
+    };
+
+    apply();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [threshold]);
@@ -33,6 +50,9 @@ export function useHgScrollY(threshold = 40) {
 }
 
 const HG_HEADER_HIDE_DELTA = 8;
+const HG_HEADER_SHOW_DELTA = 8;
+const HG_HEADER_HIDE_DELTA_MOBILE = 16;
+const HG_HEADER_SHOW_DELTA_MOBILE = 20;
 const HG_HEADER_TOP_REVEAL = 48;
 const HG_HEADER_HIDE_START = 72;
 const HG_HEADER_HERO_HIDE_PROGRESS = 0.38;
@@ -58,22 +78,31 @@ function getHeroScrollProgress() {
   return scrolled / range;
 }
 
-export function useHgHeaderAutoHide({ disabled = false, heroAware = false } = {}) {
-  const [hidden, setHidden] = useState(false);
+/**
+ * Hide/show header via classList (no React state) so scroll-up reveal
+ * does not re-render the whole header tree and stutter on mobile.
+ */
+export function useHgHeaderAutoHide({
+  disabled = false,
+  heroAware = false,
+  wrapRef = null,
+} = {}) {
   const lastScrollY = useRef(0);
   const hiddenRef = useRef(false);
   const tickingRef = useRef(false);
 
   useEffect(() => {
-    const syncDocument = (isHidden) => {
+    const wrap = wrapRef?.current ?? document.querySelector(".hg-header-wrap");
+
+    const applyHidden = (isHidden) => {
+      hiddenRef.current = isHidden;
+      wrap?.classList.toggle("is-hidden", isHidden);
       document.documentElement.classList.toggle("hg-header-hidden", isHidden);
     };
 
     const revealHeader = () => {
       if (!hiddenRef.current) return;
-      hiddenRef.current = false;
-      setHidden(false);
-      syncDocument(false);
+      applyHidden(false);
     };
 
     if (disabled) {
@@ -82,6 +111,7 @@ export function useHgHeaderAutoHide({ disabled = false, heroAware = false } = {}
     }
 
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobileQuery = window.matchMedia(`(max-width: ${HG_MOBILE_BREAKPOINT}px)`);
 
     const update = () => {
       tickingRef.current = false;
@@ -93,7 +123,11 @@ export function useHgHeaderAutoHide({ disabled = false, heroAware = false } = {}
 
       const currentY = window.scrollY;
       const delta = currentY - lastScrollY.current;
-      const heroProgress = heroAware ? getHeroScrollProgress() : null;
+      const isMobile = mobileQuery.matches;
+      const hideDelta = isMobile ? HG_HEADER_HIDE_DELTA_MOBILE : HG_HEADER_HIDE_DELTA;
+      const showDelta = isMobile ? HG_HEADER_SHOW_DELTA_MOBILE : HG_HEADER_SHOW_DELTA;
+      /* Mobile home uses hg-m-hero (no pin scroll) — skip getComputedStyle cost */
+      const heroProgress = heroAware && !isMobile ? getHeroScrollProgress() : null;
       let nextHidden = hiddenRef.current;
 
       if (currentY <= HG_HEADER_TOP_REVEAL) {
@@ -103,18 +137,16 @@ export function useHgHeaderAutoHide({ disabled = false, heroAware = false } = {}
         heroProgress < HG_HEADER_HERO_HIDE_PROGRESS
       ) {
         nextHidden = false;
-      } else if (delta > HG_HEADER_HIDE_DELTA && currentY > HG_HEADER_HIDE_START) {
+      } else if (delta > hideDelta && currentY > HG_HEADER_HIDE_START) {
         nextHidden = true;
-      } else if (delta < -HG_HEADER_HIDE_DELTA) {
+      } else if (delta < -showDelta) {
         nextHidden = false;
       }
 
       lastScrollY.current = currentY;
 
       if (nextHidden !== hiddenRef.current) {
-        hiddenRef.current = nextHidden;
-        setHidden(nextHidden);
-        syncDocument(nextHidden);
+        applyHidden(nextHidden);
       }
     };
 
@@ -129,15 +161,16 @@ export function useHgHeaderAutoHide({ disabled = false, heroAware = false } = {}
 
     window.addEventListener("scroll", onScroll, { passive: true });
     motionQuery.addEventListener("change", update);
+    mobileQuery.addEventListener("change", update);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       motionQuery.removeEventListener("change", update);
+      mobileQuery.removeEventListener("change", update);
       document.documentElement.classList.remove("hg-header-hidden");
+      wrap?.classList.remove("is-hidden");
     };
-  }, [disabled, heroAware]);
-
-  return hidden;
+  }, [disabled, heroAware, wrapRef]);
 }
 
 const HG_STICKY_SCROLL_LERP = 0.32;

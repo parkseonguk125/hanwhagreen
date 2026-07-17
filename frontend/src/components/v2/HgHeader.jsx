@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { navGroups, topLinks } from "../../data/mock";
 import { logoutMember } from "../../services/authApi";
@@ -49,7 +49,12 @@ export default function HgHeader({ hideHamburger = false }) {
   );
   const megaOpen = !isMobile && openNav !== null;
   const navLocked = megaOpen || menuOpen;
-  const headerHidden = useHgHeaderAutoHide({ disabled: navLocked, heroAware: isHome });
+  const headerWrapRef = useRef(null);
+  useHgHeaderAutoHide({
+    disabled: navLocked,
+    heroAware: isHome && !isMobile,
+    wrapRef: headerWrapRef,
+  });
 
   useEffect(() => {
     setMember(isLoggedIn() ? getStoredMember() : null);
@@ -104,7 +109,8 @@ export default function HgHeader({ hideHamburger = false }) {
   return (
     <>
       <div
-        className={`hg-header-wrap${scrolled ? " is-scrolled" : ""}${isHero ? " is-hero" : ""}${megaOpen ? " is-mega-open" : ""}${headerHidden ? " is-hidden" : ""}`}
+        ref={headerWrapRef}
+        className={`hg-header-wrap${scrolled ? " is-scrolled" : ""}${isHero ? " is-hero" : ""}${megaOpen ? " is-mega-open" : ""}`}
       >
         {megaOpen && <div className="hg-header__backdrop" aria-hidden="true" />}
 

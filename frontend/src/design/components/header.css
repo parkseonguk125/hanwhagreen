@@ -7,13 +7,28 @@
   z-index: var(--hg-z-header);
   transform: translate3d(0, 0, 0);
   transition: transform 0.44s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
 }
 
 .hg-header-wrap.is-hidden {
   /* sub-nav와 동일 px 기준으로 맞춰 스크롤 업/다운 시 틈 방지 */
   transform: translate3d(0, calc(-1 * var(--hg-header-height)), 0);
   pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+  .hg-header-wrap {
+    /* 짧은 전환 + 가벼운 이징: 스크롤 업 시 메뉴 등장 끊김 완화 */
+    transition: transform 0.18s ease-out;
+  }
+
+  .hg-header {
+    /* 스크롤 중 레이어 비용이 큰 blur를 줄여 끊김 완화 */
+    backdrop-filter: blur(8px);
+  }
+
+  .hg-header-wrap.is-hero .hg-header {
+    backdrop-filter: none;
+  }
 }
 
 .hg-header {
