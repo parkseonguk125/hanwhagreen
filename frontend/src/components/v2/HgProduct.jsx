@@ -107,7 +107,7 @@ export default function HgProduct() {
   const stickyRef = useRef(null);
   const trackRef = useRef(null);
 
-  useHgHorizontalScroll(scrollRef, isMobile ? 0 : featuredProjects.length);
+  useHgHorizontalScroll(scrollRef, isMobile ? 0 : featuredProjects.length, "--hg-project-progress");
   useProjectCardScrollRise(stickyRef, !isMobile);
 
   useEffect(() => {
