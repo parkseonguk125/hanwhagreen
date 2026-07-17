@@ -2423,6 +2423,8 @@
 .hg-proj .pg_wrap {
   float: none;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   margin-top: 0.5rem;
 }
