@@ -165,11 +165,11 @@ export function HgSubNav({ parentTitle, currentTitle, navGroupIndex = 0 }) {
               <Icon name="home" size="sm" />
             </Link>
             <span className="hg-sub-nav__sep" aria-hidden="true">
-              /
+              <Icon name="chevron-right" size={14} />
             </span>
             <span className="hg-sub-nav__crumb">{parentTitle}</span>
             <span className="hg-sub-nav__sep" aria-hidden="true">
-              /
+              <Icon name="chevron-right" size={14} />
             </span>
             <span className="hg-sub-nav__crumb hg-sub-nav__crumb--current">{currentTitle}</span>
           </div>

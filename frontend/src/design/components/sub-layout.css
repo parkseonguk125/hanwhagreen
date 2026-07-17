@@ -123,10 +123,18 @@ html.hg-header-hidden .hg-sub-nav {
 }
 
 .hg-sub-nav__sep {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   color: var(--hg-gray-300);
   flex-shrink: 0;
   font-size: 0.8125rem;
   line-height: 1;
+}
+
+.hg-sub-nav__sep .hg-icon {
+  display: block;
+  opacity: 0.85;
 }
 
 .hg-sub-nav__crumb {
