@@ -174,17 +174,31 @@ function StoryDesktop({ scrollRef, active, phase, progress, introFill, introPinn
 }
 
 function StoryMobile() {
+  const cover = STAGES[0]?.image;
+
   return (
     <section className="hg-m-story" aria-label="한화그린 비전 스토리">
       <header className="hg-m-story__intro">
-        <p className="hg-m-sec-head__eyebrow">스토리</p>
-        <h2 className="hg-m-story__intro-title">
-          깨끗한 축사환경과
-          <br />
-          스마트한 생산관리로
-          <br />
-          <span>지속가능한 미래</span>를 엽니다
-        </h2>
+        <div
+          className="hg-m-story__intro-media"
+          style={cover ? { backgroundImage: `url(${cover})` } : undefined}
+          aria-hidden="true"
+        />
+        <div className="hg-m-story__intro-shade" aria-hidden="true" />
+        <div className="hg-m-story__intro-inner">
+          <p className="hg-m-story__eyebrow">Story</p>
+          <span className="hg-m-story__rule" aria-hidden="true" />
+          <h2 className="hg-m-story__intro-title">
+            <span className="hg-m-story__line">깨끗한 축사환경과</span>
+            <span className="hg-m-story__line">스마트한 생산관리로</span>
+            <span className="hg-m-story__line">
+              <em>지속가능한 미래</em>를 엽니다
+            </span>
+          </h2>
+          <p className="hg-m-story__lead">
+            현장 기술과 친환경 솔루션으로 내일의 농업·축산을 만듭니다.
+          </p>
+        </div>
       </header>
 
       <div className="hg-m-story__list">
