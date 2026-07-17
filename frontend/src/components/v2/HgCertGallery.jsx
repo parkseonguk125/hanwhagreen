@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import HgAppLink from "./HgAppLink";
 import { certificates } from "../../data/mock";
+import { useHgViewport } from "./hooks";
 
 const pillars = [
   {
@@ -33,30 +34,139 @@ function mainCertImage(cert) {
   return cert.image.replace(/_550x320\.(jpe?g|png)$/i, "_460x550.$1");
 }
 
-function CertCard({ cert, duplicate = false }) {
+function CertCard({ cert, duplicate = false, mobile = false }) {
+  const itemClass = mobile ? "hg-m-cert__item" : "hg-cert__item";
+  const frameClass = mobile ? "hg-m-cert__frame" : "hg-cert__frame";
+  const captionClass = mobile ? "hg-m-cert__caption" : "hg-cert__caption";
+
   return (
     <HgAppLink
       to={`/bbs/board.php?bo_table=certification&wr_id=${cert.id}`}
-      className="hg-cert__item"
+      className={itemClass}
       tabIndex={duplicate ? -1 : undefined}
     >
-      <div className="hg-cert__frame">
+      <div className={frameClass}>
         <img src={mainCertImage(cert)} alt={duplicate ? "" : cert.title} loading="lazy" />
       </div>
-      <p className="hg-cert__caption">{cert.title}</p>
+      <p className={captionClass}>{cert.title}</p>
     </HgAppLink>
   );
 }
 
+function CertMobile() {
+  const [playing, setPlaying] = useState(true);
+  const marqueeRef = useRef(null);
+  const durationSec = Math.max(certificates.length * 5.5, 28);
+
+  useEffect(() => {
+    const root = marqueeRef.current;
+    if (!root) return undefined;
+
+    const pause = () => setPlaying(false);
+    root.addEventListener("touchstart", pause, { passive: true });
+    root.addEventListener("pointerdown", pause);
+
+    return () => {
+      root.removeEventListener("touchstart", pause);
+      root.removeEventListener("pointerdown", pause);
+    };
+  }, []);
+
+  return (
+    <section className="hg-m-cert" id="home-cert" aria-labelledby="hg-m-cert-title">
+      <div className="hg-m-cert__bg" aria-hidden="true" />
+
+      <header className="hg-m-cert__head">
+        <div>
+          <p className="hg-m-cert__eyebrow">인증·지속가능</p>
+          <h2 id="hg-m-cert-title" className="hg-m-cert__title">
+            지속가능한 미래를 위한
+            <br />
+            한화그린의 약속
+          </h2>
+        </div>
+        <HgAppLink to="/bbs/board.php?bo_table=certification" className="hg-m-cert__all">
+          전체
+        </HgAppLink>
+      </header>
+
+      <div className="hg-m-cert__pillars" role="list">
+        {pillars.map((item) => (
+          <HgAppLink
+            key={item.label}
+            to={item.href}
+            className="hg-m-cert__pillar"
+            style={{ "--pillar-accent": item.accent }}
+            role="listitem"
+          >
+            <span className="hg-m-cert__pillar-label">{item.label}</span>
+            <strong className="hg-m-cert__pillar-title">{item.title}</strong>
+            <span className="hg-m-cert__pillar-desc">{item.desc}</span>
+          </HgAppLink>
+        ))}
+      </div>
+
+      <div className="hg-m-cert__strip">
+        <div className="hg-m-cert__strip-bar">
+          <p className="hg-m-cert__strip-label">인증서</p>
+          <button
+            type="button"
+            className="hg-m-cert__toggle"
+            onClick={() => setPlaying((prev) => !prev)}
+            aria-pressed={!playing}
+            aria-label={playing ? "슬라이드 정지" : "슬라이드 재생"}
+          >
+            {playing ? (
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <rect x="6" y="5" width="4" height="14" rx="1" />
+                <rect x="14" y="5" width="4" height="14" rx="1" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+                <path d="M8 5.5v13l11-6.5L8 5.5z" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        <div
+          ref={marqueeRef}
+          className={`hg-m-cert__marquee${playing ? "" : " is-paused"}`}
+        >
+          <div
+            className="hg-m-cert__track"
+            style={{ "--hg-m-cert-duration": `${durationSec}s` }}
+          >
+            <div className="hg-m-cert__group">
+              {certificates.map((cert) => (
+                <CertCard key={cert.id} cert={cert} mobile />
+              ))}
+            </div>
+            <div className="hg-m-cert__group" aria-hidden="true">
+              {certificates.map((cert) => (
+                <CertCard key={`dup-${cert.id}`} cert={cert} duplicate mobile />
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="hg-m-cert__hint">터치하면 자동 재생이 멈춥니다</p>
+      </div>
+    </section>
+  );
+}
+
 export default function HgCertGallery() {
+  const { isMobile } = useHgViewport();
   const sectionRef = useRef(null);
   const stageRef = useRef(null);
   const [playing, setPlaying] = useState(true);
 
   useEffect(() => {
+    if (isMobile) return undefined;
+
     const section = sectionRef.current;
     const stage = stageRef.current;
-    if (!section || !stage) return;
+    if (!section || !stage) return undefined;
 
     const syncHeight = () => {
       if (window.matchMedia("(max-width: 1024px)").matches) {
@@ -84,7 +194,9 @@ export default function HgCertGallery() {
       window.visualViewport?.removeEventListener("resize", syncHeight);
       window.visualViewport?.removeEventListener("scroll", syncHeight);
     };
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) return <CertMobile />;
 
   const durationSec = Math.max(certificates.length * 6, 32);
 
@@ -123,13 +235,14 @@ export default function HgCertGallery() {
                 <span className="hg-pillars__label">{item.label}</span>
                 <h3 className="hg-pillars__title">{item.title}</h3>
                 <p className="hg-pillars__desc">{item.desc}</p>
-                <span className="hg-pillars__arrow" aria-hidden="true">→</span>
+                <span className="hg-pillars__arrow" aria-hidden="true">
+                  →
+                </span>
               </HgAppLink>
             ))}
           </div>
         </div>
 
-        {/* 현대차처럼 화면 전폭으로 흘러 들어가고 나가게 (컨테이너 클리핑 제거) */}
         <div className="hg-cert-block hg-reveal hg-reveal--delay-2">
           <div className="hg-container">
             <div className="hg-cert-block__head">
