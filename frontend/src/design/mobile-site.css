@@ -580,6 +580,172 @@
     justify-content: center;
   }
 
+  /* ── 주요실적: 분류 칩 + 페이지네이션 ── */
+  .hg-proj__filter {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .hg-proj__search-btn {
+    order: -1;
+    width: 100%;
+    justify-content: center;
+    min-height: 2.75rem;
+    border-radius: 0.85rem !important;
+    background: #f3f7f4 !important;
+    border-color: rgba(27, 122, 74, 0.16) !important;
+    color: var(--hg-green-800, #0f5c38) !important;
+  }
+
+  .hg-proj__cats {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    gap: 0.45rem !important;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 0.1rem 0 0.35rem;
+    overflow-x: auto !important;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+
+  .hg-proj__cats::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hg-proj__cat {
+    flex: 0 0 auto !important;
+    white-space: nowrap;
+    max-width: none;
+    min-height: 2.5rem;
+    padding: 0.55rem 0.95rem !important;
+    font-size: 0.8125rem !important;
+    scroll-snap-align: start;
+  }
+
+  .hg-proj__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    text-align: center;
+  }
+
+  .hg-proj__grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.85rem !important;
+  }
+
+  .hg-proj .pg_wrap,
+  .hg-proj .pg_wrap--mobile {
+    width: 100%;
+    margin-top: 1.25rem !important;
+    padding: 0.85rem 0.7rem 0.95rem;
+    border: 1px solid rgba(15, 40, 28, 0.08);
+    border-radius: 1.1rem;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 250, 246, 0.96));
+    box-shadow: 0 10px 28px rgba(15, 40, 28, 0.05);
+  }
+
+  .hg-proj .pg,
+  .hg-proj .pg--mobile {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.45rem !important;
+    width: 100%;
+    flex-wrap: nowrap !important;
+  }
+
+  .hg-proj .pg_arrow_group {
+    display: inline-flex !important;
+    gap: 0.3rem !important;
+  }
+
+  .hg-proj .pg_nums {
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3rem !important;
+    min-width: 0;
+    flex-wrap: nowrap !important;
+    overflow: visible;
+  }
+
+  .hg-proj .pg_page,
+  .hg-proj .pg_current {
+    min-width: 2.35rem !important;
+    width: 2.35rem;
+    height: 2.35rem !important;
+    padding: 0 !important;
+    border-radius: 0.75rem !important;
+    font-size: 0.875rem !important;
+  }
+
+  .hg-proj .pg_start,
+  .hg-proj .pg_prev,
+  .hg-proj .pg_next,
+  .hg-proj .pg_end {
+    width: 2.35rem !important;
+    min-width: 2.35rem !important;
+    padding: 0 !important;
+    font-size: 1rem !important;
+    font-weight: 700;
+    background: #eef6f1 !important;
+    color: var(--hg-green-800, #0f5c38) !important;
+  }
+
+  .hg-proj .pg_current {
+    background: var(--hg-green-800, #0f5c38) !important;
+    border-color: var(--hg-green-800, #0f5c38) !important;
+    box-shadow: 0 8px 18px rgba(15, 92, 56, 0.22);
+  }
+
+  .hg-proj .pg_status {
+    margin: 0.65rem 0 0;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 650;
+    letter-spacing: 0.04em;
+    color: var(--hg-text-light);
+  }
+
+  .hg-proj .pg_status strong {
+    color: var(--hg-green-800, #0f5c38);
+    font-size: 0.875rem;
+  }
+
+  .hg-proj .pg_status span {
+    margin-inline: 0.15rem;
+  }
+
+  .hg-proj-view__actions {
+    display: grid !important;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.5rem !important;
+    align-items: center;
+  }
+
+  .hg-proj-view__nav {
+    justify-self: stretch;
+    text-align: center;
+  }
+
+  .hg-proj-view__list-btn {
+    justify-self: center;
+  }
+
   .hg-cons__stats {
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     gap: 0.55rem !important;

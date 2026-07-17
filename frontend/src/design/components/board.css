@@ -2435,6 +2435,14 @@
   justify-content: center;
 }
 
+.hg-proj .pg_nums {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .hg-proj .pg_arrow_group {
   display: inline-flex;
   gap: 0.35rem;

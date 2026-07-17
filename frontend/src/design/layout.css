@@ -82,7 +82,8 @@
   background: var(--hg-bg);
 }
 
-.hg-sr-only {
+.hg-sr-only,
+.sound_only {
   position: absolute;
   width: 1px;
   height: 1px;
