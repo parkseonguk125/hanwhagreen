@@ -375,12 +375,21 @@
   /* Hub / cert / cta */
   .hg-hub__content,
   .hg-hub__service,
-  .hg-hub__live-solo--map {
+  .hg-hub__live-solo--map,
+  .hg-hub__panel {
     min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .hg-hub__tabs {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
   }
 
   .hg-hub__live-solo--map {
-    min-height: 15rem !important;
+    min-height: 14rem !important;
   }
 
   .hg-hub__env-weather,
