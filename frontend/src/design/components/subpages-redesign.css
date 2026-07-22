@@ -1,0 +1,263 @@
+/**
+ * Subpages redesign overrides — calm typography, hide English eyebrows,
+ * align board/login/content pages with home redesign.
+ */
+
+/* Hide AI-style English eyebrows across subpages */
+.hg-company__eyebrow,
+.hg-ceo__eyebrow,
+.hg-map__eyebrow,
+.hg-map__panel-eyebrow,
+.hg-map__drive-kicker,
+.hg-tech__eyebrow,
+.hg-cons__eyebrow,
+.hg-proj__eyebrow,
+.hg-login__eyebrow {
+  display: none !important;
+}
+
+.hg-company__accent,
+.hg-ceo__accent,
+.hg-map__accent,
+.hg-tech__accent,
+.hg-cons__accent,
+.hg-proj__accent {
+  display: none !important;
+}
+
+/* Shared lead typography */
+.hg-company__statement,
+.hg-ceo__quote,
+.hg-map__headline,
+.hg-tech__quote,
+.hg-cons__quote,
+.hg-proj__headline {
+  margin: 0;
+  color: #17201b;
+  font-size: clamp(1.55rem, 3vw, 2.35rem) !important;
+  font-weight: 700;
+  line-height: 1.4 !important;
+  letter-spacing: -0.035em;
+  word-break: keep-all;
+}
+
+.hg-company__statement {
+  max-width: none !important;
+  font-size: clamp(1.4rem, 2.6vw, 2.15rem) !important;
+}
+
+.hg-map__headline {
+  max-width: none !important;
+  font-size: clamp(1.35rem, 2.4vw, 2.05rem) !important;
+  line-height: 1.4 !important;
+  white-space: nowrap !important;
+}
+
+@media (max-width: 560px) {
+  .hg-map__headline {
+    white-space: normal !important;
+  }
+
+  .hg-map__switcher {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hg-ceo__quote,
+.hg-tech__quote {
+  max-width: 22ch;
+}
+
+.hg-proj--project .hg-proj__headline {
+  max-width: none !important;
+  font-size: clamp(1.4rem, 2.6vw, 2.15rem) !important;
+  color: #1c1f1d !important;
+}
+
+.hg-proj--cs .hg-proj__headline {
+  max-width: none !important;
+  font-size: clamp(1.4rem, 2.6vw, 2.15rem) !important;
+  color: #1c1f1d !important;
+}
+
+.hg-proj--cs .hg-proj__sub {
+  font-size: 1.0625rem !important;
+  line-height: 1.75 !important;
+  color: #626770 !important;
+  word-break: keep-all;
+}
+
+.hg-cons__quote {
+  max-width: none !important;
+}
+
+.hg-tech__quote {
+  max-width: 22em !important;
+  color: #1c1f1d !important;
+  font-size: clamp(1.4rem, 2.6vw, 2.15rem) !important;
+  line-height: 1.45 !important;
+}
+
+.hg-ceo__quote {
+  max-width: 18em !important;
+  color: #1c1f1d !important;
+}
+
+.hg-ceo__welcome,
+.hg-ceo__paragraph {
+  color: #2a342e;
+}
+
+.hg-ceo__welcome {
+  color: #1c1f1d !important;
+}
+
+.hg-company__word-inner,
+.hg-ceo__word-inner,
+.hg-tech__word-inner,
+.hg-cons__word-inner {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.hg-company__statement-line,
+.hg-ceo__quote-line,
+.hg-tech__quote-line,
+.hg-cons__quote-line,
+.hg-proj__headline-line {
+  display: block;
+}
+
+.hg-company__section-title,
+.hg-tech__section-title,
+.hg-cons__section-title {
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem) !important;
+  letter-spacing: -0.03em;
+  word-break: keep-all;
+}
+
+.hg-cons__sub {
+  font-size: 1.0625rem !important;
+  line-height: 1.75 !important;
+  color: #626770 !important;
+  word-break: keep-all;
+}
+
+.hg-proj--project .hg-proj__sub {
+  font-size: 1.0625rem !important;
+  line-height: 1.75 !important;
+  color: #626770 !important;
+  word-break: keep-all;
+}
+
+.hg-proj--cert .hg-proj__sub {
+  font-size: 1.0625rem !important;
+  line-height: 1.75 !important;
+  color: #626770 !important;
+  word-break: keep-all;
+}
+
+.hg-map__sub,
+.hg-tech__sub,
+.hg-proj__sub,
+.hg-ceo__welcome,
+.hg-ceo__paragraph {
+  font-size: 1.0625rem !important;
+  line-height: 1.75 !important;
+  color: #58635c;
+  word-break: keep-all;
+}
+
+/* Soften tech pillars — no exaggerated framing */
+.hg-tech__pillar-label {
+  font-size: clamp(1.02rem, 1.5vw, 1.15rem) !important;
+}
+
+.hg-tech__section-desc {
+  font-size: 1.02rem !important;
+  line-height: 1.7 !important;
+  color: #58635c;
+  word-break: keep-all;
+}
+
+.hg-tech__mu {
+  font-weight: 700;
+}
+
+/* Board list / gallery readability */
+.hg-notice__title {
+  font-size: 1.05rem !important;
+  word-break: keep-all;
+}
+
+.hg-proj--project .hg-proj__card-name {
+  font-size: 1.0625rem !important;
+  word-break: keep-all;
+}
+
+.hg-notice__row,
+.hg-proj__search-btn,
+.hg-proj__cat,
+.hg-cons__year-select,
+.hg-cons__search input {
+  min-height: 44px;
+}
+
+.hg-proj__card {
+  border-radius: 4px !important;
+  overflow: hidden;
+}
+
+.hg-proj--project .hg-proj__card {
+  border-radius: 2px !important;
+}
+
+.hg-proj__card-veil {
+  background: linear-gradient(180deg, transparent 40%, rgba(8, 27, 17, 0.72) 100%) !important;
+}
+
+.hg-proj--project .hg-proj__card-veil {
+  display: none !important;
+}
+
+/* Login / password — keep board.css redesign; only layout tweaks here */
+.hg-login-page {
+  min-height: calc(100svh - var(--hg-header-height));
+}
+
+.hg-pw.hg-login {
+  width: min(100%, 440px);
+}
+
+@media (max-width: 560px) {
+  .hg-login {
+    width: 100%;
+    border-left: 0;
+    border-right: 0;
+  }
+
+  .hg-login__head,
+  .hg-login__body {
+    padding-inline: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hg-company *,
+  .hg-ceo *,
+  .hg-map *,
+  .hg-tech *,
+  .hg-cons *,
+  .hg-proj *,
+  .hg-notice * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .hg-map__reveal .hg-map__panel,
+  .hg-map__drive-wrap.hg-map__reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

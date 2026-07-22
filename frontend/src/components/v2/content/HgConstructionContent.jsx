@@ -1,151 +1,30 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { constructionRecords } from "../../../data/constructionRecords";
 
-const HEAD_LINES = ["현장에서 증명한 기술", "숫자로 확인하는 신뢰입니다"];
 const UNIT_NOTES = ["평"];
 
-function useArmOnView(rootMargin = "0px 0px -8% 0px", threshold = 0.15) {
-  const ref = useRef(null);
-  const [armed, setArmed] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || armed) return undefined;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches) {
-      setArmed(true);
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => setArmed(true));
-          });
-          observer.disconnect();
-        }
-      },
-      { threshold, rootMargin }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [armed, rootMargin, threshold]);
-
-  return [ref, armed];
+function displayCell(value) {
+  if (value === null || value === undefined) return "—";
+  const text = String(value).trim();
+  if (!text || text === "-") return "—";
+  return text;
 }
 
-function AnimatedLine({ text, lineIndex }) {
-  const tokens = useMemo(() => text.split(/(\s+)/).filter((t) => t.length > 0), [text]);
-
-  return (
-    <span className="hg-cons__quote-line">
-      {tokens.map((token, index) => {
-        if (/^\s+$/.test(token)) {
-          return <span key={`s-${lineIndex}-${index}`}> </span>;
-        }
-        const delay = 0.12 + lineIndex * 0.3 + index * 0.045;
-        return (
-          <span key={`${token}-${index}`} className="hg-cons__word">
-            <span className="hg-cons__word-inner" style={{ animationDelay: `${delay}s` }}>
-              {token}
-            </span>
-          </span>
-        );
-      })}
-    </span>
-  );
+function displayCapacity(row) {
+  const capacity = displayCell(row.capacity);
+  if (capacity === "—") return "—";
+  if (UNIT_NOTES.includes(row.compare)) return `${capacity}${row.compare}`;
+  return capacity;
 }
 
-function CountUp({ value, suffix = "", armed, durationMs = 1600 }) {
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (!armed) return undefined;
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches) {
-      setDisplay(value);
-      return undefined;
-    }
-
-    let raf = 0;
-    const start = performance.now();
-    const tick = (now) => {
-      const p = Math.min(1, (now - start) / durationMs);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setDisplay(Math.round(value * eased));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [armed, value, durationMs]);
-
-  return (
-    <span>
-      {display.toLocaleString()}
-      {suffix}
-    </span>
-  );
-}
-
-function RecordRow({ row }) {
-  const capacity = row.capacity && row.capacity !== "-" ? row.capacity : "";
-  const isUnitNote = UNIT_NOTES.includes(row.compare);
-  const capacityText = capacity ? `${capacity}${isUnitNote ? row.compare : ""}` : "—";
-  const note = !isUnitNote && row.compare ? row.compare : "";
-
-  return (
-    <div className="hg-cons__row">
-      <span className="hg-cons__row-no">{String(row.no).padStart(3, "0")}</span>
-      <div className="hg-cons__row-main">
-        <strong className="hg-cons__row-client">{row.client}</strong>
-        <p className="hg-cons__row-type">
-          {row.type}
-          {note && <em className="hg-cons__row-note">{note}</em>}
-        </p>
-      </div>
-      <span className="hg-cons__row-region">
-        {row.region && row.region !== "-" ? row.region : "—"}
-        {row.rep && row.rep !== "-" && row.rep !== "대표" ? ` · ${row.rep}` : ""}
-      </span>
-      <span className={`hg-cons__row-capacity${capacity ? "" : " is-empty"}`}>
-        {capacityText}
-        {capacity && !isUnitNote && <small> m²/D</small>}
-      </span>
-    </div>
-  );
-}
-
-function YearGroup({ year, rows }) {
-  const [ref, armed] = useArmOnView("0px 0px -4% 0px", 0.05);
-
-  return (
-    <section ref={ref} className={`hg-cons__group${armed ? " is-armed" : ""}`}>
-      <header className="hg-cons__group-head">
-        <span className="hg-cons__group-year">{year}</span>
-        <span className="hg-cons__group-count">{rows.length}건</span>
-        <span className="hg-cons__group-line" aria-hidden="true" />
-      </header>
-      <ul className="hg-cons__rows">
-        {rows.map((row, index) => (
-          <li
-            key={row.no}
-            className="hg-cons__row-wrap"
-            style={{ "--hg-cons-delay": `${Math.min(index, 10) * 60}ms` }}
-          >
-            <RecordRow row={row} />
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
+function displayCompare(row) {
+  if (!row.compare || row.compare === "-" || UNIT_NOTES.includes(row.compare)) {
+    return "—";
+  }
+  return row.compare;
 }
 
 export default function HgConstructionContent() {
-  const [leadRef, leadArmed] = useArmOnView("80px 0px 0px 0px", 0.05);
-  const [statsRef, statsArmed] = useArmOnView("0px 0px -8% 0px", 0.2);
   const [activeYear, setActiveYear] = useState("all");
   const [query, setQuery] = useState("");
 
@@ -158,119 +37,131 @@ export default function HgConstructionContent() {
     const regions = new Set(
       constructionRecords.map((r) => r.region).filter((v) => v && v !== "-")
     );
-    const clients = new Set(constructionRecords.map((r) => r.client));
     return {
       total: constructionRecords.length,
-      years: years[0] - years[years.length - 1] + 1,
+      from: years[years.length - 1],
+      to: years[0],
       regions: regions.size,
-      clients: clients.size,
     };
   }, [years]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return constructionRecords.filter((r) => {
-      if (activeYear !== "all" && r.year !== activeYear) return false;
-      if (!q) return true;
-      return [r.client, r.region, r.type, r.rep].some(
-        (v) => v && String(v).toLowerCase().includes(q)
-      );
-    });
+    return constructionRecords
+      .filter((r) => {
+        if (activeYear !== "all" && r.year !== activeYear) return false;
+        if (!q) return true;
+        return [r.client, r.region, r.type, r.rep].some(
+          (v) => v && String(v).toLowerCase().includes(q)
+        );
+      })
+      .sort((a, b) => b.year - a.year || b.no - a.no);
   }, [activeYear, query]);
-
-  const groups = useMemo(() => {
-    const map = new Map();
-    filtered.forEach((r) => {
-      if (!map.has(r.year)) map.set(r.year, []);
-      map.get(r.year).push(r);
-    });
-    return [...map.entries()].sort((a, b) => b[0] - a[0]);
-  }, [filtered]);
 
   return (
     <div className="hg-cons">
-      <section ref={leadRef} className={`hg-cons__lead${leadArmed ? " is-armed" : ""}`}>
-        <p className="hg-cons__eyebrow">Projects</p>
-        <div className="hg-cons__accent" aria-hidden="true" />
-        <h2 className="hg-cons__quote">
-          {HEAD_LINES.map((line, index) => (
-            <AnimatedLine key={line} text={line} lineIndex={index} />
-          ))}
-        </h2>
+      <header className="hg-cons__lead">
+        <h2 className="hg-cons__quote">공사실적</h2>
         <p className="hg-cons__sub">
-          2011년부터 전국의 농장과 함께해 온 한화그린의 시공 기록입니다.
+          발주처·지역·공사종류·용량 등 시공 기록을 연도별로 확인할 수 있습니다.
         </p>
-      </section>
+        <p className="hg-cons__summary" aria-label="실적 요약">
+          <span>
+            총 <strong>{stats.total}</strong>건
+          </span>
+          <span>
+            {stats.from}~{stats.to}년
+          </span>
+          <span>
+            시공 지역 <strong>{stats.regions}</strong>곳
+          </span>
+        </p>
+      </header>
 
-      <section
-        ref={statsRef}
-        className={`hg-cons__stats${statsArmed ? " is-armed" : ""}`}
-        aria-label="공사실적 요약"
-      >
-        {[
-          { label: "누적 공사실적", value: stats.total, suffix: "건" },
-          { label: "시공 경험", value: stats.years, suffix: "년" },
-          { label: "시공 지역", value: stats.regions, suffix: "곳" },
-          { label: "함께한 발주처", value: stats.clients, suffix: "곳" },
-        ].map((item, index) => (
-          <div
-            key={item.label}
-            className="hg-cons__stat"
-            style={{ "--hg-cons-delay": `${index * 120}ms` }}
+      <section className="hg-cons__toolbar" aria-label="실적 검색·필터">
+        <div className="hg-cons__filter">
+          <label className="hg-cons__filter-label" htmlFor="hg-cons-year">
+            연도
+          </label>
+          <select
+            id="hg-cons-year"
+            className="hg-cons__year-select"
+            value={activeYear}
+            onChange={(e) =>
+              setActiveYear(e.target.value === "all" ? "all" : Number(e.target.value))
+            }
           >
-            <strong className="hg-cons__stat-value">
-              <CountUp value={item.value} suffix={item.suffix} armed={statsArmed} />
-            </strong>
-            <span className="hg-cons__stat-label">{item.label}</span>
-          </div>
-        ))}
-      </section>
-
-      <section className="hg-cons__controls" aria-label="실적 필터">
-        <div className="hg-cons__years" role="tablist" aria-label="연도별 보기">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeYear === "all"}
-            className={`hg-cons__year-btn${activeYear === "all" ? " is-active" : ""}`}
-            onClick={() => setActiveYear("all")}
-          >
-            전체
-          </button>
-          {years.map((year) => (
-            <button
-              key={year}
-              type="button"
-              role="tab"
-              aria-selected={activeYear === year}
-              className={`hg-cons__year-btn${activeYear === year ? " is-active" : ""}`}
-              onClick={() => setActiveYear(year)}
-            >
-              {year}
-            </button>
-          ))}
+            <option value="all">전체</option>
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}년
+              </option>
+            ))}
+          </select>
         </div>
+
         <div className="hg-cons__search">
+          <label className="hg-cons__filter-label" htmlFor="hg-cons-query">
+            검색
+          </label>
           <input
+            id="hg-cons-query"
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="발주처·지역·공사종류 검색"
+            placeholder="발주처·지역·공사종류·대표"
             aria-label="공사실적 검색"
           />
         </div>
+
+        <p className="hg-cons__result-meta" aria-live="polite">
+          조회 <strong>{filtered.length}</strong>건
+        </p>
       </section>
 
-      <div className="hg-cons__result-meta" aria-live="polite">
-        총 <strong>{filtered.length}</strong>건
-      </div>
-
-      <div className="hg-cons__groups">
-        {groups.length === 0 ? (
-          <p className="hg-cons__empty">검색 결과가 없습니다.</p>
-        ) : (
-          groups.map(([year, rows]) => <YearGroup key={year} year={year} rows={rows} />)
-        )}
+      <div className="hg-cons__table-wrap">
+        <table className="hg-cons__table">
+          <caption className="hg-cons__caption">
+            한화그린 공사실적 목록
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">번호</th>
+              <th scope="col">년도</th>
+              <th scope="col">발주처</th>
+              <th scope="col">지역</th>
+              <th scope="col">대표</th>
+              <th scope="col">공사종류</th>
+              <th scope="col">
+                용량
+                <span className="hg-cons__unit">(m²/D)</span>
+              </th>
+              <th scope="col">비교</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filtered.length === 0 ? (
+              <tr>
+                <td colSpan={8} className="hg-cons__empty">
+                  검색 결과가 없습니다.
+                </td>
+              </tr>
+            ) : (
+              filtered.map((row) => (
+                <tr key={row.no}>
+                  <td className="hg-cons__cell-num">{row.no}</td>
+                  <td className="hg-cons__cell-year">{row.year}</td>
+                  <td className="hg-cons__cell-client">{displayCell(row.client)}</td>
+                  <td>{displayCell(row.region)}</td>
+                  <td>{displayCell(row.rep)}</td>
+                  <td className="hg-cons__cell-type">{displayCell(row.type)}</td>
+                  <td className="hg-cons__cell-capacity">{displayCapacity(row)}</td>
+                  <td>{displayCompare(row)}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

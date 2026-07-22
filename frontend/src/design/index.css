@@ -15,6 +15,8 @@
 @import "./responsive.css";
 @import "./mobile-site.css";
 @import "./mobile-home.css";
+@import "./components/home-redesign.css";
+@import "./components/subpages-redesign.css";
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -23,7 +25,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -43,8 +45,8 @@ html.hg-scrolling-top .hg-vision {
 
 body {
   font-family: var(--hg-font);
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.7;
   color: var(--hg-text);
   background: var(--hg-bg);
   -webkit-font-smoothing: antialiased;
@@ -62,6 +64,12 @@ a {
 
 button {
   font-family: inherit;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid #e2a92f;
+  outline-offset: 3px;
 }
 
 ul, ol {

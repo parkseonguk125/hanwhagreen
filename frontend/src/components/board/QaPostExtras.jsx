@@ -1,6 +1,15 @@
-import { downloadQaAttachment } from "../../services/boardApi";
+import { useEffect, useState } from "react";
+import {
+  downloadQaAttachment,
+  fetchQaAttachmentBlob,
+} from "../../services/boardApi";
 import { getQaPassword } from "../../services/boardAccess";
-import { normalizeExternalUrl } from "../../utils/qaPostDisplay";
+import {
+  isImageAttachmentName,
+  isMediaAttachmentName,
+  isVideoAttachmentName,
+  normalizeExternalUrl,
+} from "../../utils/qaPostDisplay";
 
 function ExternalLink({ href, label, children }) {
   const url = normalizeExternalUrl(href);
@@ -28,6 +37,124 @@ function PlainTextItem({ label, value }) {
   );
 }
 
+function AttachmentItem({ postId, file, index, total }) {
+  const label = total > 1 ? `첨부파일 ${index + 1}` : "첨부파일";
+  const name = file.name || "첨부파일 다운로드";
+  const maybeImage = isImageAttachmentName(name);
+  const maybeVideo = isVideoAttachmentName(name);
+  const maybeMedia = isMediaAttachmentName(name);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [previewError, setPreviewError] = useState(false);
+  const [playError, setPlayError] = useState(false);
+
+  useEffect(() => {
+    if (!maybeMedia) return undefined;
+
+    let active = true;
+    let objectUrl = "";
+    setPreviewUrl("");
+    setPreviewError(false);
+    setPlayError(false);
+
+    (async () => {
+      try {
+        const result = await fetchQaAttachmentBlob(
+          postId,
+          getQaPassword(postId),
+          file.id
+        );
+        if (!active) {
+          URL.revokeObjectURL(result.url);
+          return;
+        }
+
+        const type = (result.contentType || "").toLowerCase();
+        const fileName = result.filename || name;
+        const isImage =
+          type.startsWith("image/") || isImageAttachmentName(fileName);
+        const isVideo =
+          type.startsWith("video/") || isVideoAttachmentName(fileName);
+
+        if (!isImage && !isVideo) {
+          URL.revokeObjectURL(result.url);
+          if (active) setPreviewError(true);
+          return;
+        }
+
+        objectUrl = result.url;
+        setPreviewUrl(result.url);
+      } catch {
+        if (active) setPreviewError(true);
+      }
+    })();
+
+    return () => {
+      active = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [maybeMedia, postId, file.id, name]);
+
+  const handleDownload = async () => {
+    try {
+      await downloadQaAttachment(postId, getQaPassword(postId), file.id);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const kindClass = maybeVideo ? "is-video" : maybeImage ? "is-image" : "";
+
+  return (
+    <li className={`qa-extra-attach ${kindClass}`.trim()}>
+      <div className="qa-extra-attach__row">
+        <span className="qa-extra-label">{label}</span>
+        <button type="button" className="qa-extra-download" onClick={handleDownload}>
+          {name}
+        </button>
+      </div>
+
+      {maybeImage && previewUrl && (
+        <a
+          className="qa-extra-preview"
+          href={previewUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="새 탭에서 원본 보기"
+        >
+          <img src={previewUrl} alt={name} loading="lazy" decoding="async" />
+        </a>
+      )}
+
+      {maybeVideo && previewUrl && !playError && (
+        <div className="qa-extra-preview qa-extra-preview--video">
+          <video
+            controls
+            playsInline
+            preload="metadata"
+            src={previewUrl}
+            onError={() => setPlayError(true)}
+          >
+            이 브라우저에서는 영상을 재생할 수 없습니다.
+          </video>
+        </div>
+      )}
+
+      {maybeVideo && playError && (
+        <p className="qa-extra-preview-status">
+          이 브라우저에서는 해당 영상 형식을 바로 재생하지 못할 수 있습니다. 위
+          파일 버튼으로 받아 확인해 주세요.
+        </p>
+      )}
+
+      {maybeMedia && !previewUrl && !previewError && (
+        <p className="qa-extra-preview-status">
+          {maybeVideo ? "영상 불러오는 중…" : "이미지 불러오는 중…"}
+        </p>
+      )}
+    </li>
+  );
+}
+
 export default function QaPostExtras({ postId, fields }) {
   const { email, homepage, link1, link2, attachments = [], attachmentName, hasAttachment } =
     fields;
@@ -38,14 +165,6 @@ export default function QaPostExtras({ postId, fields }) {
       : hasAttachment
         ? [{ id: null, name: attachmentName || "첨부파일 다운로드" }]
         : [];
-
-  const handleDownload = async (attachmentId) => {
-    try {
-      await downloadQaAttachment(postId, getQaPassword(postId), attachmentId);
-    } catch (error) {
-      alert(error.message);
-    }
-  };
 
   const hasMeta = email || homepage || link1 || link2 || files.length > 0;
   if (!hasMeta) return null;
@@ -59,16 +178,13 @@ export default function QaPostExtras({ postId, fields }) {
         <ExternalLink href={link1} label="링크 1" />
         <PlainTextItem label="링크 2" value={link2} />
         {files.map((file, index) => (
-          <li key={file.id || `${file.name}-${index}`}>
-            <span className="qa-extra-label">{files.length > 1 ? `첨부파일 ${index + 1}` : "첨부파일"}</span>
-            <button
-              type="button"
-              className="qa-extra-download"
-              onClick={() => handleDownload(file.id)}
-            >
-              {file.name || "첨부파일 다운로드"}
-            </button>
-          </li>
+          <AttachmentItem
+            key={file.id || `${file.name}-${index}`}
+            postId={postId}
+            file={file}
+            index={index}
+            total={files.length}
+          />
         ))}
       </ul>
     </div>

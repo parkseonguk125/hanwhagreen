@@ -9,6 +9,21 @@ export function normalizeExternalUrl(value) {
   return `https://${trimmed}`;
 }
 
+const IMAGE_EXT_RE = /\.(jpe?g|png|gif|webp|bmp|svg)$/i;
+const VIDEO_EXT_RE = /\.(mp4|webm|ogg|ogv|mov|m4v|avi|mkv|mpeg|mpg|3gp)$/i;
+
+export function isImageAttachmentName(name = "") {
+  return IMAGE_EXT_RE.test(String(name).trim());
+}
+
+export function isVideoAttachmentName(name = "") {
+  return VIDEO_EXT_RE.test(String(name).trim());
+}
+
+export function isMediaAttachmentName(name = "") {
+  return isImageAttachmentName(name) || isVideoAttachmentName(name);
+}
+
 export function parseLegacyQaContent(rawContent = "") {
   let content = (rawContent || "").trim();
   let link1 = "";

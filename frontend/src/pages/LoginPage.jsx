@@ -117,13 +117,12 @@ export default function LoginPage() {
 
   return (
     <>
-      <HgHeader />
+      <HgHeader stableLogo />
       <main className="hg-main hg-login-page">
         <div className="hg-login">
           <header className="hg-login__head">
-            <p className="hg-login__eyebrow">Member Login</p>
             <h1 className="hg-login__title">로그인</h1>
-            <p className="hg-login__desc">한화그린 서비스 이용을 위해 로그인해 주세요.</p>
+            <p className="hg-login__desc">아이디와 비밀번호를 입력해 주세요.</p>
           </header>
 
           <div className="hg-login__body">
@@ -143,92 +142,55 @@ export default function LoginPage() {
             <form name="flogin" id="flogin" onSubmit={handleSubmit}>
               <input type="hidden" name="url" value={returnUrl} readOnly />
 
-              <fieldset id="login_fs" disabled={isLockedOut} className="hg-login__fieldset">
+              <fieldset
+                id="login_fs"
+                disabled={isLockedOut}
+                className="hg-login__fieldset"
+              >
                 <legend className="hg-sr-only">회원로그인</legend>
 
                 <div className="hg-login__field">
                   <label htmlFor="login_id">
                     아이디<strong className="hg-sr-only"> 필수</strong>
                   </label>
-                  <div className="hg-login__input-wrap">
-                    <span className="hg-login__input-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" width="17" height="17">
-                        <circle
-                          cx="12"
-                          cy="8"
-                          r="3.6"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        />
-                        <path
-                          d="M5 20c1.2-3.2 3.9-4.8 7-4.8s5.8 1.6 7 4.8"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </span>
-                    <input
-                      type="text"
-                      name="mb_id"
-                      id="login_id"
-                      required
-                      placeholder="아이디를 입력해 주세요"
-                      value={form.mb_id}
-                      onChange={(event) =>
-                        setForm((prev) => ({ ...prev, mb_id: event.target.value }))
-                      }
-                      disabled={submitting || isLockedOut}
-                      autoComplete="username"
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    name="mb_id"
+                    id="login_id"
+                    required
+                    placeholder="아이디"
+                    value={form.mb_id}
+                    onChange={(event) =>
+                      setForm((prev) => ({ ...prev, mb_id: event.target.value }))
+                    }
+                    disabled={submitting || isLockedOut}
+                    autoComplete="username"
+                  />
                 </div>
 
                 <div className="hg-login__field">
                   <label htmlFor="login_pw">
                     비밀번호<strong className="hg-sr-only"> 필수</strong>
                   </label>
-                  <div className="hg-login__input-wrap">
-                    <span className="hg-login__input-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24" width="17" height="17">
-                        <rect
-                          x="5"
-                          y="11"
-                          width="14"
-                          height="9"
-                          rx="2"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        />
-                        <path
-                          d="M8 11V7a4 4 0 018 0v4"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </span>
-                    <input
-                      type="password"
-                      name="mb_password"
-                      id="login_pw"
-                      required
-                      placeholder="비밀번호를 입력해 주세요"
-                      value={form.mb_password}
-                      onChange={(event) =>
-                        setForm((prev) => ({ ...prev, mb_password: event.target.value }))
-                      }
-                      disabled={submitting || isLockedOut}
-                      autoComplete="current-password"
-                    />
-                  </div>
+                  <input
+                    type="password"
+                    name="mb_password"
+                    id="login_pw"
+                    required
+                    placeholder="비밀번호"
+                    value={form.mb_password}
+                    onChange={(event) =>
+                      setForm((prev) => ({
+                        ...prev,
+                        mb_password: event.target.value,
+                      }))
+                    }
+                    disabled={submitting || isLockedOut}
+                    autoComplete="current-password"
+                  />
                 </div>
 
-                <label className="hg-write__toggle hg-login__auto" htmlFor="login_auto_login">
+                <label className="hg-login__auto" htmlFor="login_auto_login">
                   <input
                     type="checkbox"
                     name="auto_login"
@@ -237,10 +199,8 @@ export default function LoginPage() {
                     onChange={handleAutoLoginChange}
                     disabled={submitting || isLockedOut}
                   />
-                  <span className="hg-write__toggle-track" aria-hidden="true">
-                    <span className="hg-write__toggle-thumb" />
-                  </span>
-                  <span className="hg-write__toggle-label">자동 로그인</span>
+                  <span className="hg-login__auto-box" aria-hidden="true" />
+                  <span className="hg-login__auto-label">자동 로그인</span>
                 </label>
 
                 <button

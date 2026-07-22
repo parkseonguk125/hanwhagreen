@@ -23,6 +23,15 @@ export default function BoardSearch({
     }
   }, [open, initialField, initialKeyword]);
 
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (event) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
   const handleFieldChange = (event) => {
     setField(event.target.value);
     setKeyword("");
@@ -37,11 +46,18 @@ export default function BoardSearch({
   if (!open) return null;
 
   return (
-    <div className="bo_sch_wrap is-open">
+    <div className="bo_sch_wrap is-open" role="dialog" aria-modal="true" aria-labelledby="bo-sch-title">
+      <div className="bo_sch_bg" onClick={onClose} role="presentation" />
       <fieldset className="bo_sch">
-        <h3>검색</h3>
+        <div className="bo_sch_head">
+          <h3 id="bo-sch-title">검색</h3>
+          <button type="button" className="bo_sch_cls" title="닫기" onClick={onClose}>
+            <Icon name="times" size="sm" />
+            <span className="sound_only">닫기</span>
+          </button>
+        </div>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="sfl" className="sound_only">
+          <label htmlFor="sfl" className="bo_sch_label">
             검색대상
           </label>
           <select name="sfl" id="sfl" value={field} onChange={handleFieldChange}>
@@ -59,7 +75,8 @@ export default function BoardSearch({
               </>
             )}
           </select>
-          <label htmlFor="stx" className="sound_only">
+
+          <label htmlFor="stx" className="bo_sch_label">
             검색어
           </label>
           <div className={`sch_bar${isDateField ? " sch_bar--date" : ""}`}>
@@ -91,11 +108,12 @@ export default function BoardSearch({
                 id="stx"
                 className="sch_input"
                 size="25"
-                maxLength="20"
-                placeholder=" 검색어를 입력해주세요"
+                maxLength="40"
+                placeholder="검색어를 입력해주세요"
+                autoComplete="off"
               />
             )}
-            <button type="submit" value="검색" className="sch_btn board-icon-btn">
+            <button type="submit" className="sch_btn" title="검색">
               <Icon name="search" size="sm" />
               <span className="sound_only">검색</span>
             </button>
@@ -103,13 +121,8 @@ export default function BoardSearch({
           {isAttendance && (
             <p className="bo_sch_hint">날짜 검색 후 비우고 검색하면 전체 목록이 표시됩니다.</p>
           )}
-          <button type="button" className="bo_sch_cls board-icon-btn" title="닫기" onClick={onClose}>
-            <Icon name="times" size="sm" />
-            <span className="sound_only">닫기</span>
-          </button>
         </form>
       </fieldset>
-      <div className="bo_sch_bg" onClick={onClose} role="presentation" />
     </div>
   );
 }

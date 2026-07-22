@@ -16,6 +16,9 @@ export const assets = {
     `${ASSET}/theme/FT_WEB50/img/area_con04.jpg`,
   ],
   galleryBg: `${ASSET}/theme/FT_WEB50/img/gall_Back.jpg`,
+  /* 홈 히어로·영역과 겹치지 않는 문의 밴드용 대체 이미지 */
+  inquiryBg:
+    "https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=2000&q=80",
 };
 
 export const topLinks = [
@@ -27,14 +30,14 @@ export const topLinks = [
 
 export const navGroups = [
   {
-    title: "ABOUT US",
+    title: "회사소개",
     items: [
       { label: "회사소개", href: "/bbs/content.php?co_id=company" },
       { label: "인사말", href: "/bbs/content.php?co_id=ceo" },
       { label: "오시는길", href: "/bbs/content.php?co_id=map" },
     ],
   },
-  { title: "BUSINESS", items: [{ label: "보유기술", href: "/bbs/content.php?co_id=technology" }] },
+  { title: "보유기술", items: [{ label: "보유기술", href: "/bbs/content.php?co_id=technology" }] },
   {
     title: "회사실적",
     items: [
@@ -42,7 +45,7 @@ export const navGroups = [
       { label: "주요실적", href: "/bbs/board.php?bo_table=project" },
     ],
   },
-  { title: "지식산업권 외", items: [{ label: "인증서", href: "/bbs/board.php?bo_table=certification" }] },
+  { title: "인증·특허", items: [{ label: "인증서", href: "/bbs/board.php?bo_table=certification" }] },
   {
     title: "고객센터",
     items: [
@@ -118,4 +121,18 @@ export const footerInfo = {
   mapUrl: HANWHA_GREEN_NAVER_DIRECTIONS_URL,
   youtubeUrl:
     "https://www.youtube.com/@%ED%95%9C%ED%99%94%EA%B7%B8%EB%A6%B0%EC%A3%BC%EC%8B%9D%ED%9A%8C%EC%82%AC",
+  hq: {
+    label: "본사",
+    region: "경북 칠곡",
+    address: "경북 칠곡군 가산면 송학5길 57-1",
+    phone: "054-977-4700",
+    hours: "월~금 07:30 ~ 16:30",
+  },
+  branch: {
+    label: "전라지사",
+    region: "전북 전주",
+    address: "전북 전주시 덕진구 진버들1길 52",
+    phone: "010-2372-9059",
+    hours: "상담 시 사전 연락",
+  },
 };

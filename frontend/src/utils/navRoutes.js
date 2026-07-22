@@ -3,10 +3,10 @@ export function contentRoute(coId) {
 }
 
 export const subNavGroups = [
-  { title: "ABOUT US", href: contentRoute("company") },
-  { title: "BUSINESS", href: contentRoute("technology") },
+  { title: "회사소개", href: contentRoute("company") },
+  { title: "보유기술", href: contentRoute("technology") },
   { title: "회사실적", href: contentRoute("construction") },
-  { title: "지식산업권 외", href: "/bbs/board.php?bo_table=certification" },
+  { title: "인증·특허", href: "/bbs/board.php?bo_table=certification" },
   { title: "고객센터", href: "/bbs/board.php?bo_table=qa" },
 ];
 

@@ -13,28 +13,8 @@ export const fallbackNoticePosts = [
   },
 ];
 
-export const fallbackQaPosts = [
-  {
-    id: 18,
-    status: "접수완료",
-    isSecret: true,
-    subject:
-      "카지노 솔루션 | 슬롯 솔루션 | 홀덤 솔루션 | 라이브 홀덤 솔루션 | 에보소프트",
-    author: "토지노 솔루션",
-    hits: 1,
-    date: "02-09",
-    listDate: "02-09",
-    viewDate: "2026-02-09",
-    content: "온라인 문의드립니다.",
-    email: "",
-    homepage: "",
-    link1: "",
-    link2: "",
-    attachmentName: "",
-    hasAttachment: true,
-    receiveMail: true,
-  },
-];
+/* 문의 데이터는 신뢰가 중요한 영역이므로 API 실패 시 임의 게시물을 노출하지 않는다. */
+export const fallbackQaPosts = [];
 
 export function getFallbackNoticePost(id) {
   return fallbackNoticePosts.find((post) => post.id === Number(id)) || null;

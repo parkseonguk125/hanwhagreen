@@ -210,17 +210,20 @@ export default function HgSubLayout({
   parentTitle,
   children,
   wide = false,
+  hideNav = false,
 }) {
   const resolvedParent = parentTitle ?? subNavGroups[navGroupIndex]?.title ?? "";
 
   return (
     <div className="hg-main">
       <HgSubVisual title={title} bannerUrl={bannerUrl} subtitle={visualSubtitle} />
-      <HgSubNav
-        parentTitle={resolvedParent}
-        currentTitle={currentNavTitle || title}
-        navGroupIndex={navGroupIndex}
-      />
+      {!hideNav && (
+        <HgSubNav
+          parentTitle={resolvedParent}
+          currentTitle={currentNavTitle || title}
+          navGroupIndex={navGroupIndex}
+        />
+      )}
       <div className={`hg-sub-content${wide ? " hg-sub-content--wide" : ""}`}>
         {children}
       </div>

@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import HgHeader from "../components/v2/HgHeader";
 import HgFooter from "../components/v2/HgFooter";
 import HgSubLayout from "../components/v2/HgSubLayout";
-import Icon from "../components/Icons";
 import MockRecaptcha from "../components/board/MockRecaptcha";
 import {
   createNoticePost,
@@ -31,23 +30,6 @@ const boardConfig = {
     banner: boardBanners.qa,
   },
 };
-
-function WriteField({ id, label, required = false, hint, children }) {
-  return (
-    <div className="hg-write__field">
-      <label htmlFor={id} className="hg-write__label">
-        {label}
-        {required && (
-          <em className="hg-write__required" aria-label="필수">
-            *
-          </em>
-        )}
-        {hint && <span className="hg-write__hint">{hint}</span>}
-      </label>
-      {children}
-    </div>
-  );
-}
 
 const emptyForm = {
   wr_name: "",
@@ -347,215 +329,253 @@ export default function BoardWritePage() {
     <>
       <HgHeader />
       <HgSubLayout {...layoutProps}>
-        <div className="hg-proj hg-write">
+        <div className="hg-proj hg-write hg-proj--cs">
           <header className="hg-write__head">
-            <p className="hg-proj__eyebrow">{table === "qa" ? "Contact Us" : "Notice"}</p>
             <h2 className="hg-write__title">{pageTitle}</h2>
             <p className="hg-write__desc">
               {table === "qa"
-                ? "아래 양식을 작성해 주시면 담당자가 확인 후 빠르게 답변드립니다."
+                ? "아래 양식을 작성해 주시면 담당자가 확인 후 답변드립니다."
                 : "공지사항 내용을 입력해 주세요."}
             </p>
           </header>
 
           <form id="fwrite" onSubmit={handleSubmit} className="hg-write__form">
-            <section className="hg-write__card">
-              <h3 className="hg-write__card-title">
-                <span className="hg-write__card-num">01</span> 작성자 정보
-              </h3>
-              <div className="hg-write__grid">
-                <WriteField id="wr_name" label="이름" required>
-                  <input
-                    type="text"
-                    name="wr_name"
-                    id="wr_name"
-                    required
-                    className="hg-write__input"
-                    placeholder="이름을 입력해 주세요"
-                    value={form.wr_name}
-                    onChange={updateField("wr_name")}
-                  />
-                </WriteField>
-
-                {table === "qa" && (
-                  <>
-                    <WriteField
-                      id="wr_password"
-                      label={isEdit ? "현재 비밀번호" : "비밀번호"}
-                      required
-                      hint="글 수정·삭제 시 필요합니다"
-                    >
+            <div className="hg-write__panel">
+              <table className="hg-write__table">
+                <caption className="sound_only">{pageTitle} 작성 양식</caption>
+                <tbody>
+                  <tr>
+                    <th scope="row">
+                      <label htmlFor="wr_name">
+                        이름 <em className="hg-write__required">*</em>
+                      </label>
+                    </th>
+                    <td>
                       <input
-                        type="password"
-                        name="wr_password"
-                        id="wr_password"
+                        type="text"
+                        name="wr_name"
+                        id="wr_name"
                         required
                         className="hg-write__input"
-                        placeholder={isEdit ? "현재 비밀번호" : "비밀번호"}
-                        value={form.wr_password}
-                        onChange={updateField("wr_password")}
+                        placeholder="이름을 입력해 주세요"
+                        value={form.wr_name}
+                        onChange={updateField("wr_name")}
                       />
-                    </WriteField>
-                    {isEdit && (
-                      <WriteField id="wr_new_password" label="새 비밀번호" hint="변경할 때만 입력">
-                        <input
-                          type="password"
-                          name="wr_new_password"
-                          id="wr_new_password"
-                          className="hg-write__input"
-                          placeholder="새 비밀번호"
-                          value={form.wr_new_password}
-                          onChange={updateField("wr_new_password")}
-                        />
-                      </WriteField>
-                    )}
-                    <WriteField id="wr_email" label="이메일">
-                      <input
-                        type="text"
-                        name="wr_email"
-                        id="wr_email"
-                        className="hg-write__input"
-                        placeholder="example@email.com"
-                        value={form.wr_email}
-                        onChange={updateField("wr_email")}
-                      />
-                    </WriteField>
-                    <WriteField id="wr_homepage" label="홈페이지">
-                      <input
-                        type="text"
-                        name="wr_homepage"
-                        id="wr_homepage"
-                        className="hg-write__input"
-                        placeholder="https://"
-                        value={form.wr_homepage}
-                        onChange={updateField("wr_homepage")}
-                      />
-                    </WriteField>
-                  </>
-                )}
-              </div>
+                    </td>
+                  </tr>
 
-              {table === "qa" && (
-                <label className="hg-write__toggle" htmlFor="mail">
-                  <input
-                    type="checkbox"
-                    id="mail"
-                    name="mail"
-                    checked={form.mail}
-                    onChange={updateField("mail")}
-                  />
-                  <span className="hg-write__toggle-track" aria-hidden="true">
-                    <span className="hg-write__toggle-thumb" />
-                  </span>
-                  <span className="hg-write__toggle-label">답변 메일 받기</span>
-                </label>
-              )}
-            </section>
-
-            <section className="hg-write__card">
-              <h3 className="hg-write__card-title">
-                <span className="hg-write__card-num">02</span>{" "}
-                {table === "qa" ? "문의 내용" : "게시글 내용"}
-              </h3>
-              <WriteField id="wr_subject" label="제목" required>
-                <input
-                  type="text"
-                  name="wr_subject"
-                  id="wr_subject"
-                  required
-                  className="hg-write__input"
-                  placeholder="제목을 입력해 주세요"
-                  value={form.wr_subject}
-                  onChange={updateField("wr_subject")}
-                />
-              </WriteField>
-              <WriteField id="wr_content" label="내용" required>
-                <textarea
-                  id="wr_content"
-                  name="wr_content"
-                  required
-                  maxLength={65536}
-                  className="hg-write__textarea"
-                  placeholder={
-                    table === "qa"
-                      ? "문의하실 내용을 자세히 적어주시면 더 정확한 답변을 드릴 수 있습니다."
-                      : "내용을 입력해 주세요"
-                  }
-                  value={form.wr_content}
-                  onChange={updateField("wr_content")}
-                />
-              </WriteField>
-            </section>
-
-            {table === "qa" && !isEdit && (
-              <section className="hg-write__card">
-                <h3 className="hg-write__card-title">
-                  <span className="hg-write__card-num">03</span> 추가 정보
-                  <span className="hg-write__card-optional">선택</span>
-                </h3>
-                <div className="hg-write__grid">
-                  <WriteField id="wr_link1" label="관련 링크 1">
-                    <input
-                      type="text"
-                      name="wr_link1"
-                      id="wr_link1"
-                      className="hg-write__input"
-                      placeholder="https://"
-                      value={form.wr_link1}
-                      onChange={updateField("wr_link1")}
-                    />
-                  </WriteField>
-                  <WriteField id="wr_link2" label="관련 링크 2">
-                    <input
-                      type="text"
-                      name="wr_link2"
-                      id="wr_link2"
-                      className="hg-write__input"
-                      placeholder="https://"
-                      value={form.wr_link2}
-                      onChange={updateField("wr_link2")}
-                    />
-                  </WriteField>
-                </div>
-                <WriteField id="bf_file_0" label="파일 첨부" hint={`최대 ${MAX_ATTACHMENTS}개`}>
-                  <div className="hg-write__file">
-                    <label className="hg-write__file-btn" htmlFor="bf_file_0">
-                      <Icon name="folder-open" size="sm" />
-                      파일 선택
-                    </label>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      name="bf_file[]"
-                      id="bf_file_0"
-                      className="hg-write__file-input"
-                      multiple
-                      onChange={handleAttachmentChange}
-                    />
-                    {attachments.length === 0 && (
-                      <span className="hg-write__file-empty">선택된 파일이 없습니다</span>
-                    )}
-                  </div>
-                  {attachments.length > 0 && (
-                    <ul className="hg-write__file-list">
-                      {attachments.map((file, index) => (
-                        <li key={`${file.name}-${file.size}-${file.lastModified}-${index}`} className="hg-write__file-name">
-                          <span>{file.name}</span>
-                          <button
-                            type="button"
-                            className="hg-write__file-del"
-                            onClick={() => removeAttachment(index)}
-                            aria-label={`${file.name} 삭제`}
-                          >
-                            ×
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
+                  {table === "qa" && (
+                    <>
+                      <tr>
+                        <th scope="row">
+                          <label htmlFor="wr_password">
+                            {isEdit ? "현재 비밀번호" : "비밀번호"}{" "}
+                            <em className="hg-write__required">*</em>
+                          </label>
+                        </th>
+                        <td>
+                          <input
+                            type="password"
+                            name="wr_password"
+                            id="wr_password"
+                            required
+                            className="hg-write__input hg-write__input--short"
+                            placeholder={isEdit ? "현재 비밀번호" : "비밀번호"}
+                            value={form.wr_password}
+                            onChange={updateField("wr_password")}
+                          />
+                          <p className="hg-write__hint">글 수정·삭제 시 필요합니다.</p>
+                        </td>
+                      </tr>
+                      {isEdit && (
+                        <tr>
+                          <th scope="row">
+                            <label htmlFor="wr_new_password">새 비밀번호</label>
+                          </th>
+                          <td>
+                            <input
+                              type="password"
+                              name="wr_new_password"
+                              id="wr_new_password"
+                              className="hg-write__input hg-write__input--short"
+                              placeholder="변경할 때만 입력"
+                              value={form.wr_new_password}
+                              onChange={updateField("wr_new_password")}
+                            />
+                          </td>
+                        </tr>
+                      )}
+                      <tr>
+                        <th scope="row">
+                          <label htmlFor="wr_email">이메일</label>
+                        </th>
+                        <td>
+                          <input
+                            type="text"
+                            name="wr_email"
+                            id="wr_email"
+                            className="hg-write__input"
+                            placeholder="example@email.com"
+                            value={form.wr_email}
+                            onChange={updateField("wr_email")}
+                          />
+                          <label className="hg-write__check" htmlFor="mail">
+                            <input
+                              type="checkbox"
+                              id="mail"
+                              name="mail"
+                              checked={form.mail}
+                              onChange={updateField("mail")}
+                            />
+                            <span>답변 메일 받기</span>
+                          </label>
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          <label htmlFor="wr_homepage">홈페이지</label>
+                        </th>
+                        <td>
+                          <input
+                            type="text"
+                            name="wr_homepage"
+                            id="wr_homepage"
+                            className="hg-write__input"
+                            placeholder="https://"
+                            value={form.wr_homepage}
+                            onChange={updateField("wr_homepage")}
+                          />
+                        </td>
+                      </tr>
+                    </>
                   )}
-                </WriteField>
-              </section>
-            )}
+
+                  <tr>
+                    <th scope="row">
+                      <label htmlFor="wr_subject">
+                        제목 <em className="hg-write__required">*</em>
+                      </label>
+                    </th>
+                    <td>
+                      <input
+                        type="text"
+                        name="wr_subject"
+                        id="wr_subject"
+                        required
+                        className="hg-write__input"
+                        placeholder="제목을 입력해 주세요"
+                        value={form.wr_subject}
+                        onChange={updateField("wr_subject")}
+                      />
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <th scope="row">
+                      <label htmlFor="wr_content">
+                        내용 <em className="hg-write__required">*</em>
+                      </label>
+                    </th>
+                    <td>
+                      <textarea
+                        id="wr_content"
+                        name="wr_content"
+                        required
+                        maxLength={65536}
+                        className="hg-write__textarea"
+                        placeholder={
+                          table === "qa"
+                            ? "문의하실 내용을 자세히 적어 주세요."
+                            : "내용을 입력해 주세요"
+                        }
+                        value={form.wr_content}
+                        onChange={updateField("wr_content")}
+                      />
+                    </td>
+                  </tr>
+
+                  {table === "qa" && !isEdit && (
+                    <>
+                      <tr>
+                        <th scope="row">
+                          <label htmlFor="wr_link1">관련 링크</label>
+                        </th>
+                        <td className="hg-write__stack">
+                          <input
+                            type="text"
+                            name="wr_link1"
+                            id="wr_link1"
+                            className="hg-write__input"
+                            placeholder="관련 링크 1 (선택)"
+                            value={form.wr_link1}
+                            onChange={updateField("wr_link1")}
+                          />
+                          <input
+                            type="text"
+                            name="wr_link2"
+                            id="wr_link2"
+                            className="hg-write__input"
+                            placeholder="관련 링크 2 (선택)"
+                            value={form.wr_link2}
+                            onChange={updateField("wr_link2")}
+                          />
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row">
+                          <label htmlFor="bf_file_0">파일 첨부</label>
+                        </th>
+                        <td>
+                          <div className="hg-write__file">
+                            <label className="hg-write__file-btn" htmlFor="bf_file_0">
+                              파일 선택
+                            </label>
+                            <input
+                              ref={fileInputRef}
+                              type="file"
+                              name="bf_file[]"
+                              id="bf_file_0"
+                              className="hg-write__file-input"
+                              multiple
+                              onChange={handleAttachmentChange}
+                            />
+                            {attachments.length === 0 ? (
+                              <span className="hg-write__file-empty">
+                                선택된 파일 없음 (최대 {MAX_ATTACHMENTS}개)
+                              </span>
+                            ) : (
+                              <span className="hg-write__file-empty">
+                                {attachments.length}개 선택됨
+                              </span>
+                            )}
+                          </div>
+                          {attachments.length > 0 && (
+                            <ul className="hg-write__file-list">
+                              {attachments.map((file, index) => (
+                                <li
+                                  key={`${file.name}-${file.size}-${file.lastModified}-${index}`}
+                                  className="hg-write__file-name"
+                                >
+                                  <span>{file.name}</span>
+                                  <button
+                                    type="button"
+                                    className="hg-write__file-del"
+                                    onClick={() => removeAttachment(index)}
+                                    aria-label={`${file.name} 삭제`}
+                                  >
+                                    ×
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </td>
+                      </tr>
+                    </>
+                  )}
+                </tbody>
+              </table>
+            </div>
 
             {!isEdit && (
               <div className="hg-write__captcha">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import HgHeader from "../components/v2/HgHeader";
 import HgFooter from "../components/v2/HgFooter";
@@ -159,7 +159,7 @@ export default function BoardPasswordPage() {
     return shell(
       <>
         <header className="hg-login__head">
-          <p className="hg-login__eyebrow">Protected Post</p>
+          
           <h1 className="hg-login__title">비밀번호 확인</h1>
           <p className="hg-login__desc">잘못된 접근입니다.</p>
         </header>
@@ -184,7 +184,7 @@ export default function BoardPasswordPage() {
     return shell(
       <>
         <header className="hg-login__head">
-          <p className="hg-login__eyebrow">Protected Post</p>
+          
           <h1 className="hg-login__title">비밀번호 확인</h1>
           <p className="hg-login__desc">글을 불러오지 못했습니다.</p>
         </header>
@@ -204,7 +204,7 @@ export default function BoardPasswordPage() {
   return shell(
     <>
       <header className="hg-login__head">
-        <p className="hg-login__eyebrow">Protected Post</p>
+        
         <div className="hg-pw__lock" aria-hidden="true">
           <LockIcon />
         </div>

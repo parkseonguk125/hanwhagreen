@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 import HgHeader from "../components/v2/HgHeader";
@@ -28,39 +28,6 @@ function isAttendanceDateSearch({ field, keyword }) {
   return field === "wr_work_date" || field === "wr_month";
 }
 
-function useArmOnView(rootMargin = "0px 0px -6% 0px", threshold = 0.05) {
-  const ref = useRef(null);
-  const [armed, setArmed] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || armed) return undefined;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches) {
-      setArmed(true);
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => setArmed(true));
-          });
-          observer.disconnect();
-        }
-      },
-      { threshold, rootMargin }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [armed, rootMargin, threshold]);
-
-  return [ref, armed];
-}
-
 /** "어디서 · 누가 · 무엇을" 형태의 목록 제목을 분해 */
 function parseListSubject(post) {
   const raw = post.listSubject || post.subject || "";
@@ -71,18 +38,9 @@ function parseListSubject(post) {
   return { where: raw, who: post.reporterName || "-", what: "" };
 }
 
-/** "2024-05-12" → { day: "12", rest: "2024.05" } */
-function splitWorkDate(workDate = "") {
-  const match = String(workDate).match(/^(\d{4})[.-](\d{2})[.-](\d{2})/);
-  if (!match) return { day: "-", rest: workDate || "" };
-  return { day: match[3], rest: `${match[1]}.${match[2]}` };
-}
-
-function AttendanceLead({ armed, leadRef }) {
+function AttendanceLead() {
   return (
-    <section ref={leadRef} className={`hg-proj__lead${armed ? " is-armed" : ""}`}>
-      <p className="hg-proj__eyebrow">Attendance</p>
-      <div className="hg-proj__accent" aria-hidden="true" />
+    <header className="hg-proj__lead">
       <h2 className="hg-proj__headline">
         <span className="hg-proj__headline-line">현장의 하루를 기록하는</span>
         <span className="hg-proj__headline-line">
@@ -93,7 +51,7 @@ function AttendanceLead({ armed, leadRef }) {
         현장별 출결 기록을 한눈에 확인하세요. GPS 위치·작업내용·현장사진 등 상세 내용은 관리자
         로그인 후 열람할 수 있습니다.
       </p>
-    </section>
+    </header>
   );
 }
 
@@ -143,82 +101,51 @@ function AttendanceToolbar({ total, searchState, onClearSearch, onSearchOpen }) 
 }
 
 function AttendanceList({ posts }) {
-  const [listRef, armed] = useArmOnView();
-
   if (posts.length === 0) {
     return <p className="hg-proj__empty">출결 기록이 없습니다.</p>;
   }
 
   return (
-    <ol ref={listRef} className={`hg-notice__list${armed ? " is-armed" : ""}`}>
-      {posts.map((post, index) => {
-        const { where, who, what } = parseListSubject(post);
-        const { day, rest } = splitWorkDate(post.workDate);
-        return (
-          <li
-            key={post.id}
-            className="hg-notice__item"
-            style={{ "--hg-proj-delay": `${(index % 15) * 55}ms` }}
-          >
-            <Link
-              to={boardViewRouteTarget("attendance", post.id)}
-              className="hg-notice__row hg-att__row"
-            >
-              <span className="hg-att__date" aria-label={`작업일 ${post.workDate || ""}`}>
-                <span className="hg-att__date-day">{day}</span>
-                <span className="hg-att__date-rest">{rest}</span>
-              </span>
-              <span className="hg-notice__main">
-                <span className="hg-notice__title">{where}</span>
-                <span className="hg-notice__meta">
-                  <span className="hg-att__who">{who}</span>
-                  {what && (
-                    <>
-                      <span className="hg-notice__dot" aria-hidden="true" />
-                      <span className="hg-att__what">{what}</span>
-                    </>
-                  )}
-                </span>
-              </span>
-              <span className="hg-att__lock-hint" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="14" height="14">
-                  <rect
-                    x="5"
-                    y="11"
-                    width="14"
-                    height="9"
-                    rx="2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  />
-                  <path
-                    d="M8 11V7a4 4 0 018 0v4"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-                관리자
-              </span>
-              <span className="hg-notice__arrow" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18">
-                  <path
-                    d="M9 6l6 6-6 6"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </span>
-            </Link>
-          </li>
-        );
-      })}
-    </ol>
+    <div className="hg-board-table-wrap">
+      <table className="hg-board-table hg-board-table--att">
+        <caption className="sound_only">출결서비스 목록</caption>
+        <thead>
+          <tr>
+            <th scope="col" className="hg-board-table__date">
+              작업일
+            </th>
+            <th scope="col" className="hg-board-table__subject">
+              현장
+            </th>
+            <th scope="col" className="hg-board-table__author">
+              담당
+            </th>
+            <th scope="col" className="hg-board-table__what">
+              작업내용
+            </th>
+            <th scope="col" className="hg-board-table__lock">
+              열람
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {posts.map((post) => {
+            const { where, who, what } = parseListSubject(post);
+            return (
+              <tr key={post.id}>
+                <td className="hg-board-table__date">{post.workDate || "-"}</td>
+                <td className="hg-board-table__subject">
+                  <Link to={boardViewRouteTarget("attendance", post.id)}>{where}</Link>
+                </td>
+                <td className="hg-board-table__author">{who}</td>
+                <td className="hg-board-table__what">{what || "-"}</td>
+                <td className="hg-board-table__lock">관리자</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -234,7 +161,6 @@ export default function AttendanceBoardPage() {
   const [viewPost, setViewPost] = useState(null);
   const [viewLoading, setViewLoading] = useState(Boolean(wrId));
   const [viewMissing, setViewMissing] = useState(false);
-  const [leadRef, leadArmed] = useArmOnView("80px 0px 0px 0px", 0.05);
 
   useEffect(() => {
     if (wrId) return undefined;
@@ -361,7 +287,9 @@ export default function AttendanceBoardPage() {
       <>
         <HgHeader />
         <HgSubLayout {...layoutProps}>
-          <AttendanceBoardView post={viewPost} />
+          <div className="hg-proj hg-att hg-proj--cs">
+            <AttendanceBoardView post={viewPost} />
+          </div>
         </HgSubLayout>
         <HgFooter />
       </>
@@ -372,8 +300,8 @@ export default function AttendanceBoardPage() {
     <>
       <HgHeader />
       <HgSubLayout {...layoutProps}>
-        <div className="hg-proj hg-att">
-          <AttendanceLead armed={leadArmed} leadRef={leadRef} />
+        <div className="hg-proj hg-att hg-proj--cs">
+          <AttendanceLead />
           <AttendanceToolbar
             total={filteredPosts.length}
             searchState={searchState}

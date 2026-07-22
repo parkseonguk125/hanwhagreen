@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function stripTags(html = "") {
   return html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
@@ -18,139 +18,106 @@ function splitBodyParagraphs(html = "") {
     .filter(Boolean);
 }
 
-function useArmOnView(rootMargin = "0px", threshold = 0.12) {
+function useSectionInView() {
   const ref = useRef(null);
-  const [armed, setArmed] = useState(false);
 
   useEffect(() => {
-    const node = ref.current;
-    if (!node || armed) return undefined;
+    const el = ref.current;
+    if (!el) return undefined;
 
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches) {
-      setArmed(true);
+    let framed = false;
+    const show = () => {
+      if (framed) return;
+      framed = true;
+      requestAnimationFrame(() => el.classList.add("is-in"));
+    };
+
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.92) {
+      show();
       return undefined;
     }
 
-    let started = false;
-    const start = () => {
-      if (started) return;
-      started = true;
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => setArmed(true));
-      });
-    };
-
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          start();
-          observer.disconnect();
-        }
+        if (!entry?.isIntersecting) return;
+        show();
+        observer.disconnect();
       },
-      { threshold, rootMargin }
+      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" }
     );
 
-    observer.observe(node);
+    observer.observe(el);
     return () => observer.disconnect();
-  }, [armed, rootMargin, threshold]);
+  }, []);
 
-  return [ref, armed];
-}
-
-function AnimatedLine({ text, lineIndex }) {
-  const tokens = useMemo(() => text.split(/(\s+)/).filter((t) => t.length > 0), [text]);
-
-  return (
-    <span className="hg-ceo__quote-line">
-      {tokens.map((token, index) => {
-        if (/^\s+$/.test(token)) {
-          return <span key={`s-${lineIndex}-${index}`}> </span>;
-        }
-
-        const delay = 0.12 + lineIndex * 0.28 + index * 0.04;
-        return (
-          <span key={`${token}-${index}`} className="hg-ceo__word">
-            <span className="hg-ceo__word-inner" style={{ animationDelay: `${delay}s` }}>
-              {token}
-            </span>
-          </span>
-        );
-      })}
-    </span>
-  );
-}
-
-function RevealBlock({ children, className = "", delay = 0 }) {
-  return (
-    <div
-      className={`hg-ceo__reveal${className ? ` ${className}` : ""}`}
-      style={{ "--hg-ceo-reveal-delay": `${delay}ms` }}
-    >
-      {children}
-    </div>
-  );
+  return ref;
 }
 
 export default function HgCeoContent({ config }) {
-  /* 헤드라인: 페이지 진입 직후 */
-  const [leadRef, leadArmed] = useArmOnView("80px 0px 0px 0px", 0.05);
-  /* 초상·본문: 스크롤로 해당 영역이 보일 때 */
-  const [stageRef, stageArmed] = useArmOnView("0px 0px -12% 0px", 0.18);
-
+  const [armed, setArmed] = useState(false);
+  const stageRef = useSectionInView();
   const headingLines = splitHeadingLines(config.headingHtml);
   const paragraphs = splitBodyParagraphs(config.bodyHtml);
 
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setArmed(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   return (
-    <div className="hg-ceo">
-      <section
-        ref={leadRef}
-        className={`hg-ceo__lead${leadArmed ? " is-lead-armed" : ""}`}
-      >
-        <p className="hg-ceo__eyebrow">CEO Message</p>
-        <div className="hg-ceo__accent" aria-hidden="true" />
+    <div className={`hg-ceo${armed ? " is-armed" : ""}`}>
+      <section className="hg-ceo__lead">
+        <p className="hg-ceo__label">인사말</p>
         <h2 className="hg-ceo__quote">
           {headingLines.map((line, index) => (
-            <AnimatedLine key={`${line}-${index}`} text={line} lineIndex={index} />
+            <span
+              key={line}
+              className="hg-ceo__quote-line"
+              style={{ "--hg-ceo-line": `${index * 80}ms` }}
+            >
+              {line}
+            </span>
           ))}
         </h2>
       </section>
 
-      <section
-        ref={stageRef}
-        className={`hg-ceo__stage${stageArmed ? " is-stage-armed" : ""}`}
-      >
-        <RevealBlock className="hg-ceo__portrait-wrap" delay={0}>
+      <section ref={stageRef} className="hg-ceo__stage hg-ceo__reveal">
+        <div className="hg-ceo__portrait-wrap hg-ceo__reveal-item">
           <figure className="hg-ceo__portrait">
-            <img src={config.photoUrl} alt="한화그린 대표이사" />
+            <img src={config.photoUrl} alt="한화그린 대표이사 김용우" />
             <figcaption className="hg-ceo__portrait-meta">
-              <span>CEO Message</span>
-              <strong>대표이사</strong>
+              <span>대표이사</span>
+              <strong>김용우</strong>
             </figcaption>
           </figure>
-        </RevealBlock>
+        </div>
 
         <div className="hg-ceo__copy">
-          <RevealBlock delay={140}>
-            <p className="hg-ceo__welcome">{config.welcome}</p>
-          </RevealBlock>
-
-          <RevealBlock delay={280}>
-            <div className="hg-ceo__letter">
-              {paragraphs.map((paragraph, index) => (
-                <p key={`${index}-${paragraph.slice(0, 12)}`} className="hg-ceo__paragraph">
-                  {paragraph}
-                </p>
-              ))}
-            </div>
-          </RevealBlock>
-
-          <RevealBlock delay={420}>
-            <footer className="hg-ceo__sign">
-              <span className="hg-ceo__sign-line" aria-hidden="true" />
-              <p>{config.signature}</p>
-            </footer>
-          </RevealBlock>
+          <p
+            className="hg-ceo__welcome hg-ceo__reveal-item"
+            style={{ "--hg-ceo-stagger": "60ms" }}
+          >
+            {config.welcome}
+          </p>
+          <div className="hg-ceo__letter">
+            {paragraphs.map((paragraph, index) => (
+              <p
+                key={`${index}-${paragraph.slice(0, 12)}`}
+                className="hg-ceo__paragraph hg-ceo__reveal-item"
+                style={{ "--hg-ceo-stagger": `${120 + index * 55}ms` }}
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
+          <footer
+            className="hg-ceo__sign hg-ceo__reveal-item"
+            style={{ "--hg-ceo-stagger": `${160 + paragraphs.length * 55}ms` }}
+          >
+            <span className="hg-ceo__sign-line" aria-hidden="true" />
+            <p>{config.signature}</p>
+          </footer>
         </div>
       </section>
     </div>

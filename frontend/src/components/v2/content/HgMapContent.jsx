@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import DaumRoughMapEmbed from "../../DaumRoughMapEmbed";
 import { getNaverDirectionsUrl } from "../../../config/mapLinks";
 
@@ -39,11 +39,59 @@ function telHref(value) {
   return digits ? `tel:${digits}` : undefined;
 }
 
+function fieldLabel(field) {
+  if (/ADDRESS|주소/i.test(field.label)) return "주소";
+  if (/Fax|팩스/i.test(field.label)) return "팩스";
+  if (/Tel|전화/i.test(field.label)) return "전화";
+  if (/상담/i.test(field.label)) return "상담문의";
+  return field.label;
+}
+
+function useSectionInView() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
+
+    let framed = false;
+    const show = () => {
+      if (framed) return;
+      framed = true;
+      requestAnimationFrame(() => el.classList.add("is-in"));
+    };
+
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 0.88) {
+      show();
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return;
+        show();
+        observer.disconnect();
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return ref;
+}
+
 function LocationSwitcher({ locations, activeIndex, onChange }) {
   return (
     <div className="hg-map__switcher" role="tablist" aria-label="지점 선택">
       {locations.map((location, index) => {
         const active = index === activeIndex;
+        const address =
+          location.info.fields.find((f) => /ADDRESS|주소/i.test(f.label))?.value || "";
+        const role = index === 0 ? "본사" : "지사";
+
         return (
           <button
             key={location.containerId}
@@ -53,10 +101,16 @@ function LocationSwitcher({ locations, activeIndex, onChange }) {
             className={`hg-map__switch${active ? " is-active" : ""}`}
             onClick={() => onChange(index)}
           >
-            <span className="hg-map__switch-label">{location.info.name}</span>
-            <span className="hg-map__switch-hint">
-              {location.info.fields.find((f) => /ADDRESS|주소/i.test(f.label))?.value || ""}
+            <span className="hg-map__switch-top">
+              <span className="hg-map__switch-role">{role}</span>
+              {active && (
+                <span className="hg-map__switch-check" aria-hidden="true">
+                  선택됨
+                </span>
+              )}
             </span>
+            <span className="hg-map__switch-label">{location.info.name}</span>
+            <span className="hg-map__switch-hint">{address}</span>
           </button>
         );
       })}
@@ -65,40 +119,25 @@ function LocationSwitcher({ locations, activeIndex, onChange }) {
 }
 
 function ContactPanel({ info, navLink }) {
-  const address = info.fields.find((f) => /ADDRESS|주소/i.test(f.label));
   const phone = info.fields.find((f) => /Tel|전화|상담/i.test(f.label));
-  const fax = info.fields.find((f) => /Fax|팩스/i.test(f.label));
 
   return (
-    <aside className="hg-map__panel">
-      <p className="hg-map__panel-eyebrow">Visit Us</p>
+    <aside className="hg-map__panel hg-map__reveal-item">
       <h3 className="hg-map__panel-title">{info.name}</h3>
 
       <dl className="hg-map__meta">
-        {address && (
-          <div className="hg-map__meta-row">
-            <dt>주소</dt>
-            <dd>{address.value}</dd>
-          </div>
-        )}
-        {phone && (
-          <div className="hg-map__meta-row">
-            <dt>{phone.label}</dt>
+        {info.fields.map((field) => (
+          <div key={`${field.label}-${field.value}`} className="hg-map__meta-row">
+            <dt>{fieldLabel(field)}</dt>
             <dd>
-              {telHref(phone.value) ? (
-                <a href={telHref(phone.value)}>{phone.value}</a>
+              {telHref(field.value) && /Tel|전화|상담/i.test(field.label) ? (
+                <a href={telHref(field.value)}>{field.value}</a>
               ) : (
-                phone.value
+                field.value
               )}
             </dd>
           </div>
-        )}
-        {fax && (
-          <div className="hg-map__meta-row">
-            <dt>{fax.label}</dt>
-            <dd>{fax.value}</dd>
-          </div>
-        )}
+        ))}
       </dl>
 
       <div className="hg-map__actions">
@@ -139,7 +178,6 @@ function DrivingGuide({ routes, navLink }) {
         onClick={() => setOpen((prev) => !prev)}
       >
         <span className="hg-map__drive-toggle-copy">
-          <span className="hg-map__drive-kicker">By Car</span>
           <span className="hg-map__drive-title">자차로 오시는 방법</span>
           <span className="hg-map__drive-desc">
             출발지별 상세 경로를 확인할 수 있습니다
@@ -205,7 +243,11 @@ function DrivingGuide({ routes, navLink }) {
 }
 
 export default function HgMapContent({ config }) {
+  const [armed, setArmed] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const stageRef = useSectionInView();
+  const driveRef = useSectionInView();
+
   const location = config.locations[activeIndex] || config.locations[0];
   const isHq = activeIndex === 0;
 
@@ -219,18 +261,18 @@ export default function HgMapContent({ config }) {
     return config.navLink || getNaverDirectionsUrl();
   }, [config.navLink, isHq]);
 
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setArmed(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
+
   return (
-    <div className="hg-map">
+    <div className={`hg-map${armed ? " is-armed" : ""}`}>
       <section className="hg-map__lead">
-        <p className="hg-map__eyebrow">Location</p>
-        <div className="hg-map__accent" aria-hidden="true" />
-        <h2 className="hg-map__headline">
-          한화그린으로
-          <br />
-          오시는 길
-        </h2>
+        <p className="hg-map__label">연락처</p>
+        <h2 className="hg-map__headline">한화그린으로 오시는 길</h2>
         <p className="hg-map__sub">
-          본사와 지사 위치를 확인하고, 원하시는 출발 경로로 방문해 주세요.
+          본사와 전라지사 위치를 확인하고, 원하시는 출발 경로로 방문해 주세요.
         </p>
       </section>
 
@@ -240,7 +282,7 @@ export default function HgMapContent({ config }) {
         onChange={setActiveIndex}
       />
 
-      <section className="hg-map__stage">
+      <section ref={stageRef} className="hg-map__stage hg-map__reveal">
         <div className="hg-map__canvas">
           <DaumRoughMapEmbed
             key={location.containerId}
@@ -253,7 +295,11 @@ export default function HgMapContent({ config }) {
         <ContactPanel info={location.info} navLink={navLink} />
       </section>
 
-      {isHq && <DrivingGuide routes={routes} navLink={navLink} />}
+      {isHq && (
+        <div ref={driveRef} className="hg-map__drive-wrap hg-map__reveal">
+          <DrivingGuide routes={routes} navLink={navLink} />
+        </div>
+      )}
     </div>
   );
 }

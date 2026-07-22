@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import HgHeader from "../components/v2/HgHeader";
 import HgFooter from "../components/v2/HgFooter";
@@ -22,44 +22,9 @@ const noticeConfig = {
   banner: boardBanners.notice,
 };
 
-function useArmOnView(rootMargin = "0px 0px -6% 0px", threshold = 0.05) {
-  const ref = useRef(null);
-  const [armed, setArmed] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || armed) return undefined;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches) {
-      setArmed(true);
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => setArmed(true));
-          });
-          observer.disconnect();
-        }
-      },
-      { threshold, rootMargin }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [armed, rootMargin, threshold]);
-
-  return [ref, armed];
-}
-
-function NoticeLead({ armed, leadRef }) {
+function NoticeLead() {
   return (
-    <section ref={leadRef} className={`hg-proj__lead${armed ? " is-armed" : ""}`}>
-      <p className="hg-proj__eyebrow">Notice</p>
-      <div className="hg-proj__accent" aria-hidden="true" />
+    <header className="hg-proj__lead">
       <h2 className="hg-proj__headline">
         <span className="hg-proj__headline-line">한화그린이 전하는</span>
         <span className="hg-proj__headline-line">
@@ -69,7 +34,7 @@ function NoticeLead({ armed, leadRef }) {
       <p className="hg-proj__sub">
         공지사항과 안내 소식을 통해 한화그린의 최신 소식을 가장 먼저 만나보세요.
       </p>
-    </section>
+    </header>
   );
 }
 
@@ -130,57 +95,52 @@ function NoticeToolbar({ total, keyword, onClearSearch, onSearchOpen, showWrite 
 }
 
 function NoticeList({ posts }) {
-  const [listRef, armed] = useArmOnView();
-
   if (posts.length === 0) {
     return <p className="hg-proj__empty">게시물이 없습니다.</p>;
   }
 
   return (
-    <ol ref={listRef} className={`hg-notice__list${armed ? " is-armed" : ""}`}>
-      {posts.map((post, index) => (
-        <li
-          key={post.id}
-          className="hg-notice__item"
-          style={{ "--hg-proj-delay": `${(index % 15) * 55}ms` }}
-        >
-          <Link
-            to={boardViewRouteTarget("notice", post.id)}
-            className={`hg-notice__row${post.isNotice ? " is-pinned" : ""}`}
-          >
-            <span className={`hg-notice__badge${post.isNotice ? " is-pinned" : ""}`}>
-              {post.isNotice ? "공지" : post.id}
-            </span>
-            <span className="hg-notice__main">
-              <span className="hg-notice__title">{post.subject}</span>
-              <span className="hg-notice__meta">
-                <span>{post.author}</span>
-                <span className="hg-notice__dot" aria-hidden="true" />
-                <span>{post.date}</span>
-                {post.hits != null && (
-                  <>
-                    <span className="hg-notice__dot" aria-hidden="true" />
-                    <span>조회 {Number(post.hits).toLocaleString()}</span>
-                  </>
-                )}
-              </span>
-            </span>
-            <span className="hg-notice__arrow" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18">
-                <path
-                  d="M9 6l6 6-6 6"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-          </Link>
-        </li>
-      ))}
-    </ol>
+    <div className="hg-board-table-wrap">
+      <table className="hg-board-table">
+        <caption className="sound_only">공지사항 목록</caption>
+        <thead>
+          <tr>
+            <th scope="col" className="hg-board-table__num">
+              번호
+            </th>
+            <th scope="col" className="hg-board-table__subject">
+              제목
+            </th>
+            <th scope="col" className="hg-board-table__author">
+              글쓴이
+            </th>
+            <th scope="col" className="hg-board-table__date">
+              날짜
+            </th>
+            <th scope="col" className="hg-board-table__hits">
+              조회
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {posts.map((post) => (
+            <tr key={post.id} className={post.isNotice ? "is-pinned" : undefined}>
+              <td className="hg-board-table__num">
+                {post.isNotice ? <span className="hg-board-table__pin">공지</span> : post.id}
+              </td>
+              <td className="hg-board-table__subject">
+                <Link to={boardViewRouteTarget("notice", post.id)}>{post.subject}</Link>
+              </td>
+              <td className="hg-board-table__author">{post.author}</td>
+              <td className="hg-board-table__date">{post.date}</td>
+              <td className="hg-board-table__hits">
+                {post.hits != null ? Number(post.hits).toLocaleString() : "-"}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -207,7 +167,7 @@ function NoticeArticleView({ post }) {
   return (
     <article className="hg-notice-view">
       <header className="hg-notice-view__head">
-        <p className="hg-proj__eyebrow">Notice</p>
+        
         <h1 className="hg-notice-view__title">{post.subject}</h1>
         <p className="hg-notice-view__meta">
           <span>{post.author}</span>
@@ -261,7 +221,6 @@ export default function NoticeBoardPage() {
   const [viewPost, setViewPost] = useState(null);
   const [viewLoading, setViewLoading] = useState(Boolean(wrId));
   const [viewMissing, setViewMissing] = useState(false);
-  const [leadRef, leadArmed] = useArmOnView("80px 0px 0px 0px", 0.05);
 
   useEffect(() => {
     if (wrId) return undefined;
@@ -356,7 +315,7 @@ export default function NoticeBoardPage() {
       <>
         <HgHeader />
         <HgSubLayout {...layoutProps}>
-          <div className="hg-proj hg-notice">
+          <div className="hg-proj hg-notice hg-proj--cs">
             <NoticeArticleView post={viewPost} />
           </div>
         </HgSubLayout>
@@ -369,8 +328,8 @@ export default function NoticeBoardPage() {
     <>
       <HgHeader />
       <HgSubLayout {...layoutProps}>
-        <div className="hg-proj hg-notice">
-          <NoticeLead armed={leadArmed} leadRef={leadRef} />
+        <div className="hg-proj hg-notice hg-proj--cs">
+          <NoticeLead />
           <NoticeToolbar
             total={filteredPosts.length}
             keyword={searchState.keyword}

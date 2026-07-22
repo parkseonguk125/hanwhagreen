@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import HgHeader from "../components/v2/HgHeader";
 import HgFooter from "../components/v2/HgFooter";
@@ -25,54 +25,19 @@ function parseProjectTitle(title = "") {
   return { name, date };
 }
 
-function useArmOnView(rootMargin = "0px 0px -6% 0px", threshold = 0.05) {
-  const ref = useRef(null);
-  const [armed, setArmed] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node || armed) return undefined;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (reduceMotion.matches) {
-      setArmed(true);
-      return undefined;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => setArmed(true));
-          });
-          observer.disconnect();
-        }
-      },
-      { threshold, rootMargin }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [armed, rootMargin, threshold]);
-
-  return [ref, armed];
-}
-
-function ProjectLead({ total, armed, leadRef }) {
+function ProjectLead() {
   return (
-    <section ref={leadRef} className={`hg-proj__lead${armed ? " is-armed" : ""}`}>
-      <p className="hg-proj__eyebrow">Portfolio</p>
-      <div className="hg-proj__accent" aria-hidden="true" />
+    <header className="hg-proj__lead">
       <h2 className="hg-proj__headline">
         <span className="hg-proj__headline-line">전국 현장에서 쌓아온</span>
         <span className="hg-proj__headline-line">
-          <strong>{total.toLocaleString()}</strong>건의 생생한 기록
+          한화그린의 <strong>주요실적</strong>
         </span>
       </h2>
       <p className="hg-proj__sub">
-        액비순환시스템부터 축사현대화까지, 한화그린이 시공한 현장을 사진으로 확인하세요.
+        액비순환·정화방류·축사현대화 등 한화그린이 시공한 현장을 사진으로 확인하세요.
       </p>
-    </section>
+    </header>
   );
 }
 
@@ -99,21 +64,19 @@ function certBadgeLabel(post) {
   return CERT_CATEGORIES.find((category) => category.key === key)?.label ?? "";
 }
 
-function CertLead({ total, armed, leadRef }) {
+function CertLead() {
   return (
-    <section ref={leadRef} className={`hg-proj__lead${armed ? " is-armed" : ""}`}>
-      <p className="hg-proj__eyebrow">Certification &amp; Patent</p>
-      <div className="hg-proj__accent" aria-hidden="true" />
+    <header className="hg-proj__lead">
       <h2 className="hg-proj__headline">
-        <span className="hg-proj__headline-line">기술력을 증명하는</span>
+        <span className="hg-proj__headline-line">기술·품질을 확인할 수 있는</span>
         <span className="hg-proj__headline-line">
-          <strong>{total.toLocaleString()}</strong>건의 인증과 특허
+          한화그린의 <strong>인증서와 특허</strong>
         </span>
       </h2>
       <p className="hg-proj__sub">
-        특허등록증부터 경영시스템 인증까지, 한화그린의 공인된 기술 경쟁력을 확인하세요.
+        환경전문공사업 등록, 경영시스템 인증, 폐수처리 관련 특허 자료를 확인하세요.
       </p>
-    </section>
+    </header>
   );
 }
 
@@ -155,25 +118,21 @@ function CertCategoryChips({ activeKey, onSelect, onSearchOpen }) {
 }
 
 function CertGalleryList({ posts, table }) {
-  const [gridRef, armed] = useArmOnView();
-
   if (posts.length === 0) {
     return <p className="hg-proj__empty">게시물이 없습니다.</p>;
   }
 
   return (
-    <div ref={gridRef} className={`hg-cert__grid${armed ? " is-armed" : ""}`}>
-      {posts.map((post, index) => (
+    <div className="hg-cert__grid">
+      {posts.map((post) => (
         <Link
           key={post.id}
           to={boardViewRouteTarget(table, post.id)}
           className="hg-cert__card"
           title={post.subject}
-          style={{ "--hg-proj-delay": `${(index % 15) * 60}ms` }}
         >
           <span className="hg-cert__card-frame">
             <img src={post.imageLink || post.image} alt={post.subject} loading="lazy" />
-            <span className="hg-cert__card-glare" aria-hidden="true" />
           </span>
           <span className="hg-cert__card-body">
             <span className="hg-cert__card-badge">{certBadgeLabel(post)}</span>
@@ -197,14 +156,21 @@ function CertBoardView({ post, table }) {
   return (
     <article className="hg-proj-view hg-cert-view">
       <header className="hg-proj-view__head">
-        <p className="hg-proj__eyebrow">Certification &amp; Patent</p>
         <h1 className="hg-proj-view__title">{post.subject}</h1>
         <p className="hg-proj-view__date">
-          <span className="hg-cert__card-badge">{certBadgeLabel(post)}</span> {post.date}
+          <span className="hg-cert__card-badge">{certBadgeLabel(post)}</span>
+          <span>{post.date}</span>
         </p>
       </header>
       <figure className="hg-cert-view__figure">
-        <img src={post.imageLink || post.image} alt={post.subject} />
+        <a
+          href={post.imageLink || post.image}
+          target="_blank"
+          rel="noreferrer"
+          className="hg-cert-view__image-link"
+        >
+          <img src={post.imageLink || post.image} alt={post.subject} />
+        </a>
       </figure>
       <div className="hg-proj-view__actions">
         {prevPost ? (
@@ -287,15 +253,13 @@ const galleryConfigs = {
 };
 
 function ProjectGalleryList({ posts, table }) {
-  const [gridRef, armed] = useArmOnView();
-
   if (posts.length === 0) {
     return <p className="hg-proj__empty">게시물이 없습니다.</p>;
   }
 
   return (
-    <div ref={gridRef} className={`hg-proj__grid${armed ? " is-armed" : ""}`}>
-      {posts.map((post, index) => {
+    <div className="hg-proj__grid">
+      {posts.map((post) => {
         const { name, date } = parseProjectTitle(post.subject);
         return (
           <Link
@@ -303,18 +267,13 @@ function ProjectGalleryList({ posts, table }) {
             to={boardViewRouteTarget(table, post.id)}
             className="hg-proj__card"
             title={post.subject}
-            style={{ "--hg-proj-delay": `${(index % 15) * 55}ms` }}
           >
             <span className="hg-proj__card-media">
               <img src={post.image} alt={post.subject} loading="lazy" />
             </span>
-            <span className="hg-proj__card-veil" aria-hidden="true" />
             <span className="hg-proj__card-body">
               {date && <span className="hg-proj__card-date">{date}</span>}
               <span className="hg-proj__card-name">{name}</span>
-            </span>
-            <span className="hg-proj__card-plus" aria-hidden="true">
-              +
             </span>
           </Link>
         );
@@ -333,9 +292,9 @@ function ProjectBoardView({ post, table }) {
     currentIndex >= 0 && currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null;
 
   return (
-    <article className="hg-proj-view">
+    <article className="hg-proj-view hg-proj-view--project">
       <header className="hg-proj-view__head">
-        <p className="hg-proj__eyebrow">Portfolio</p>
+        
         <h1 className="hg-proj-view__title">{name}</h1>
         {date && <p className="hg-proj-view__date">{date}</p>}
       </header>
@@ -380,7 +339,6 @@ export default function GalleryBoardPage({ table }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchState, setSearchState] = useState({ field: "wr_subject", keyword: "" });
   const [certCategory, setCertCategory] = useState("");
-  const [leadRef, leadArmed] = useArmOnView("80px 0px 0px 0px", 0.05);
   const allPosts = useMemo(() => galleryPostsForTable(table), [table]);
 
   const filteredPosts = useMemo(() => {
@@ -473,8 +431,8 @@ export default function GalleryBoardPage({ table }) {
       <>
         <HgHeader />
         <HgSubLayout {...layoutProps} wide>
-          <div className="hg-proj">
-            <ProjectLead total={allPosts.length} armed={leadArmed} leadRef={leadRef} />
+          <div className="hg-proj hg-proj--project">
+            <ProjectLead />
             <ProjectCategoryChips
               table={table}
               activeSca={activeSca}
@@ -522,8 +480,8 @@ export default function GalleryBoardPage({ table }) {
     <>
       <HgHeader />
       <HgSubLayout {...layoutProps} wide>
-        <div className="hg-proj hg-cert">
-          <CertLead total={allPosts.length} armed={leadArmed} leadRef={leadRef} />
+        <div className="hg-proj hg-cert hg-proj--cert">
+          <CertLead />
           <CertCategoryChips
             activeKey={certCategory}
             onSelect={setCertCategory}

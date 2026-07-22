@@ -157,7 +157,7 @@ function parseFilenameFromDisposition(header) {
   }
 }
 
-export async function downloadQaAttachment(id, password, attachmentId) {
+async function fetchQaAttachmentResponse(id, password, attachmentId) {
   const headers = {};
   const token = getAuthToken();
   if (token) {
@@ -176,13 +176,26 @@ export async function downloadQaAttachment(id, password, attachmentId) {
     const data = await response.json().catch(() => ({}));
     throw new Error(data.message || "첨부파일을 받을 수 없습니다.");
   }
+  return response;
+}
 
+/** 미리보기용 — blob URL은 호출측에서 revoke */
+export async function fetchQaAttachmentBlob(id, password, attachmentId) {
+  const response = await fetchQaAttachmentResponse(id, password, attachmentId);
   const blob = await response.blob();
   const filename =
     parseFilenameFromDisposition(response.headers.get("Content-Disposition")) ||
     `qa-attachment-${id}`;
+  return {
+    blob,
+    filename,
+    contentType: blob.type || response.headers.get("Content-Type") || "",
+    url: URL.createObjectURL(blob),
+  };
+}
 
-  const url = URL.createObjectURL(blob);
+export async function downloadQaAttachment(id, password, attachmentId) {
+  const { url, filename } = await fetchQaAttachmentBlob(id, password, attachmentId);
   const anchor = document.createElement("a");
   anchor.href = url;
   anchor.download = filename;

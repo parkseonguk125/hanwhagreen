@@ -1,0 +1,10 @@
+# Release APK 서명용 (이 파일을 key.properties 로 복사 후 값 입력)
+# key.properties 는 Git에 올리지 마세요 (.gitignore 처리됨)
+#
+# 키스토어 생성 (PowerShell, mobile/android 폴더에서):
+#   keytool -genkey -v -keystore hanwha-attendance-release.jks -keyalg RSA -keysize 2048 -validity 10000 -alias hanwha-attendance
+#
+storePassword=키스토어_비밀번호
+keyPassword=키_비밀번호
+keyAlias=hanwha-attendance
+storeFile=hanwha-attendance-release.jks

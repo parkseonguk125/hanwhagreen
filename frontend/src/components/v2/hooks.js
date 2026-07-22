@@ -3,6 +3,9 @@ import { isProgrammaticScrollActive } from "../../utils/scrollControl";
 
 export const HG_MOBILE_BREAKPOINT = 1024;
 
+/** sticky pin / wheel lock / 강제 snap — 홈·서브 모두 네이티브 스크롤만 사용 */
+export const HG_SCROLL_JACK_ENABLED = false;
+
 export function useHgViewport() {
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth <= HG_MOBILE_BREAKPOINT : false
@@ -184,6 +187,7 @@ const easeHeroProgress = (p) => p * p * (3 - 2 * p);
 
 export function useHgStickyScroll(scrollRef, progressVar = "--hg-sticky-progress", enabled = true) {
   useEffect(() => {
+    if (!HG_SCROLL_JACK_ENABLED) return undefined;
     const zone = scrollRef.current;
     if (!zone || !enabled) return undefined;
 
@@ -282,6 +286,14 @@ export function useHgStoryVisionScroll(scrollRef, stageCount = 3) {
   const [introPinned, setIntroPinned] = useState(false);
 
   useEffect(() => {
+    if (!HG_SCROLL_JACK_ENABLED) {
+      setProgress(1);
+      setIntroFill(1);
+      setActive(0);
+      setPhase("done");
+      setIntroPinned(false);
+      return undefined;
+    }
     const zone = scrollRef.current;
     if (!zone || stageCount < 1) return undefined;
 
@@ -412,6 +424,7 @@ function getVisionZoneHeight() {
 
 export function useHgVisionScroll(scrollRef, enabled = true) {
   useEffect(() => {
+    if (!HG_SCROLL_JACK_ENABLED) return undefined;
     const zone = scrollRef?.current;
     if (!zone || !enabled) return undefined;
 
@@ -743,6 +756,10 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
   const [contentRevealIndex, setContentRevealIndex] = useState(-1);
 
   useEffect(() => {
+    if (!HG_SCROLL_JACK_ENABLED) {
+      setContentRevealIndex(Math.max(panelCount - 1, 0));
+      return undefined;
+    }
     const zone = scrollRef.current;
     if (!zone || panelCount < 1) return undefined;
 
@@ -1167,6 +1184,8 @@ export function useHgBusinessScroll(scrollRef, panelCount) {
     const clamped = Math.min(Math.max(index, 0), maxIndex);
     setActiveIndex(clamped);
 
+    if (!HG_SCROLL_JACK_ENABLED) return;
+
     const zone = scrollRef.current;
     if (!zone || panelCount <= 1) return;
 
@@ -1189,6 +1208,7 @@ export function useHgSnapShowcase(scrollRef, panelCount, progressVar = "--hg-sho
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
+    if (!HG_SCROLL_JACK_ENABLED) return undefined;
     const zone = scrollRef.current;
     if (!zone || panelCount < 1) return undefined;
 
@@ -1288,6 +1308,7 @@ export function useHgSnapShowcase(scrollRef, panelCount, progressVar = "--hg-sho
 
 export function useHgHorizontalScroll(scrollRef, panelCount, progressVar = "--hg-hscroll-progress") {
   useEffect(() => {
+    if (!HG_SCROLL_JACK_ENABLED) return undefined;
     const zone = scrollRef.current;
     if (!zone || panelCount < 2) return undefined;
 
@@ -1468,12 +1489,16 @@ export function useHgReveal(deps = []) {
           }
         });
       },
-      { threshold: 0.05, rootMargin: "0px 0px -10px 0px" }
+      /* 뷰포트에 충분히 들어온 뒤에만 등장 (미리 재생 방지) */
+      { threshold: 0.18, rootMargin: "0px 0px -12% 0px" }
     );
 
     els.forEach((el) => {
       const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.95 && rect.bottom > 0) {
+      const inView =
+        rect.top < window.innerHeight * 0.7 &&
+        rect.bottom > window.innerHeight * 0.15;
+      if (inView) {
         reveal(el);
       } else {
         observer.observe(el);

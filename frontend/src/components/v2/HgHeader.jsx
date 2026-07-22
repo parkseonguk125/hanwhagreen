@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { navGroups, topLinks } from "../../data/mock";
+import { navGroups } from "../../data/mock";
 import { logoutMember } from "../../services/authApi";
 import { clearAuth, getStoredMember, isLoggedIn } from "../../services/authAccess";
 import { parseAppHref } from "../../utils/navRoutes";
@@ -11,14 +11,6 @@ import HgDesktopMenu from "./HgDesktopMenu";
 import HgLogo from "./HgLogo";
 import { useHgHeaderAutoHide, useHgScrollY, useHgViewport } from "./hooks";
 
-const navDescriptions = {
-  "ABOUT US": "한화그린의 비전과 역사, 오시는 길을 안내합니다.",
-  BUSINESS: "환경·에너지 분야의 핵심 기술과 솔루션을 소개합니다.",
-  회사실적: "다양한 현장에서 쌓아온 공사·주요 실적을 확인하세요.",
-  "지식산업권 외": "특허·인증 등 지식산업권 관련 자료를 제공합니다.",
-  고객센터: "공지, 문의, 출결 서비스 등 고객 지원 채널입니다.",
-};
-
 function isNavGroupActive(group, pathname, search) {
   const current = `${pathname}${search}`;
   return group.items.some((item) => {
@@ -28,10 +20,11 @@ function isNavGroupActive(group, pathname, search) {
   });
 }
 
-export default function HgHeader({ hideHamburger = false }) {
+export default function HgHeader({ hideHamburger = false, stableLogo = false }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const scrolled = useHgScrollY(20);
+  const scrolledRaw = useHgScrollY(20);
+  const scrolled = stableLogo ? false : scrolledRaw;
   const { isMobile } = useHgViewport();
   const [menuOpen, setMenuOpen] = useState(false);
   const [openNav, setOpenNav] = useState(null);
@@ -48,10 +41,9 @@ export default function HgHeader({ hideHamburger = false }) {
     [location.pathname, location.search]
   );
   const megaOpen = !isMobile && openNav !== null;
-  const navLocked = megaOpen || menuOpen;
   const headerWrapRef = useRef(null);
   useHgHeaderAutoHide({
-    disabled: navLocked,
+    disabled: true,
     heroAware: isHome && !isMobile,
     wrapRef: headerWrapRef,
   });
@@ -103,7 +95,6 @@ export default function HgHeader({ hideHamburger = false }) {
     closeMegaMenu();
   };
 
-  const activeGroup = openNav !== null ? navGroups[openNav] : null;
   const logoVariant = isHero && !scrolled && !megaOpen ? "light" : "dark";
 
   return (
@@ -112,7 +103,12 @@ export default function HgHeader({ hideHamburger = false }) {
         ref={headerWrapRef}
         className={`hg-header-wrap${scrolled ? " is-scrolled" : ""}${isHero ? " is-hero" : ""}${megaOpen ? " is-mega-open" : ""}`}
       >
-        {megaOpen && <div className="hg-header__backdrop" aria-hidden="true" />}
+        {!isMobile && (
+          <div
+            className="hg-header__backdrop"
+            aria-hidden={!megaOpen}
+          />
+        )}
 
         <header className="hg-header" onMouseLeave={handleHeaderMouseLeave}>
           <div className="hg-header__inner">
@@ -141,8 +137,15 @@ export default function HgHeader({ hideHamburger = false }) {
                     key={group.title}
                     className={`hg-header__nav-item${isOpen ? " is-open" : ""}${isActive ? " is-active" : ""}`}
                     onMouseEnter={() => !isMobile && setOpenNav(index)}
+                    onFocus={() => !isMobile && setOpenNav(index)}
                   >
-                    <button type="button" className="hg-header__nav-link">
+                    <button
+                      type="button"
+                      className="hg-header__nav-link"
+                      aria-expanded={isOpen}
+                      aria-controls="hg-header-mega-menu"
+                      onClick={() => setOpenNav(isOpen ? null : index)}
+                    >
                       <span>{group.title}</span>
                     </button>
                   </div>
@@ -152,19 +155,6 @@ export default function HgHeader({ hideHamburger = false }) {
             </div>
 
             <div className="hg-header__actions">
-              <nav className="hg-header__utility" aria-label="바로가기">
-                {topLinks.slice(0, 3).map((link) => (
-                  <HgNavLink
-                    key={link.label}
-                    item={link}
-                    className="hg-header__utility-link"
-                    onNavigate={() => setOpenNav(null)}
-                  />
-                ))}
-              </nav>
-
-              <div className="hg-header__actions-divider" aria-hidden="true" />
-
               <div className="hg-header__user">
                 {member ? (
                   <>
@@ -193,45 +183,63 @@ export default function HgHeader({ hideHamburger = false }) {
                   aria-expanded={menuOpen}
                   onClick={() => setMenuOpen((open) => !open)}
                 >
+                  <span className="hg-header__menu-label">MENU</span>
                   <span className="hg-header__menu-icon" aria-hidden="true">
                     <span />
                     <span />
                     <span />
                   </span>
-                  <span className="hg-header__menu-label">MENU</span>
                 </button>
               )}
             </div>
           </div>
         </header>
 
-        {activeGroup && (
+        {!isMobile && (
           <div
+            id="hg-header-mega-menu"
             className="hg-header__mega-panel"
             aria-hidden={!megaOpen}
             onMouseLeave={handleMegaMouseLeave}
           >
             <div className="hg-header__mega-inner">
               <div className="hg-header__mega-intro">
-                <p className="hg-header__mega-eyebrow">Explore</p>
-                <h2 className="hg-header__mega-title">{activeGroup.title}</h2>
+                <p className="hg-header__mega-eyebrow">HANWHA GREEN</p>
+                <h2 className="hg-header__mega-title">한화그린</h2>
                 <p className="hg-header__mega-desc">
-                  {navDescriptions[activeGroup.title] ?? ""}
+                  환경을 우선으로 현장에 맞는 정화기술을 제시합니다.
                 </p>
               </div>
-              <div className="hg-header__mega-links">
-                {activeGroup.items.map((item) => (
-                  <HgNavLink
-                    key={item.label}
-                    item={item}
-                    className="hg-header__mega-link"
-                    onNavigate={() => setOpenNav(null)}
+              <div className="hg-header__mega-groups">
+                {navGroups.map((group, groupIndex) => (
+                  <section
+                    key={group.title}
+                    className={`hg-header__mega-group${openNav === groupIndex ? " is-current" : ""}`}
+                    style={{ "--hg-mega-stagger": `${groupIndex * 45}ms` }}
+                    aria-labelledby={`hg-header-mega-title-${groupIndex}`}
                   >
-                    <span className="hg-header__mega-link-label">{item.label}</span>
-                    <span className="hg-header__mega-link-arrow" aria-hidden="true">
-                      →
-                    </span>
-                  </HgNavLink>
+                    <h2
+                      id={`hg-header-mega-title-${groupIndex}`}
+                      className="hg-header__mega-group-title"
+                    >
+                      {group.title}
+                    </h2>
+                    <div className="hg-header__mega-links">
+                      {group.items.map((item) => (
+                        <HgNavLink
+                          key={item.label}
+                          item={item}
+                          className="hg-header__mega-link"
+                          onNavigate={() => setOpenNav(null)}
+                        >
+                          <span className="hg-header__mega-link-label">{item.label}</span>
+                          <span className="hg-header__mega-link-arrow" aria-hidden="true">
+                            →
+                          </span>
+                        </HgNavLink>
+                      ))}
+                    </div>
+                  </section>
                 ))}
               </div>
             </div>

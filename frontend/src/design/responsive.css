@@ -481,30 +481,47 @@
   .hg-content__tech-item,
   .hg-content__map-info,
   .hg-company__videos,
-  .hg-company__division-stage,
+  .hg-company__division-cards,
   .hg-ceo__stage {
     grid-template-columns: 1fr;
   }
 
   .hg-ceo__portrait-wrap {
     height: auto;
+    min-height: 0;
+    position: relative;
+    top: auto;
+    max-width: 18rem;
+    margin-inline: auto;
+    aspect-ratio: 3 / 4;
   }
 
   .hg-ceo__portrait {
-    max-width: 20rem;
+    position: absolute;
+    inset: 0;
+    max-width: none;
     min-height: 0;
     height: auto;
-    margin-inline: auto;
+    margin-inline: 0;
   }
 
   .hg-ceo__portrait img {
+    position: absolute;
+    inset: 0;
+    max-width: none;
+    max-height: none;
     min-height: 0;
-    aspect-ratio: 3 / 4;
-    height: auto;
+    aspect-ratio: auto;
+    height: 100%;
+    width: 100%;
   }
 
   .hg-ceo__quote {
     font-size: clamp(1.45rem, 6.5vw, 2rem);
+  }
+
+  .hg-ceo__letter {
+    padding-left: 0.9rem;
   }
 
   .hg-map__switcher,
@@ -542,29 +559,11 @@
 
   .hg-company__downloads {
     margin-inline: 0;
-    border-radius: 18px;
+    border-radius: 0;
   }
 
-  .hg-company__division-stage {
-    min-height: 0;
-  }
-
-  .hg-company__division-visual {
-    min-height: 18rem;
-    height: auto;
-    aspect-ratio: 4 / 3;
-  }
-
-  .hg-company__division-tab {
-    padding: 1.15rem 1.1rem;
-  }
-
-  .hg-company__division-image {
-    position: absolute;
-  }
-
-  .hg-company__division-tab.is-active {
-    transform: none;
+  .hg-company__division-cards {
+    gap: 0.85rem;
   }
 
   .hg-content__tech-item:nth-child(even) {
