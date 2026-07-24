@@ -13,8 +13,7 @@ import {
 } from "../../utils/navRoutes";
 import { useHgReveal } from "./hooks";
 
-/** 히어로 3장 동일 체류 시간 (페이드·줌과 맞춤) */
-const HERO_INTERVAL_MS = 6000;
+const HERO_INTERVAL_MS = 4000;
 
 /* 원본 홈(hanwhagreen.com)의 3개 영역 구성·카피 */
 const areaItems = [
@@ -107,13 +106,12 @@ function HomeHero() {
   useEffect(() => {
     if (paused || slides.length < 2) return undefined;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
-    // current가 바뀔 때마다 타이머를 다시 시작해 3장이 같은 간격으로 순환
-    const timer = window.setTimeout(
+    const timer = setInterval(
       () => setCurrent((index) => (index + 1) % slides.length),
       HERO_INTERVAL_MS
     );
-    return () => window.clearTimeout(timer);
-  }, [paused, slides.length, current]);
+    return () => clearInterval(timer);
+  }, [paused, slides.length]);
 
   return (
     <section

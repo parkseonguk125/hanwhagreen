@@ -61,15 +61,6 @@ export default function BoardWritePage() {
   const fileInputRef = useRef(null);
 
   const MAX_ATTACHMENTS = 10;
-  /** 백엔드 QA_MAX_FILE_SIZE_MB(기본 200)와 맞춤 */
-  const MAX_ATTACHMENT_BYTES = 200 * 1024 * 1024;
-
-  const formatFileSize = (bytes) => {
-    if (!Number.isFinite(bytes) || bytes < 0) return "";
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  };
 
   useEffect(() => {
     if (table !== "notice") return undefined;
@@ -161,24 +152,9 @@ export default function BoardWritePage() {
     const selected = Array.from(event.target.files || []);
     if (!selected.length) return;
 
-    const oversized = selected.filter((file) => file.size > MAX_ATTACHMENT_BYTES);
-    if (oversized.length) {
-      alert(
-        `다음 파일은 용량 제한(파일당 200MB)을 초과합니다.\n${oversized
-          .map((file) => `· ${file.name} (${formatFileSize(file.size)})`)
-          .join("\n")}`
-      );
-    }
-
-    const accepted = selected.filter((file) => file.size <= MAX_ATTACHMENT_BYTES);
-    if (!accepted.length) {
-      if (fileInputRef.current) fileInputRef.current.value = "";
-      return;
-    }
-
     setAttachments((prev) => {
       const merged = [...prev];
-      for (const file of accepted) {
+      for (const file of selected) {
         const duplicate = merged.some(
           (item) => item.name === file.name && item.size === file.size && item.lastModified === file.lastModified
         );
@@ -565,7 +541,7 @@ export default function BoardWritePage() {
                             />
                             {attachments.length === 0 ? (
                               <span className="hg-write__file-empty">
-                                선택된 파일 없음 (최대 {MAX_ATTACHMENTS}개, 파일당 200MB)
+                                선택된 파일 없음 (최대 {MAX_ATTACHMENTS}개)
                               </span>
                             ) : (
                               <span className="hg-write__file-empty">
@@ -573,9 +549,6 @@ export default function BoardWritePage() {
                               </span>
                             )}
                           </div>
-                          <p className="hg-write__hint">
-                            이미지·동영상 첨부 가능 · 파일당 최대 200MB · 최대 {MAX_ATTACHMENTS}개
-                          </p>
                           {attachments.length > 0 && (
                             <ul className="hg-write__file-list">
                               {attachments.map((file, index) => (
@@ -583,9 +556,7 @@ export default function BoardWritePage() {
                                   key={`${file.name}-${file.size}-${file.lastModified}-${index}`}
                                   className="hg-write__file-name"
                                 >
-                                  <span>
-                                    {file.name} ({formatFileSize(file.size)})
-                                  </span>
+                                  <span>{file.name}</span>
                                   <button
                                     type="button"
                                     className="hg-write__file-del"

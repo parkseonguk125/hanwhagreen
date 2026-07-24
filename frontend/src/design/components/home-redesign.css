@@ -174,19 +174,17 @@
   object-position: center 38%;
   opacity: 0;
   transform: scale(1);
-  /* 전환 페이드 — 장당 6초 체류와 맞춤 */
-  transition: opacity 1.2s ease;
+  transition: opacity 1.1s ease;
 }
 
 .hg3-hero__slide.is-active {
   opacity: 1;
-  /* 줌도 장당 6초로 맞춰 3장 속도감 동일 */
-  animation: hg3-hero-zoom 6s linear forwards;
+  animation: hg3-hero-zoom 9s ease-out forwards;
 }
 
 @keyframes hg3-hero-zoom {
   from { transform: scale(1); }
-  to { transform: scale(1.05); }
+  to { transform: scale(1.06); }
 }
 
 .hg3-hero__shade {
