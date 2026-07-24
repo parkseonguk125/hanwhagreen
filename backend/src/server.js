@@ -76,8 +76,9 @@ app.use("/api/live", liveDataRouter);
 
 app.use((err, req, res, _next) => {
   if (err?.name === "MulterError") {
+    const maxMb = Math.max(1, Number(process.env.QA_MAX_FILE_SIZE_MB) || 300);
     const messages = {
-      LIMIT_FILE_SIZE: "첨부파일 용량이 너무 큽니다. 파일당 최대 200MB까지 업로드할 수 있습니다.",
+      LIMIT_FILE_SIZE: `첨부파일 용량이 너무 큽니다. 파일당 최대 ${maxMb}MB까지 업로드할 수 있습니다.`,
       LIMIT_FILE_COUNT: "첨부파일 개수가 너무 많습니다. 최대 10개까지 가능합니다.",
       LIMIT_UNEXPECTED_FILE: "허용되지 않은 첨부 필드입니다.",
     };

@@ -61,8 +61,9 @@ export default function BoardWritePage() {
   const fileInputRef = useRef(null);
 
   const MAX_ATTACHMENTS = 10;
-  /** 백엔드 QA_MAX_FILE_SIZE_MB(기본 200)와 맞춤 */
-  const MAX_ATTACHMENT_BYTES = 200 * 1024 * 1024;
+  /** 백엔드 QA_MAX_FILE_SIZE_MB(기본 300)와 맞춤 */
+  const MAX_ATTACHMENT_MB = 300;
+  const MAX_ATTACHMENT_BYTES = MAX_ATTACHMENT_MB * 1024 * 1024;
 
   const formatFileSize = (bytes) => {
     if (!Number.isFinite(bytes) || bytes < 0) return "";
@@ -164,7 +165,7 @@ export default function BoardWritePage() {
     const oversized = selected.filter((file) => file.size > MAX_ATTACHMENT_BYTES);
     if (oversized.length) {
       alert(
-        `다음 파일은 용량 제한(파일당 200MB)을 초과합니다.\n${oversized
+        `다음 파일은 용량 제한(파일당 ${MAX_ATTACHMENT_MB}MB)을 초과합니다.\n${oversized
           .map((file) => `· ${file.name} (${formatFileSize(file.size)})`)
           .join("\n")}`
       );
@@ -565,7 +566,7 @@ export default function BoardWritePage() {
                             />
                             {attachments.length === 0 ? (
                               <span className="hg-write__file-empty">
-                                선택된 파일 없음 (최대 {MAX_ATTACHMENTS}개, 파일당 200MB)
+                                선택된 파일 없음 (최대 {MAX_ATTACHMENTS}개, 파일당 {MAX_ATTACHMENT_MB}MB)
                               </span>
                             ) : (
                               <span className="hg-write__file-empty">
@@ -574,7 +575,7 @@ export default function BoardWritePage() {
                             )}
                           </div>
                           <p className="hg-write__hint">
-                            이미지·동영상 첨부 가능 · 파일당 최대 200MB · 최대 {MAX_ATTACHMENTS}개
+                            이미지·동영상 첨부 가능 · 파일당 최대 {MAX_ATTACHMENT_MB}MB · 최대 {MAX_ATTACHMENTS}개
                           </p>
                           {attachments.length > 0 && (
                             <ul className="hg-write__file-list">
