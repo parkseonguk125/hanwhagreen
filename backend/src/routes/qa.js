@@ -20,10 +20,10 @@ import {
   deleteQaAttachmentFiles,
   getQaAttachmentAbsolute,
 } from "../qaFiles.js";
-import { qaUpload } from "../qaUpload.js";
+import { QA_MAX_FILES, qaUpload } from "../qaUpload.js";
 
 const router = Router();
-const MAX_QA_ATTACHMENTS = 10;
+const MAX_QA_ATTACHMENTS = QA_MAX_FILES;
 
 function parseReceiveMail(value) {
   return value === true || value === "true" || value === "1";
