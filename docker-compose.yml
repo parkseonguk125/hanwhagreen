@@ -95,7 +95,7 @@ services:
       PORT: "3000"
 
       QA_UPLOAD_DIR: /app/uploads/qa
-      QA_MAX_FILE_SIZE_MB: "300"
+      QA_MAX_FILE_SIZE_MB: "200"
       ATTENDANCE_UPLOAD_DIR: /app/uploads/attendance
 
     env_file:
